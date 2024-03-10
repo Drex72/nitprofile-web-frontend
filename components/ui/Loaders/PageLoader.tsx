@@ -1,0 +1,17 @@
+import Image from "next/image"
+import { getAsset } from "@/utils"
+
+export const PageLoader = () => {
+    return (
+        <div className="flex h-screen flex-col items-center justify-center">
+            <Image
+                src={getAsset("nitprofile_logo.png", "icons")}
+                alt="Logo"
+                width={300}
+                height={300}
+                className="h-auto animate-[logo-spin_2s_alternate_infinite]"
+                priority
+            />
+        </div>
+    )
+}
