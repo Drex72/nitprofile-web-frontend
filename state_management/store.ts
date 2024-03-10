@@ -12,7 +12,7 @@ const persistConfig = {
     key: "nitprofile",
     version: 1,
     storage,
-    whitelist: [ "appSlice"],
+    whitelist: ["appSlice", "authSlice"],
 }
 
 /**

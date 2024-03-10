@@ -26,8 +26,6 @@ interface RequireAuthProps {
 export const RequireAuthentication: React.FC<RequireAuthProps> = ({ children, require = "auth", allowedRoles }) => {
     const { isAuthenticated, data } = useAppSelector((state) => state.authSlice)
 
-    console.log(isAuthenticated, data)
-
     // State to manage the loading status
     const [loading, setLoading] = useState(false)
 

@@ -18,7 +18,6 @@ export interface IAcceptAdminInvitationRequest {
     lastName: string
 }
 
-
 export interface IVerifyAccountRequest {
     token: string
     password: string
