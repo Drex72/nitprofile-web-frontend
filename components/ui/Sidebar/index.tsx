@@ -6,7 +6,7 @@ export const Sidebar = () => {
 
     return (
         <aside
-            className={`fixed z-[1] h-full top-0 left-0 flex lg:flex flex-shrink-0 flex-col transition-width duration-75 ${
+            className={`fixed h-full top-0 left-0 flex lg:flex flex-shrink-0 flex-col transition-width duration-75 ${
                 sidebarOpened ? "w-screen md:w-[17rem]" : "w-0"
             }`}
             aria-label="Sidebar"

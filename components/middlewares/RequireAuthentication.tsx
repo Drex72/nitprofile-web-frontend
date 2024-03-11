@@ -21,6 +21,7 @@ interface IValidatorHandler {
  * Provides a sleek loading animation for a touch of suspense while validating routes.
  *
  * @component
+ * @author Drex
  * @param {Object} props - Component props
  * @param {ReactNode} props.children - The React node(s) to be rendered conditionally.
  * @param {"auth" | "no-auth"} [props.require="auth"] - Specifies whether authentication is required or not.
@@ -60,9 +61,7 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
     const validatorHandler = (options: IValidatorHandler) => {
         const { routeName } = options
 
-        if (routeName) {
-            router.push(routeName)
-        }
+        if (routeName) router.push(routeName)
 
         // Set loading to false after navigation
         setLoading(false)
