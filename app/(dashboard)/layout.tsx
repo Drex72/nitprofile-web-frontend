@@ -5,9 +5,9 @@ import { Navbar } from "@/components/ui"
 import { Sidebar } from "@/components/ui/Sidebar"
 import React from "react"
 
-const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <RequireAuthentication allowedRoles={["ADMIN", "SUPER ADMIN"]}>
+        <RequireAuthentication>
             <div className="h-full min-h-screen bg-[#F6F7FD]">
                 <Navbar />
 
@@ -24,4 +24,4 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     )
 }
 
-export default AdminLayout
+export default DashboardLayout

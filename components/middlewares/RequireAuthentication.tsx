@@ -1,72 +1,86 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { PageLoader } from "@/components/ui/Loaders"
-import { IRole, useAppSelector } from "@/state_management"
+import { appSlice, useAppDispatch, useAppSelector } from "@/state_management"
+import { useDelayUnmount } from "@/hooks/useDelayMount"
 
 interface RequireAuthProps {
     children: React.ReactNode
     require?: "auth" | "no-auth"
-    allowedRoles?: IRole[]
 }
 
-/**
- * React component that conditionally renders its children based on authentication status and user roles.
- *
- * @component
- * @param {Object} props - Component props
- * @param {ReactNode} props.children - The React node(s) to be rendered conditionally.
- * @param {"auth" | "no-auth"} [props.require="auth"] - Specifies whether authentication is required or not.
- *   - "auth" (default) - Requires authentication; redirects to "/auth" if not authenticated or if user roles are not allowed.
- *   - "no-auth" - Requires no authentication; redirects to "/" if authenticated.
- * @param {IRole[]} props.allowedRoles - The array of roles allowed to access the children when authentication is required.
- * @returns {ReactElement} - The rendered React element.
- */
-export const RequireAuthentication: React.FC<RequireAuthProps> = ({ children, require = "auth", allowedRoles }) => {
+export const RequireAuthentication: React.FC<RequireAuthProps> = ({ children, require = "auth" }) => {
+    const router = useRouter()
+
+    const dispatch = useAppDispatch()
+
+    const { routeValidated } = useAppSelector((state) => state.appSlice)
+
     const { isAuthenticated, data } = useAppSelector((state) => state.authSlice)
 
-    // State to manage the loading status
-    const [loading, setLoading] = useState(false)
+    const { setRouteValidation } = appSlice.actions
 
-    /**
-     * Effect hook to handle authentication checks, role-based authorization checks, and redirects.
-     *
-     * @function
-     * @name useEffect
-     * @param {function} effect - The effect function to be executed.
-     * @param {Array} dependencies - The dependencies for the effect.
-     */
-    useEffect(() => {
-        setLoading(true)
+    const [loading, setLoading] = useState(routeValidated ? false : true)
 
-        // Check if authentication is required
-        if (require === "auth") {
-            // Redirect to "/auth" if not authenticated or access token is missing
-            if (!isAuthenticated || !data) {
-                return redirect("/auth")
-            }
+    const showLoader = useDelayUnmount(loading, 450)
 
-            // Redirect to "/auth" if user roles are not allowed
-            if (allowedRoles && allowedRoles.length > 0 && (!data || !allowedRoles.includes(data.role))) {
-                return redirect("/auth")
-            }
-        }
+    const mountedStyle = { animation: "fade-in-animation 450ms ease-in" }
 
-        // Check if no authentication is required and user is authenticated
-        if (require === "no-auth") {
-            // Redirect to "/" if authenticated
-            if (isAuthenticated && data) {
-                return data.role === "USER" ? redirect("/student") : redirect("/admin")
-            }
-        }
+    const unmountedStyle = {
+        animation: "fade-out-animation 470ms ease-out",
+        animationFillMode: "forwards",
+    }
+
+    const validatorHandler = (route: string) => {
+        router.push(route)
 
         setLoading(false)
-    }, [isAuthenticated, data])
 
-    // Render a page loader while waiting for authentication and authorization checks
-    if (loading) return <PageLoader />
+        dispatch(setRouteValidation(true))
 
-    // Render the children if no redirection is needed
-    return children
+        setTimeout(() => {
+            dispatch(setRouteValidation(false))
+        }, 5000)
+    }
+
+    useEffect(() => {
+        // Check if a validation was just previously done
+        if (routeValidated) {
+            return setLoading(false)
+        }
+
+        setLoading(true)
+
+        if (require === "auth") {
+            if (isAuthenticated || data) {
+                return setLoading(false)
+            }
+
+            if (!isAuthenticated || !data) {
+                return validatorHandler("/auth")
+            }
+        }
+
+        if (require === "no-auth") {
+            if (isAuthenticated && data) {
+                return validatorHandler(data.role === "USER" ? "/student" : "/admin")
+            } else {
+                return setLoading(false)
+            }
+        }
+    }, [isAuthenticated, data, require])
+
+    return (
+        <div>
+            {/* Render a page loader while waiting for authentication and authorization checks */}
+            <div style={showLoader ? mountedStyle : unmountedStyle}>
+                <PageLoader />
+            </div>
+
+            {/* Render the children if no redirection is needed */}
+            <div style={showLoader ? unmountedStyle : mountedStyle}>{children}</div>
+        </div>
+    )
 }

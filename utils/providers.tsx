@@ -22,7 +22,7 @@ export const CustomProvider = (props: React.PropsWithChildren) => {
      */
     return (
         // Wrap the application with Redux Persist for state persistence and loading indicator.
-        <PersistGate persistor={persistor} loading={<PageLoader />}>
+        <PersistGate persistor={persistor}>
             {/* Provide the Redux store to the application. */}
             <Provider store={store}>
                 {/* Display toasts using react-hot-toast. */}

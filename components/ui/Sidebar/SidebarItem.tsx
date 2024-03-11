@@ -1,7 +1,8 @@
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { MdKeyboardArrowRight } from "react-icons/md"
-import { PiGraduationCapLight } from "react-icons/pi"
+import { getSidebarData } from "./data"
+import { useAppSelector } from "@/state_management"
 
 const SidebarItems = () => {
     const router = useRouter()
@@ -16,39 +17,39 @@ const SidebarItems = () => {
         return routes.includes(currentPath)
     }
 
-    const sidebarData = [
-        {
-            name: "Applicants",
-            icon: <PiGraduationCapLight />,
-            route: "/",
-            active: isItemActive(["", "applicants"]),
-        },
-    ]
+    const { data } = useAppSelector((state) => state.authSlice)
+
+    const sidebarData = getSidebarData(data!.role)
 
     return (
         <div>
-            {sidebarData.map((item, index) => (
-                <div
-                    key={index}
-                    onClick={goToPage(item.route)}
-                    className="relative bg-[#F6F7FD26]  pl-8 pr-3 py-4 w-full mb-[5px] cursor-pointer flex items-center justify-between "
-                >
-                    <div className="flex items-center gap-2">
-                        {item.icon}
-                        <p className={`text-sm font-medium transition-all duration-300 ease-in-out ${item.active ? "text-white" : "text-[#B1B1B1]"}`}>
-                            {item.name}
-                        </p>
-                    </div>
-
-                    <MdKeyboardArrowRight className="text-2xl font-light" />
-
+            {sidebarData.map((item, index) => {
+                const isActive = isItemActive(item.activeRoutes)
+                return (
                     <div
-                        className={`h-full absolute bg-[#F6F7FD] top-0 left-0 transition-all duration-300 ease-in-out ${
-                            item.active ? "w-[5px]" : "w-0"
-                        }`}
-                    />
-                </div>
-            ))}
+                        key={index}
+                        onClick={goToPage(item.route)}
+                        className="relative mb-[5px]  flex w-full cursor-pointer items-center justify-between bg-[#F6F7FD26] py-4 pl-8 pr-3 "
+                    >
+                        <div className="flex items-center gap-2">
+                            {item.icon}
+                            <p
+                                className={`text-sm font-medium transition-all duration-300 ease-in-out ${isActive ? "text-white" : "text-[#B1B1B1]"}`}
+                            >
+                                {item.name}
+                            </p>
+                        </div>
+
+                        <MdKeyboardArrowRight className="text-2xl font-light" />
+
+                        <div
+                            className={`absolute left-0 top-0 h-full bg-[#F6F7FD] transition-all duration-300 ease-in-out ${
+                                isActive ? "w-[5px]" : "w-0"
+                            }`}
+                        />
+                    </div>
+                )
+            })}
         </div>
     )
 }
