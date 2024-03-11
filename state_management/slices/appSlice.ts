@@ -44,7 +44,6 @@ const appReduxSlice = createSlice({
                 payload: boolean
             },
         ) => {
-            console.log(action)
             state.routeValidated = action.payload
         },
     },

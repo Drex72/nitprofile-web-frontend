@@ -1,0 +1,1 @@
+Work on the RequireAuthentication Middleware and make it more efficient

@@ -3,7 +3,7 @@ import { getAsset } from "@/utils"
 
 export const PageLoader = () => {
     return (
-        <div className="z-[8] flex h-screen flex-col items-center justify-center ">
+        <div className="z-[8] flex h-screen flex-col items-center justify-center bg-[#ededee]  ">
             <Image
                 src={getAsset("nitprofile_logo.png", "icons")}
                 alt="Logo"

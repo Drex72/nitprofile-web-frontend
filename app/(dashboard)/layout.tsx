@@ -3,12 +3,16 @@
 import { RequireAuthentication } from "@/components/middlewares"
 import { Navbar } from "@/components/ui"
 import { Sidebar } from "@/components/ui/Sidebar"
+import { getAllowedRoles } from "@/utils"
+import { usePathname } from "next/navigation"
 import React from "react"
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+    const pathname = usePathname()
+
     return (
-        <RequireAuthentication>
-            <div className="h-full min-h-screen bg-[#F6F7FD]">
+        <RequireAuthentication allowedRoles={getAllowedRoles(pathname)}>
+            <div className="h-full min-h-screen bg-[#ededee]">
                 <Navbar />
 
                 <div className="flex overflow-scroll ">
