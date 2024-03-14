@@ -18,7 +18,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                 <div className="flex overflow-scroll ">
                     <Sidebar />
 
-                    {/* Main Content */}
                     <main id="main-content" className="relative !z-0 w-full px-8 pt-[120px] md:ml-[17rem] ">
                         {children}
                     </main>

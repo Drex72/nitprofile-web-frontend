@@ -2,6 +2,7 @@
 
 import { ConditionalComponent } from "@/components/animation"
 import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 
 interface IModalProps {
     children: React.ReactNode
@@ -23,7 +24,7 @@ export function ModalLayout(props: IModalProps) {
         setShowModal(isMounted)
     }, [isMounted])
 
-    return (
+    return createPortal(
         <ConditionalComponent isMounted={showModal} delay={200}>
             <div className="fixed bottom-0 left-0 right-0 top-0 z-10 ">
                 <div
@@ -41,6 +42,7 @@ export function ModalLayout(props: IModalProps) {
                     {children}
                 </div>
             </div>
-        </ConditionalComponent>
+        </ConditionalComponent>,
+        document.getElementById("modal") as HTMLElement,
     )
 }
