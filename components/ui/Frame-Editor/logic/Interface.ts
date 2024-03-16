@@ -8,7 +8,7 @@ interface INode {
     y: number
 }
 
-interface ImageNode extends INode {
+interface IImageNode extends INode {
     type: "image"
     overlay: string
     width: number
@@ -37,12 +37,17 @@ interface IPlaceholderTextNode extends INode {
     color?: string
     placeholder?: true
     entity: IPlaceholderTextNodeEntity
-    entity_key: string
+    entity_key?: string
 }
 
-type TextNode = INonPlaceholderTextNode | IPlaceholderTextNode
+type ITextNode = INonPlaceholderTextNode | IPlaceholderTextNode
 
-type Node = ImageNode | TextNode
+type Node = IImageNode | ITextNode
+
+type PlaceholderKeys = {
+    entity: IPlaceholderTextNodeEntity
+    entityKey?: string
+}
 
 type ICreateNodeOptions =
     | {
@@ -54,4 +59,16 @@ type ICreateNodeOptions =
           entityKey: string
       }
 
-export type { TextNode, ImageNode, Node, ICreateNodeOptions, IPlaceholderTextNodeEntity }
+interface INodeFactory<T = undefined> {
+    fabricNode: T
+}
+
+export type {
+    ITextNode,
+    IImageNode,
+    Node,
+    ICreateNodeOptions,
+    IPlaceholderTextNodeEntity,
+    INodeFactory,
+    PlaceholderKeys,
+}

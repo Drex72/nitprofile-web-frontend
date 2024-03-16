@@ -30,6 +30,7 @@ export default function RootLayout({
             <body className={inter.className}>
                 <CustomProvider>{children}</CustomProvider>
                 <div className="modal" id="modal"></div>
+                <div id="canvas_portal"></div>
             </body>
         </html>
     )
