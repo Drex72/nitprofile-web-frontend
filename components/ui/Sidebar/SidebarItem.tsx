@@ -1,6 +1,5 @@
 import { usePathname } from "next/navigation"
 import { useRouter } from "next/navigation"
-import { MdKeyboardArrowRight } from "react-icons/md"
 import { getSidebarData } from "./data"
 import { useAppSelector } from "@/state_management"
 
@@ -11,7 +10,7 @@ const SidebarItems = () => {
 
     const goToPage = (page: string) => () => router.push(page)
 
-    const isItemActive = (routes: string[], index: number = 1) => {
+    const isItemActive = (routes: (string | undefined)[], index: number = 1) => {
         const currentPath = pathname.split("/")[index]
 
         return routes.includes(currentPath)
@@ -22,31 +21,25 @@ const SidebarItems = () => {
     const sidebarData = getSidebarData(data!.role)
 
     return (
-        <div>
+        <div className="flex flex-col gap-5">
             {sidebarData.map((item, index) => {
-                const isActive = isItemActive(item.activeRoutes)
+                const isActive = isItemActive(item.activeRoutes, 2)
+
                 return (
                     <div
                         key={index}
                         onClick={goToPage(item.route)}
-                        className="relative mb-[5px]  flex w-full cursor-pointer items-center justify-between bg-[#F6F7FD26] py-4 pl-8 pr-3 "
+                        className={`cursor-pointer rounded-lg px-6 py-[10px] transition-all duration-300 ease-in-out hover:bg-[#7fca63] ${isActive ? "bg-[#62CF3A]" : "bg-transparent"}`}
                     >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-4">
                             {item.icon}
+
                             <p
-                                className={`text-sm font-medium transition-all duration-300 ease-in-out ${isActive ? "text-white" : "text-[#B1B1B1]"}`}
+                                className={`text-sm font-medium transition-all duration-300 ease-in-out ${isActive ? "text-[#101010]" : "text-[#676767]"}`}
                             >
                                 {item.name}
                             </p>
                         </div>
-
-                        <MdKeyboardArrowRight className="text-2xl font-light" />
-
-                        <div
-                            className={`absolute left-0 top-0 h-full bg-[#F6F7FD] transition-all duration-300 ease-in-out ${
-                                isActive ? "w-[5px]" : "w-0"
-                            }`}
-                        />
                     </div>
                 )
             })}

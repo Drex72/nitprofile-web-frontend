@@ -1,14 +1,13 @@
 import { Canvas, Object } from "fabric/fabric-impl"
 import { ISceneState } from ".."
-import { IBaseAction, ReducerHandlers,Actions } from "./interfaces"
-
-
+import { IBaseAction, ReducerHandlers, Actions } from "./interfaces"
 
 /**
  * Represents the action types available in the scene.
  */
 type ActionTypes = {
     initialize_canvas: IBaseAction<"initialize_canvas", { canvas: Canvas }>
+    add_scene_background: IBaseAction<"add_scene_background", { background: string }>
     clear_canvas: IBaseAction<"clear_canvas">
     select_object: IBaseAction<"select_object", { item: Object }>
     deselect_object: IBaseAction<"deselect_object">
@@ -16,7 +15,7 @@ type ActionTypes = {
 
 type SceneActions = Actions<ActionTypes>
 
-type SceneReducerHandler = ReducerHandlers<ISceneState, ActionTypes>;
+type SceneReducerHandler = ReducerHandlers<ISceneState, ActionTypes>
 
 /**
  * Contains the reducer functions for each action type.
@@ -30,6 +29,16 @@ const reducerHandlers: SceneReducerHandler = {
      */
     initialize_canvas: (state, action) => {
         return { ...state, canvas: action.payload.canvas }
+    },
+
+    /**
+     * Reducer function for Adding the Frame background as the canvas.
+     * @param {InitialStateType} state - The current state.
+     * @param {IBaseAction<"add_scene_background", { background: string }>} action - The add_scene_background action.
+     * @returns {InitialStateType} The updated state.
+     */
+    add_scene_background: (state, action) => {
+        return { ...state, sceneBackground: action.payload.background }
     },
 
     /**

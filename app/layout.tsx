@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Spline_Sans } from "next/font/google"
 import "../styles/globals.css"
 import { CustomProvider } from "@/utils"
 
-const inter = Inter({ subsets: ["latin"] })
+const splineSans = Spline_Sans({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
     title: {
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={splineSans.className}>
                 <CustomProvider>{children}</CustomProvider>
                 <div className="modal" id="modal"></div>
                 <div id="canvas_portal"></div>

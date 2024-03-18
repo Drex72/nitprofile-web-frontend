@@ -6,7 +6,7 @@ const adminRoutes = [
         name: "Home",
         icon: <PiGraduationCapLight />,
         route: "/admin",
-        activeRoutes: [""],
+        activeRoutes: ["", undefined],
     },
 ]
 
@@ -23,7 +23,7 @@ interface ISidebarData {
     name: string
     icon: string | React.ReactNode | null
     route: string
-    activeRoutes: string[]
+    activeRoutes: (string | undefined)[]
 }
 
 export const getSidebarData = (role: IRole): ISidebarData[] => {
@@ -34,7 +34,7 @@ export const getSidebarData = (role: IRole): ISidebarData[] => {
         case "SUPER ADMIN":
             return [
                 ...adminRoutes,
-                { name: "Admins", icon: <PiGraduationCapLight />, route: "/admin", activeRoutes: [""] },
+                { name: "Admins", icon: <PiGraduationCapLight />, route: "/admin/name", activeRoutes: [""] },
             ]
 
         case "USER":

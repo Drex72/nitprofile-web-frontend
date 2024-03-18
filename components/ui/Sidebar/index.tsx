@@ -1,25 +1,32 @@
 "use client"
+import Image from "next/image"
 import SidebarItems from "./SidebarItem"
+import { getAsset } from "@/utils"
 
 export const Sidebar = () => {
     const sidebarOpened = true
+    // Work on the keyboard accessibility
 
     return (
         <aside
-            className={`fixed h-full top-0 left-0 flex lg:flex flex-shrink-0 flex-col transition-width duration-75 ${
-                sidebarOpened ? "w-screen md:w-[17rem]" : "w-0"
+            className={`transition-width fixed left-0 top-0 z-[1] flex h-full flex-shrink-0 flex-col duration-75 lg:flex ${
+                sidebarOpened ? "w-screen md:w-[15rem]" : "w-0"
             }`}
             aria-label="Sidebar"
         >
-            <div className="relative flex-1 flex flex-col min-h-0 bg-white">
-                <div
-                    className={`pt-[120px] text-white h-full  overflow-y-scroll ${sidebarOpened ? "block" : "hidden"}`}
-                >
-                    <div>
-                        <h2 className="text-base ml-8 font-medium mt-8 mb-4">Main Menu</h2>
+            <div className="relative flex min-h-0 flex-1 flex-col bg-white">
+                <div className={`h-full overflow-y-scroll px-4 py-5 ${sidebarOpened ? "block" : "hidden"}`}>
+                    <Image
+                        alt="Logo"
+                        width={120}
+                        height={35}
+                        src={getAsset("nitda_logo.png", "icons")}
+                        unoptimized
+                        priority
+                        className="mb-12"
+                    />
 
-                        <SidebarItems />
-                    </div>
+                    <SidebarItems />
                 </div>
             </div>
         </aside>

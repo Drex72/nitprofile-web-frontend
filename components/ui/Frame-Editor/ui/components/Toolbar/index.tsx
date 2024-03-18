@@ -110,12 +110,14 @@ export const Toolbar = (props: IToolbarProps) => {
         })
     }, [canvas])
 
-    const save = () => {
-        // Get all objects on the page
-        // Get the properties needed from them
-        // Send it to the api
-        // Clear the scene, canvas, etc
-        // Take them back to home page
+    const handleDelete = () => {
+        if (!canvas || !selectedItem) return
+
+        canvas.remove(selectedItem)
+
+        dispatch({
+            type: "deselect_object",
+        })
     }
 
     if (!canvas) return null
@@ -123,6 +125,8 @@ export const Toolbar = (props: IToolbarProps) => {
     return (
         <div>
             {selectedItem && selectedItem.type === "circle" && <ImageControls />}
+
+            {selectedItem && <button onClick={handleDelete}>Delete</button>}
 
             {/* {selectedItem && selectedItem.type === "i-text" && <TextControls />} */}
 
