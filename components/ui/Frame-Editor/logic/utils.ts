@@ -12,16 +12,16 @@ const convert_fabric_objects_to_nodes = (options: IOptions): Node[] => {
     const result: Node[] = []
 
     objects.forEach((item) => {
-        console.log(item)
         if (item.type === "circle") {
             const newObj = item as fabric.Circle
 
             const finalRadius = newObj.radius! * scaleFactor
+
             const scaledLeft = newObj.left! * scaleFactor
+
             const scaledTop = newObj.top! * scaleFactor
 
             const { gravity, x, y } = get_gravity_and_offsets(scaledLeft, scaledTop, canvasWidth, canvasHeight)
-            console.log(gravity, x, y)
 
             result.push({
                 type: "image",
@@ -39,29 +39,31 @@ const convert_fabric_objects_to_nodes = (options: IOptions): Node[] => {
             const newObj = item as fabric.IText
 
             const scaledLeft = newObj.left! * scaleFactor
+
             const scaledTop = newObj.top! * scaleFactor
 
             const { gravity, x, y } = get_gravity_and_offsets(scaledLeft, scaledTop, canvasWidth, canvasHeight)
 
-            console.log(gravity, x, y)
-
-           const vals =  newObj.toObject()
-
-           console.log(vals)
+            const metadata = newObj.toObject()
 
             result.push({
                 type: "text",
                 x,
                 y,
+                gravity,
                 text: newObj.text ?? "",
                 font_family: (newObj.fontFamily as string) ?? "Helvetica",
                 font_size: newObj.fontSize,
                 font_weight: (newObj.fontWeight as string) ?? "bold",
                 color: newObj.fill as string,
-                placeholder: false,
+                placeholder: metadata?.placeholder ?? false,
+                entity: metadata?.entity ?? undefined,
+                entity_key: metadata?.entityKey ?? undefined,
             })
         }
     })
+
+    console.log(result)
 
     return result
 }
@@ -87,6 +89,5 @@ const get_gravity_and_offsets = (x: number, y: number, canvasWidth: number, canv
     }
 }
 const convert_node_to_fabric_object = () => {}
-
 
 export { convert_fabric_objects_to_nodes, convert_node_to_fabric_object }

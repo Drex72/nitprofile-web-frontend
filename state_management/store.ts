@@ -1,4 +1,4 @@
-import { bindActionCreators, combineReducers, configureStore } from "@reduxjs/toolkit"
+import { ActionCreatorsMapObject, bindActionCreators, combineReducers, configureStore } from "@reduxjs/toolkit"
 import storage from "redux-persist/lib/storage"
 import { persistReducer, persistStore } from "redux-persist"
 import { appSlice, authSlice, frameEditorSlice, programSlice } from "./slices"
@@ -78,7 +78,6 @@ export type AppDispatch = typeof store.dispatch
  */
 export const useAppDispatch: () => AppDispatch = useDispatch
 
-
 /**
  * Typed selector hook for accessing the Redux store state.
  * @function
@@ -88,9 +87,22 @@ export const useAppDispatch: () => AppDispatch = useDispatch
  */
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
+// export const useEditorActions = () => {
+//     const dispatch = useDispatch()
 
-export const useEditorActions = () => {
-    const dispatch = useDispatch();
-  
-    return bindActionCreators(Object.assign({}, frameEditorSlice.actions), dispatch);
-  };
+//     return bindActionCreators(Object.assign({}, frameEditorSlice.actions), dispatch)
+// }
+
+// Define a custom React hook to encapsulate logic for using slice actions
+// The hook accepts a generic type parameter 'T' representing an object containing action creators
+export const useSliceActions = <T extends ActionCreatorsMapObject<any>>(slice: T) => {
+    // Retrieve the dispatch function from the Redux store using the 'useDispatch' hook from react-redux
+    const dispatch = useDispatch()
+
+    // Bind the action creators from the 'slice' object to the 'dispatch' function
+    // This allows us to directly dispatch actions to the Redux store
+    return bindActionCreators(slice, dispatch)
+}
+
+
+export const useEditorActions= () => useSliceActions(frameEditorSlice.actions);

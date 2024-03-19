@@ -20,6 +20,7 @@ interface IImageNode extends INode {
 interface INonPlaceholderTextNode extends INode {
     type: "text"
     text: string
+    gravity: string
     font_family: string
     font_size?: number
     font_weight?: string

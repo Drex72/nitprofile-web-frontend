@@ -4,7 +4,6 @@ import { Provider } from "react-redux"
 import { Toaster } from "react-hot-toast"
 import { PersistGate } from "redux-persist/integration/react"
 import { store, persistor } from "@/state_management"
-import { PageLoader } from "@/components/ui/Loaders"
 
 /**
  * CustomProvider component that wraps the application with necessary providers and components.
