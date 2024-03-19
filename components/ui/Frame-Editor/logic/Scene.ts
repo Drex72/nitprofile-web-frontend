@@ -1,8 +1,7 @@
 import { ICanvasOptions } from "fabric/fabric-impl"
 import { fabric } from "fabric"
-import { ImageNode, TextNode } from "./nodes"
-import { ICreateNodeOptions } from "./Interface"
-import { DEFAULT_CANVAS_VALUES } from "../utils/defaultSizes"
+import { ICreateNodeOptions, PlaceholderKeys } from "./Interface"
+import { DEFAULT_CANVAS_VALUES, DEFAULT_IMAGE_NODE_VALUES, DEFAULT_TEXT_NODE_VALUES } from "../utils/defaultSizes"
 
 type ICreateSceneOptions = {
     canvas_id: string
@@ -46,12 +45,15 @@ export class Scene {
             }
         })
     }
+    get_canvas = () => {
+        return this.canvas
+    }
 
     create_node(options: ICreateNodeOptions) {
         if (!this.canvas) throw new Error("Canvas Does not Exist")
 
         if (options.nodeType === "image") {
-            const { fabricNode: imageNode } = new ImageNode()
+            const imageNode = this.createImageObject()
 
             this.canvas.add(imageNode)
 
@@ -59,7 +61,7 @@ export class Scene {
         }
 
         if (options.nodeType === "text") {
-            const { fabricNode: textNode } = new TextNode()
+            const textNode = this.createTextObject()
 
             this.canvas.add(textNode)
 
@@ -67,7 +69,7 @@ export class Scene {
         }
 
         if (options.nodeType === "placeholder") {
-            const { fabricNode: textNode } = new TextNode({
+            const textNode = this.createTextObject({
                 entity: options.entity,
                 entityKey: options.entityKey,
             })
@@ -80,7 +82,53 @@ export class Scene {
         throw new Error("Invalid node type")
     }
 
-    get_canvas = () => {
-        return this.canvas
+    private createImageObject(): fabric.Circle {
+        const createdFabricNode = new fabric.Circle({
+            left: DEFAULT_IMAGE_NODE_VALUES.x,
+            top: DEFAULT_IMAGE_NODE_VALUES.y,
+            fill: "#aaa",
+            radius: DEFAULT_IMAGE_NODE_VALUES.radius,
+            opacity: 1,
+            stroke: "#000",
+            strokeWidth: 1,
+        })
+
+        return createdFabricNode
+    }
+
+    private createTextObject(placeholder?: PlaceholderKeys): fabric.Text {
+        const isPlaceholder = placeholder && placeholder.entity
+
+        const createdFabricNode = new fabric.IText(DEFAULT_TEXT_NODE_VALUES.text, {
+            fontFamily: DEFAULT_TEXT_NODE_VALUES.font_family,
+            left: DEFAULT_TEXT_NODE_VALUES.x,
+            top: DEFAULT_TEXT_NODE_VALUES.y,
+            fontSize: DEFAULT_TEXT_NODE_VALUES.font_size,
+            fontWeight: DEFAULT_TEXT_NODE_VALUES.font_weight,
+            fill: DEFAULT_TEXT_NODE_VALUES.color,
+            opacity: 1,
+            stroke: DEFAULT_TEXT_NODE_VALUES.color,
+            editable: !isPlaceholder,
+        })
+
+        if (isPlaceholder) {
+            createdFabricNode.toObject = () => {
+                return {
+                    placeholder: true,
+                    entity: placeholder.entity,
+                    entityKey: placeholder.entityKey ?? undefined,
+                }
+            }
+
+            // createdFabricNode.toObject = function (this: fabric.IText, propertiesToInclude) {
+            //     return fabric.util.object.extend(fabric.IText.prototype.toObject.call(this, propertiesToInclude), {
+            //         placeholder: true,
+            //         entity: placeholder.entity,
+            //         entityKey: placeholder.entityKey ?? undefined,
+            //     })
+            // }
+        }
+
+        return createdFabricNode
     }
 }

@@ -4,16 +4,20 @@ import { useSceneContext } from "./hooks"
 import { makeToast } from "@/libs/react-toast"
 import { Toolbar } from "@frame-editor/ui/components/Toolbar"
 import NextImage from "next/image"
-import { useAppSelector } from "@/state_management"
+import { useAppDispatch, useAppSelector, useEditorActions } from "@/state_management"
+import { convert_fabric_objects_to_nodes } from "../logic/utils"
 
 export const FrameEditor = () => {
     const sceneRef = useRef<Scene | null>(null)
 
     const { dispatch, state } = useSceneContext()
 
-    const {isMobile} = useAppSelector((state) => state.appSlice)
+    const { editorBackground } = useAppSelector((state) => state.editorSlice)
 
-    console.log(isMobile)
+    const { save } = useEditorActions()
+
+    // sceneBackground:
+    // "https://res.cloudinary.com/dinrq1kf4/image/upload/c_fill,g_center,h_1500,w_1500/c_fit,h_500,l_Nithub:NITPROFILE_ASSETS:IMAGE%2022-8769646304,r_10000,w_500,x_20,y_20/co_red,l_text:Cookie_10_bold:Teledua,x_40,y_40/v1/Nithub/nitprofile_profile_frames/FRAME%20119-5069537755",
 
     const [type, setType] = useState<"landscape" | "portrait">("portrait")
 
@@ -81,7 +85,6 @@ export const FrameEditor = () => {
 
             obj.left = originalLeft * scaleFactor
             obj.top = originalTop * scaleFactor
-
             obj.setCoords()
         })
 
@@ -100,7 +103,23 @@ export const FrameEditor = () => {
         return () => window.removeEventListener("resize", handleResize)
     }, [imageRef.current])
 
-    const save = () => {
+    const saves = () => {
+        const objects = state.scene.canvas?.getObjects()
+
+        if (!objects || !state.scene.canvas || !imageRef.current) return
+
+        const canvasWidth = state.scene.canvas.getWidth()
+
+        const clientWidth = imageRef.current?.offsetWidth
+
+        const scaleFactor = clientWidth / canvasWidth
+
+        convert_fabric_objects_to_nodes({
+            canvasHeight: state.scene.canvas.getHeight(),
+            canvasWidth: state.scene.canvas.getWidth(),
+            objects,
+            scaleFactor,
+        })
         // Get all objects on the page
         // Get the properties needed from them
         // Send it to the api
@@ -115,7 +134,7 @@ export const FrameEditor = () => {
                     width={300}
                     height={300}
                     ref={imageRef}
-                    src={state.scene.sceneBackground ?? ""}
+                    src={editorBackground ?? ""}
                     alt="Frame Background"
                     className="h-full w-full"
                 />
@@ -123,7 +142,7 @@ export const FrameEditor = () => {
                     <canvas id="frame_editor" />
                 </div>
             </div>
-
+<button onClick={() => saves()}>save</button>
             {state.scene.canvas && <Toolbar create_node={handleCreateNode} />}
         </div>
     )

@@ -7,7 +7,6 @@ import { IBaseAction, ReducerHandlers, Actions } from "./interfaces"
  */
 type ActionTypes = {
     initialize_canvas: IBaseAction<"initialize_canvas", { canvas: Canvas }>
-    add_scene_background: IBaseAction<"add_scene_background", { background: string }>
     clear_canvas: IBaseAction<"clear_canvas">
     select_object: IBaseAction<"select_object", { item: Object }>
     deselect_object: IBaseAction<"deselect_object">
@@ -31,15 +30,6 @@ const reducerHandlers: SceneReducerHandler = {
         return { ...state, canvas: action.payload.canvas }
     },
 
-    /**
-     * Reducer function for Adding the Frame background as the canvas.
-     * @param {InitialStateType} state - The current state.
-     * @param {IBaseAction<"add_scene_background", { background: string }>} action - The add_scene_background action.
-     * @returns {InitialStateType} The updated state.
-     */
-    add_scene_background: (state, action) => {
-        return { ...state, sceneBackground: action.payload.background }
-    },
 
     /**
      * Reducer function for clearing the canvas.

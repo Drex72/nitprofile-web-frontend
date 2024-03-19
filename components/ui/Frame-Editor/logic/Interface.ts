@@ -3,14 +3,13 @@ const placeholderTextNodeEntity = ["program", "date", "user"] as const
 type IPlaceholderTextNodeEntity = (typeof placeholderTextNodeEntity)[number]
 
 interface INode {
-    id: string
     x: number
     y: number
 }
 
 interface IImageNode extends INode {
     type: "image"
-    overlay: string
+    overlay?: string
     width: number
     height: number
     gravity: string

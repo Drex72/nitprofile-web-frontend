@@ -1,7 +1,7 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit"
+import { bindActionCreators, combineReducers, configureStore } from "@reduxjs/toolkit"
 import storage from "redux-persist/lib/storage"
 import { persistReducer, persistStore } from "redux-persist"
-import { appSlice, authSlice } from "./slices"
+import { appSlice, authSlice, frameEditorSlice, programSlice } from "./slices"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 
 /**
@@ -12,7 +12,7 @@ const persistConfig = {
     key: "nitprofile",
     version: 1,
     storage,
-    whitelist: [ ],
+    whitelist: [],
 }
 
 /**
@@ -22,6 +22,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
     appSlice: appSlice.reducer,
     authSlice: authSlice.reducer,
+    editorSlice: frameEditorSlice.reducer,
+    programSlice: programSlice.reducer,
 })
 
 /**
@@ -76,6 +78,7 @@ export type AppDispatch = typeof store.dispatch
  */
 export const useAppDispatch: () => AppDispatch = useDispatch
 
+
 /**
  * Typed selector hook for accessing the Redux store state.
  * @function
@@ -84,3 +87,10 @@ export const useAppDispatch: () => AppDispatch = useDispatch
  * @returns {TypedUseSelectorHook<RootState>} - The Redux store selector hook.
  */
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+
+
+export const useEditorActions = () => {
+    const dispatch = useDispatch();
+  
+    return bindActionCreators(Object.assign({}, frameEditorSlice.actions), dispatch);
+  };
