@@ -61,3 +61,22 @@ body {
         height: 0;
     }
 }
+
+
+
+@-webkit-keyframes spinner-wave-after {
+	from { -webkit-transform: scale(0.5,0.5); opacity: 0; }
+	to { -webkit-transform: scale(1,1); opacity: 1; }
+}
+@keyframes spinner-wave-after {
+	from { transform: scale(0.5,0.5); opacity: 0; }
+	to { transform: scale(1,1); opacity: 1; }
+}
+@-webkit-keyframes spinner-wave-before {
+	from { -webkit-transform: scale(1,1); opacity: 1; }
+	to { -webkit-transform: scale(1.5,1.5); opacity: 0; }
+}
+@keyframes spinner-wave-before {
+	from { -webkit-transform: scale(1,1); opacity: 1; }
+	to { -webkit-transform: scale(1.5,1.5); opacity: 0; }
+}
