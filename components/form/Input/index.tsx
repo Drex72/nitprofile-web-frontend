@@ -13,25 +13,25 @@ export const Input = <T extends FieldValues>(props: TInputProps<T>) => {
     const { name, label, error, prefixIcon, register, ...others } = props
 
     return (
-        <label htmlFor={name} className=" flex w-full flex-col">
+        <label htmlFor={name} className="flex w-full flex-col">
             <span
                 aria-disabled={others.disabled}
-                className={`mb-2  flex  items-center gap-[1px] text-sm font-medium text-[#272727]  disabled:text-[#B7B7B7] md:mb-3 md:text-base`}
+                className={`text-sm font-medium text-[#101010]  disabled:text-[#B7B7B7] mb-1`}
             >
                 {label}
 
-                {others.required ? <p className={`text-sm leading-none text-[#EF233C] md:text-base`}>*</p> : null}
+                {others.required ? <span className={`text-sm leading-none `}>*</span> : null}
             </span>
 
             <div
-                className={`focus-within:border-primary flex flex-row gap-x-2 overflow-hidden rounded-[4px] border border-solid border-transparent bg-white duration-200 ease-in ${
+                className={`flex flex-row gap-x-2 overflow-hidden rounded-[4px] border border-[#676767_0.6] bg-transparent duration-200 ease-in focus-within:border-primary ${
                     error ? "!border-[#EF233C]" : ""
                 }`}
             >
                 <input
                     disabled={others.disabled}
                     id={name}
-                    className={` text-text-color-main flex-1 px-5 py-3 text-sm font-normal outline-none placeholder:text-sm placeholder:text-[#B7B7B7] disabled:cursor-not-allowed disabled:bg-[#F9F9F9]  md:text-base md:placeholder:text-base`}
+                    className={` text-[#101010]flex-1 p-3 text-sm font-normal outline-none placeholder:text-sm placeholder:text-[#676767] disabled:cursor-not-allowed disabled:bg-[#F9F9F9] `}
                     {...register(name)}
                     {...others}
                 />

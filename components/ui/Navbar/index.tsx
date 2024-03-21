@@ -5,6 +5,7 @@ import { ProgramsModal } from "../Modals/ProgramsModal"
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { useAppSelector } from "@/state_management"
 import { usePathname } from "next/navigation"
+import { CreateProgramModal } from "../Modals/CreateProgramModal"
 
 /**
  * Navbar component for displaying navigation options and user information.
@@ -30,6 +31,12 @@ export const Navbar = () => {
                 modalIsMounted={programsModal.showPrograms}
                 createProgram={() => setProgramsModal({ createProgram: true, showPrograms: false })}
                 handleClose={() => setProgramsModal({ ...programsModal, showPrograms: false })}
+            />
+
+            {/* Create Programs Modal */}
+            <CreateProgramModal
+                modalIsMounted={programsModal.createProgram}
+                handleClose={() => setProgramsModal({ ...programsModal, createProgram: false })}
             />
 
             {/* Current Page Title */}
