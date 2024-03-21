@@ -16,7 +16,7 @@ export const Input = <T extends FieldValues>(props: TInputProps<T>) => {
         <label htmlFor={name} className="flex w-full flex-col">
             <span
                 aria-disabled={others.disabled}
-                className={`text-sm font-medium text-[#101010]  disabled:text-[#B7B7B7] mb-1`}
+                className={`mb-1 text-sm font-medium  text-[#101010] disabled:text-[#B7B7B7]`}
             >
                 {label}
 
@@ -31,7 +31,7 @@ export const Input = <T extends FieldValues>(props: TInputProps<T>) => {
                 <input
                     disabled={others.disabled}
                     id={name}
-                    className={` text-[#101010]flex-1 p-3 text-sm font-normal outline-none placeholder:text-sm placeholder:text-[#676767] disabled:cursor-not-allowed disabled:bg-[#F9F9F9] `}
+                    className={` text-[#101010]flex-1 w-full p-3 text-sm font-normal outline-none placeholder:text-sm placeholder:text-[#676767] disabled:cursor-not-allowed disabled:bg-[#F9F9F9] `}
                     {...register(name)}
                     {...others}
                 />

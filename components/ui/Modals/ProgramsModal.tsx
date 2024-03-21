@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/state_management"
 import { Button } from "../Button"
 import { IBaseModalProps, ModalLayout } from "./ModalLayout"
 import { TfiClose } from "react-icons/tfi"
@@ -11,6 +12,8 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
     const { modalIsMounted, handleClose, createProgram } = props
 
     const programs = ["Hatchdev", "Nitdev"]
+
+    const { data } = useAppSelector((state) => state.authSlice)
 
     return (
         <ModalLayout isMounted={modalIsMounted} onClose={handleClose}>
@@ -28,7 +31,7 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
                     {programs.map((program, index) => (
                         <button
                             key={index}
-                            className="shadow-program_card group relative mx-auto inline-flex w-[98%] items-center justify-start overflow-hidden rounded bg-white py-3 pl-4 pr-12 text-sm font-normal capitalize text-[#101010] transition-all  duration-300 ease-in-out hover:pl-10 hover:pr-6 md:text-base"
+                            className="group relative mx-auto inline-flex w-[98%] items-center justify-start overflow-hidden rounded bg-white py-3 pl-4 pr-12 text-sm font-normal capitalize text-[#101010] shadow-program_card transition-all  duration-300 ease-in-out hover:pl-10 hover:pr-6 md:text-base"
                         >
                             <span className="absolute left-0 top-0 h-[1px] w-full bg-primary transition-all duration-150 ease-in-out group-hover:h-full"></span>
                             <span className="absolute right-0 pr-4 duration-200 ease-out group-hover:translate-x-12"></span>
@@ -40,9 +43,11 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
                     ))}
                 </div>
 
-                <div className="flex items-end justify-end">
-                    <Button variant="contained" label="Create Program" onClick={() => createProgram()} />
-                </div>
+                {data?.role !== "USER" && (
+                    <div className="flex items-end justify-end">
+                        <Button variant="contained" label="Create Program" onClick={() => createProgram()} />
+                    </div>
+                )}
             </div>
         </ModalLayout>
     )
