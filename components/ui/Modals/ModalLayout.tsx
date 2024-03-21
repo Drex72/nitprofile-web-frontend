@@ -37,7 +37,7 @@ export function ModalLayout(props: IModalProps) {
                     }}
                 />
                 <div
-                    className={`absolute left-1/2 top-1/2 z-[9999]  max-h-[900px] w-[90%]  -translate-x-1/2 -translate-y-1/2 scale-100 overflow-x-hidden overflow-y-scroll rounded-[16px] bg-[#E3E5F6]  px-3 py-5  transition-all duration-300 ease-in-out md:max-w-[500px] md:p-5`}
+                    className={`absolute left-1/2 top-1/2 z-[9999]  max-h-[900px] w-[90%]  -translate-x-1/2 -translate-y-1/2 scale-100 overflow-x-hidden overflow-y-scroll rounded-lg bg-white px-3  py-5 shadow-md  transition-all duration-300 ease-in-out md:max-w-[600px] md:p-5`}
                 >
                     {children}
                 </div>

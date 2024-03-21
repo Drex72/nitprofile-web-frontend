@@ -16,19 +16,20 @@ const config: Config = {
             },
 
             fontSize: {
-                xs: "clamp(0.64rem, 2vw, 0.707rem)",
-                sm: "clamp(0.8rem, 2vw, 1rem)",
-                base: "clamp(1rem, 2vw, 1.414rem)",
-                lg: "clamp(1.25rem, 2vw, 1.999rem)",
-                xl: "clamp(1.562rem, 2vw, 2.827rem)",
-                "2xl": "clamp(1.953rem, 1.5vw, 3.997rem)",
-                "3xl": "clamp(2.441rem, 1.5vw, 5.652rem)",
-                "4xl": "clamp(3.051rem, 1.5vw, 7.992rem)",
-                "5xl": "clamp(3.814rem, 1.5vw, 11.302rem)",
+                // xs: "clamp(0.64rem, 2vw, 0.707rem)",
+                // sm: "clamp(0.8rem, 2vw, 1rem)",
+                // base: "clamp(1rem, 2vw, 1.414rem)",
+                // lg: "clamp(1.25rem, 2vw, 1.999rem)",
+                // xl: "clamp(1.562rem, 2vw, 2.827rem)",
+                // "2xl": "clamp(1.953rem, 1.5vw, 3.997rem)",
+                // "3xl": "clamp(2.441rem, 1.5vw, 5.652rem)",
+                // "4xl": "clamp(3.051rem, 1.5vw, 7.992rem)",
+                // "5xl": "clamp(3.814rem, 1.5vw, 11.302rem)",
             },
 
             boxShadow: {
                 toolbar_button: "0 0 40px 40px #e74c3c inset",
+                program_card: "0px 8px 24px 0px rgba(149, 157, 165, 0.2)",
             },
 
             colors: {
