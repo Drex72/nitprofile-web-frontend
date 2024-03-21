@@ -40,12 +40,14 @@ export const Navbar = () => {
             />
 
             {/* Current Page Title */}
-            <h2 className="text-lg font-semibold capitalize text-[#101010]">{pathname.split("/")[2] ?? "Home"}</h2>
+            <h2 className="flex-1 text-lg font-semibold capitalize text-[#101010]">
+                {pathname.split("/")[2] ?? "Home"}
+            </h2>
 
             {/* Nitprofile Dropdown */}
             <div
                 onClick={() => setProgramsModal({ ...programsModal, showPrograms: true })}
-                className="group flex cursor-pointer items-center justify-between gap-20 rounded-md border border-[#676767] px-4 py-2 text-[14px] font-medium  text-[#101010]"
+                className="group flex max-w-[250px] flex-1 cursor-pointer items-center justify-between gap-4 rounded-md border border-[#676767] px-4 py-2 text-[14px] font-medium  text-[#101010]"
             >
                 <p>Nitprofile</p>
 
@@ -53,7 +55,7 @@ export const Navbar = () => {
             </div>
 
             {/* User Information */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-1 items-center justify-end gap-2">
                 <div className="h-[40px] w-[40px] rounded-full bg-gray-500" />
                 <div>
                     <p className="text-sm font-normal text-[#101010]">{data?.firstName ?? "Chidi"}</p>

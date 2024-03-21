@@ -11,13 +11,19 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <RequireAuthentication allowedRoles={getAllowedRoles(pathname)}>
-            <div className="h-full min-h-screen bg-[#ededee]">
+            <div className="min-h-screen bg-[#ededee]">
                 <Navbar />
 
-                <div className="flex overflow-scroll ">
+                <div className="flex">
                     <Sidebar />
 
-                    <main id="main-content" className="relative !z-0 w-full px-8 pt-[40px] md:ml-[15rem] ">
+                    <main
+                        id="main-content"
+                        style={{
+                            minHeight: "calc(100vh - 70px)",
+                        }}
+                        className="relative !z-0 w-full overflow-y-scroll  px-8 py-[40px] md:ml-[15rem] "
+                    >
                         {children}
                     </main>
                 </div>
