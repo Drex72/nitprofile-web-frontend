@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { ProgramsModal } from "../Modals/ProgramsModal"
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { useAppSelector } from "@/state_management"
@@ -23,6 +23,15 @@ export const Navbar = () => {
 
     // Retrieves user data from the state
     const { data } = useAppSelector((state) => state.authSlice)
+
+    // Retrieves selected Program data from the state
+    const { selectedProgram, allPrograms } = useAppSelector((state) => state.programSlice)
+
+    useEffect(() => {
+        if (allPrograms.length <= 0) {
+            setProgramsModal({ ...programsModal, createProgram: true })
+        }
+    }, [allPrograms])
 
     return (
         <nav className="ml-[15rem] flex items-center justify-between bg-white px-[20px] py-[15px] shadow-sm">
@@ -49,7 +58,7 @@ export const Navbar = () => {
                 onClick={() => setProgramsModal({ ...programsModal, showPrograms: true })}
                 className="group flex max-w-[250px] flex-1 cursor-pointer items-center justify-between gap-4 rounded-md border border-[#676767] px-4 py-2 text-[14px] font-medium  text-[#101010]"
             >
-                <p>Nitprofile</p>
+                <p>{selectedProgram?.program.name ?? "Nitprofile"}</p>
 
                 <MdKeyboardArrowDown className="text-2xl transition-all duration-300 ease-in-out group-hover:rotate-180" />
             </div>

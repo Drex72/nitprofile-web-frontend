@@ -11,9 +11,9 @@ interface IProgramsModalProps extends IBaseModalProps {
 export const ProgramsModal = (props: IProgramsModalProps) => {
     const { modalIsMounted, handleClose, createProgram } = props
 
-    const programs = ["Hatchdev", "Nitdev"]
-
     const { data } = useAppSelector((state) => state.authSlice)
+
+    const { allPrograms } = useAppSelector((state) => state.programSlice)
 
     return (
         <ModalLayout isMounted={modalIsMounted} onClose={handleClose}>
@@ -28,7 +28,7 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
                 </div>
 
                 <div className="mb-8 flex h-full max-h-[400] flex-col gap-4 overflow-y-scroll">
-                    {programs.map((program, index) => (
+                    {allPrograms.map((program, index) => (
                         <button
                             key={index}
                             className="group relative mx-auto inline-flex w-[98%] items-center justify-start overflow-hidden rounded bg-white py-3 pl-4 pr-12 text-sm font-normal capitalize text-[#101010] shadow-program_card transition-all  duration-300 ease-in-out hover:pl-10 hover:pr-6 md:text-base"
@@ -37,7 +37,7 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
                             <span className="absolute right-0 pr-4 duration-200 ease-out group-hover:translate-x-12"></span>
                             <span className="absolute left-0 -translate-x-12 pl-2.5 duration-200 ease-out group-hover:translate-x-0"></span>
                             <span className="relative w-full text-left transition-colors duration-200 ease-in-out group-hover:text-white">
-                                {program}
+                                {program.name}
                             </span>
                         </button>
                     ))}

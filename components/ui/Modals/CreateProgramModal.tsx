@@ -3,11 +3,14 @@ import { Button } from "../Button"
 import { IBaseModalProps, ModalLayout } from "./ModalLayout"
 import { TfiClose } from "react-icons/tfi"
 import { useCreateProgram } from "@/hooks/useCreateProgram"
+import { useAppSelector } from "@/state_management"
 
 export const CreateProgramModal = (props: IBaseModalProps) => {
     const { modalIsMounted, handleClose } = props
 
-    const { closeModal, form, onSubmit, programs } = useCreateProgram(handleClose)
+    const { closeModal, form, onSubmit } = useCreateProgram(handleClose)
+
+    const { allPrograms } = useAppSelector((state) => state.programSlice)
 
     const {
         register,
@@ -15,8 +18,10 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
         handleSubmit,
     } = form
 
+    // If there is no program, don't allow the admin to close the portal until they have created a program
+
     return (
-        <ModalLayout canClose={programs.length ? true : false} isMounted={modalIsMounted} onClose={handleClose}>
+        <ModalLayout canClose={allPrograms.length ? true : false} isMounted={modalIsMounted} onClose={handleClose}>
             <div className="px-2 md:px-0">
                 <div className="mb-4 flex items-center justify-between border-b-2 border-[#676767_0.5] pb-2 text-[#000000_0.5]">
                     <h2 className="text-lg font-semibold md:text-xl">Create new Program</h2>

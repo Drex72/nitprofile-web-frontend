@@ -6,6 +6,7 @@ import {
     IAssignAdminToProgramPayload,
     ICreateProgramPayload,
     IProgram,
+    IProgramNode,
     IProgramUser,
     IRegisterSingleUserForProgram,
 } from "./program.interface"
@@ -134,8 +135,11 @@ class ProgramService {
      * @param {FormData} data - Form data containing the frame information.
      * @returns {Promise<IBaseApiResponse<IProgram>>} - A promise that resolves when the frame is uploaded.
      */
-    public async uploadProgramFrame(programId: string, data: FormData) {
-        return await axiosInstance.post<IBaseApiResponse<IProgram>>(`${this.programUrl}?programId=${programId}`, data)
+    public async uploadProfileFrame(programId: string, data: FormData) {
+        return await axiosInstance.post<IBaseApiResponse<IProgram>>(
+            `${this.programUrl}/profile?programId=${programId}`,
+            data,
+        )
     }
 
     /**
@@ -145,7 +149,10 @@ class ProgramService {
      * @returns {Promise<IBaseApiResponse<IProgram>>} - A promise that resolves when profile generation is enabled.
      */
     public async enableProfileGeneration(programId: string, data: FormData) {
-        return await axiosInstance.put<IBaseApiResponse<IProgram>>(`${this.programUrl}?programId=${programId}`, data)
+        return await axiosInstance.put<IBaseApiResponse<IProgram>>(
+            `${this.programUrl}/profile?programId=${programId}`,
+            data,
+        )
     }
 
     /**
@@ -154,7 +161,11 @@ class ProgramService {
      * @returns {Promise<IBaseApiResponse>} - A promise that resolves with the generated profile.
      */
     public async generateProfile(programId: string) {
-        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}?programId=${programId}`)
+        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile?programId=${programId}`)
+    }
+
+    public async createProgramNode(programId: string, data: { nodes: IProgramNode[] }) {
+        return await axiosInstance.post<IBaseApiResponse>(`${this.programUrl}/node?programId=${programId}`, data)
     }
 }
 

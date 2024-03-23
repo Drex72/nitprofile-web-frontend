@@ -2,11 +2,14 @@
 import { Button } from "@/components/ui/Button"
 import { DropzoneModal } from "@/components/ui/Modals/DropzoneModal"
 import { IDropZoneHandlerProps } from "@/hooks/useDropZone"
+import { useAppSelector } from "@/state_management"
 import { getAsset } from "@/utils"
 import Image from "next/image"
 import { useState } from "react"
 
 const Profile = () => {
+    const { selectedProgram } = useAppSelector((state) => state.programSlice)
+
     const [uploadProfileFrame, setUploadProfileFrame] = useState(false)
 
     const [imageUrl, setImageUrl] = useState("")

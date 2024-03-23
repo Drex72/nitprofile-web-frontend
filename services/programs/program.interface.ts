@@ -57,3 +57,26 @@ export interface IAssignAdminToProgramPayload {
     adminId: string
     payloadid: string
 }
+
+
+export interface IProgramNode {
+    id: string
+    placeholder: boolean
+    type: "image" | "text"
+    x: number
+    y: number
+    width: number
+    height: number
+    gravity: string
+    radius: number
+    crop: string
+    programId: string
+    overlay: string | null
+    text: string | null
+    font_family: string | null
+    font_size: string | null
+    font_weight: string | null
+    color: string | null
+    entity: string | null
+    entity_key: string | null
+}
