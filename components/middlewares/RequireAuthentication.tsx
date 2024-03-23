@@ -85,23 +85,23 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
         setLoading(true)
 
         if (require === "auth") {
-            if (isAuthenticated || data) {
-                // Redirect to the previous route if user roles are not allowed
-                if (allowedRoles.length > 0 && (!data || !allowedRoles.includes(data.role))) {
-                    return validatorHandler({
-                        routeName: "/admin",
-                    })
-                }
-
-                // If authenticated, set loading to false
-                return setLoading(false)
-            }
-
             if (!isAuthenticated || !data) {
                 // If not authenticated, perform route validation to "/auth"
                 return validatorHandler({
                     routeName: "/auth",
                 })
+            }
+
+            if (isAuthenticated && data) {
+                // Redirect to the previous route if user roles are not allowed
+                if (allowedRoles.length > 0 && (!data || !allowedRoles.includes(data.role))) {
+                    return validatorHandler({
+                        routeName: "/auth",
+                    })
+                }
+
+                // If authenticated, set loading to false
+                return setLoading(false)
             }
         }
 
@@ -118,8 +118,10 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
         }
     }, [isAuthenticated, data, require])
 
+    const states = useAppSelector((state) => state)
+
     return (
-        <div>
+        <>
             {/* Render a page loader while waiting for authentication and authorization checks */}
             <ConditionalComponent isMounted={loading}>
                 <PageLoader />
@@ -127,6 +129,6 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
 
             {/* Render the children if no redirection is needed */}
             <ConditionalComponent isMounted={!loading}>{children}</ConditionalComponent>
-        </div>
+        </>
     )
 }

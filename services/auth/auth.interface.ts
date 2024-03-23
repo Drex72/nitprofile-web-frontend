@@ -22,3 +22,19 @@ export interface IVerifyAccountRequest {
     token: string
     password: string
 }
+
+export type IRole = "ADMIN" | "SUPER ADMIN" | "USER"
+
+export interface IUser {
+    id: string
+    firstName: string
+    lastName: string
+    otherName?: string
+    email: string
+    emailVerified: boolean
+    profilePicPublicId: string | null
+    resetToken: string | null
+    profilePicSecureUrl: string | null
+    isVerified: boolean
+    role: IRole
+}

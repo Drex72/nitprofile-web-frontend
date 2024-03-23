@@ -1,8 +1,9 @@
 import { RequireAuthentication } from "@/components/middlewares"
 import React from "react"
+import Login from "./login/page"
 
 const Auth = () => {
-    return <RequireAuthentication require="no-auth">Auth</RequireAuthentication>
+    return <Login />
 }
 
 export default Auth

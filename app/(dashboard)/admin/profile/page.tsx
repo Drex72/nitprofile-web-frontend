@@ -1,10 +1,37 @@
+"use client"
 import { Button } from "@/components/ui/Button"
+import { DropzoneModal } from "@/components/ui/Modals/DropzoneModal"
+import { IDropZoneHandlerProps } from "@/hooks/useDropZone"
 import { getAsset } from "@/utils"
 import Image from "next/image"
+import { useState } from "react"
 
 const Profile = () => {
+    const [uploadProfileFrame, setUploadProfileFrame] = useState(false)
+
+    const [imageUrl, setImageUrl] = useState("")
+
+    const handleFileForm = (file: IDropZoneHandlerProps) => {
+        if (file.stream) {
+            setImageUrl(file.stream)
+        }
+    }
+
+    // const clos
     return (
         <section className="flex h-full flex-col items-center justify-center">
+            <DropzoneModal
+                header={"Upload Profile Frame"}
+                modalIsMounted={uploadProfileFrame}
+                handleClose={() => setUploadProfileFrame(false)}
+                handleInputChange={handleFileForm}
+                accept={{
+                    "image/*": [".jpeg", ".png"],
+                }}
+            >
+                <Image src={imageUrl} alt="Uploaded Frame" width={400} height={400} />
+            </DropzoneModal>
+
             <Image src={getAsset("rocket.svg", "images")} alt="Rocket svg" width={280} height={280} />
 
             <p className="my-6 max-w-[32rem] text-center">
@@ -12,7 +39,7 @@ const Profile = () => {
                 program.
             </p>
 
-            <Button label="Upload Profile Frame" variant="contained" />
+            <Button label="Upload Profile Frame" variant="contained" onClick={() => setUploadProfileFrame(true)} />
         </section>
     )
 }

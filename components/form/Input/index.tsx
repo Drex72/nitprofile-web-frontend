@@ -39,7 +39,7 @@ export const Input = <T extends FieldValues>(props: TInputProps<T>) => {
                 {prefixIcon ? prefixIcon : null}
             </div>
 
-            {error && !others.disabled && <span className={` mt-1 text-xs text-[#EF233C]`}>{error}</span>}
+            {error && <span className={` mt-1 text-xs text-[#EF233C]`}>{error}</span>}
         </label>
     )
 }

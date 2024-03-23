@@ -4,7 +4,7 @@ import { SidebarItems } from "./SidebarItem"
 import { getAsset } from "@/utils"
 import { usePathname } from "next/navigation"
 import { getSidebarData } from "./data"
-import { useAppSelector } from "@/state_management"
+import { authSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { RiLogoutBoxRFill } from "react-icons/ri"
 
 export const Sidebar = () => {
@@ -15,6 +15,10 @@ export const Sidebar = () => {
 
     // Gets the current pathname using the usePathname hook
     const pathname = usePathname()
+
+    const dispatch = useAppDispatch()
+
+    const { logout } = authSlice.actions
 
     /**
      * Checks if the provided routes include the current path.
@@ -31,7 +35,12 @@ export const Sidebar = () => {
     const { data } = useAppSelector((state) => state.authSlice)
 
     // Retrieves sidebar data based on user role
-    const sidebarData = getSidebarData(data!.role)
+    const sidebarData = getSidebarData(data?.role)
+
+    const handleLogout = () => {
+        // Let the logout function dispatch other acgtions redux
+        dispatch(logout())
+    }
 
     return (
         <aside
@@ -63,7 +72,7 @@ export const Sidebar = () => {
                         })}
                     </div>
 
-                    <SidebarItems icon={<RiLogoutBoxRFill />} name="Logout" />
+                    <SidebarItems icon={<RiLogoutBoxRFill />} name="Logout" onClick={handleLogout} />
                 </div>
             </div>
         </aside>

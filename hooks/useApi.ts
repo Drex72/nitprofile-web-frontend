@@ -45,15 +45,6 @@ export const useApi = <T, K>(apiFunc: (arg: K) => Promise<AxiosResponse>) => {
             // Handle errors gracefully and display a toast with a touch of humor
             const error = err.response?.data
 
-            if (!error?.error) {
-                // If there's no specific error message, let's be creative!
-                if (err.message) {
-                    error.message = err?.message
-                } else {
-                    error.message = "Something Went Wrong! Maybe gremlins in the server room?"
-                }
-            }
-
             // Display an error toast message
             makeToast({ message: error?.message || "", type: "error", id: "api-error" })
 

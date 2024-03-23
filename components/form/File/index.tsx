@@ -6,13 +6,14 @@ import { convertFileToReadableStream } from "./utils/convertImageToStream.servic
 import { FieldValues, Path, UseFormRegister } from "react-hook-form"
 import React, { InputHTMLAttributes, useCallback, useEffect, useState } from "react"
 import { getAsset } from "@/utils"
+import { IDropZoneHandlerProps, useFormDropzone } from "@/hooks/useDropZone"
 
 type IFileInput<T extends FieldValues> = {
     name: Path<T>
     label: string
     error?: string
     register: UseFormRegister<T>
-    handleChange?: (file: File) => void
+    handleChange?: (file: IDropZoneHandlerProps) => void
     fileValue?: File | string
 } & InputHTMLAttributes<HTMLInputElement>
 
@@ -21,53 +22,14 @@ export const FileInput = <T extends FieldValues>(props: IFileInput<T>) => {
 
     const { ref: registerRef, ...rest } = register(name)
 
-    const [readableStream, setReadableStream] = useState<string | null>(null)
-
-    const handleUploadFile: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
-        if (!e.target.files) return
-
-        const file = e.target.files[0]
-
-        await handleConvertToStream(file)
-
-        if (props.handleChange) {
-            props.handleChange(file)
-        }
-    }
-
-    const handleConvertToStream = async (file: File) => {
-        const stream = await convertFileToReadableStream(file)
-
-        setReadableStream(stream)
-    }
-
-    useEffect(() => {
-        console.log(fileValue)
-        if (fileValue && typeof fileValue !== "string") {
-            handleConvertToStream(fileValue)
-        }
-        if (fileValue && typeof fileValue === "string") {
-            setReadableStream(fileValue)
-        }
-    }, [fileValue])
-
-    const onDrop = useCallback(
-        async (acceptedFiles: Array<File>) => {
-            const file = acceptedFiles[0]
-
-            await handleConvertToStream(file)
-
-            if (props.handleChange) {
-                props.handleChange(file)
-            }
-        },
-        [props],
-    )
+    const { onDrop, handleUploadFile, readableStream } = useFormDropzone({
+        handleChange: props.handleChange,
+        initialValue: props.fileValue,
+    })
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
     })
-
     return (
         <div className="atmua-input flex w-full flex-col">
             <span
@@ -85,7 +47,7 @@ export const FileInput = <T extends FieldValues>(props: IFileInput<T>) => {
                     {...getRootProps()}
                     className="flex h-full w-full cursor-pointer flex-col items-center justify-center"
                 >
-                    <div className=" focus-within:border-primary flex w-full  items-center justify-center rounded-[4px] border border-solid border-transparent bg-white py-3 duration-200 ease-in">
+                    <div className=" flex w-full items-center  justify-center rounded-[4px] border border-solid border-transparent bg-white py-3 duration-200 ease-in focus-within:border-primary">
                         <div className="flex items-center"></div>
 
                         <Image src={getAsset("cloud.svg", "icons")} alt="Upload" width={20} height={20} />
@@ -112,7 +74,6 @@ export const FileInput = <T extends FieldValues>(props: IFileInput<T>) => {
                         id={name}
                         name={name}
                         accept="image/*"
-                        onChange={handleUploadFile}
                         className="h-0 w-0 "
                     />
                 </label>

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit"
+import moment from "moment"
 
 export type IRole = "ADMIN" | "SUPER ADMIN" | "USER"
 
@@ -20,6 +21,7 @@ export interface IUser {
 interface IInitialState {
     data: IUser | null
     isAuthenticated: boolean
+    persistExpDate: Date | null
 }
 
 const dummyUser = {
@@ -37,8 +39,9 @@ const dummyUser = {
 }
 
 const initialState: IInitialState = {
-    data: dummyUser,
-    isAuthenticated: true,
+    data: null,
+    isAuthenticated: false,
+    persistExpDate: null,
 }
 
 const authReduxSlice = createSlice({
@@ -53,6 +56,9 @@ const authReduxSlice = createSlice({
         login: (state, action: { payload: IUser }) => {
             state.isAuthenticated = true
             state.data = action.payload
+
+            const expDate = moment().add(1, "minute").toDate()
+            state.persistExpDate = expDate
         },
     },
 })

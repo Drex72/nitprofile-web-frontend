@@ -19,5 +19,5 @@ export const ConditionalComponent = ({ children, isMounted, delay = 300 }: ICond
         animationFillMode: "forwards",
     }
 
-    return <div>{showComponent && <div style={isMounted ? mountedStyle : unmountedStyle}>{children}</div>}</div>
+    return <>{showComponent && <div style={isMounted ? mountedStyle : unmountedStyle}>{children}</div>}</>
 }

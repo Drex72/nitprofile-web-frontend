@@ -84,7 +84,7 @@ const userRoutes = [
  * @param {IRole} role - The user's role.
  * @returns {ISidebarData[]} - An array of sidebar data based on the user's role.
  */
-export const getSidebarData = (role: IRole): ISidebarData[] => {
+export const getSidebarData = (role: IRole | undefined): ISidebarData[] => {
     switch (role) {
         case "ADMIN":
             return adminRoutes

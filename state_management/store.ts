@@ -12,7 +12,7 @@ const persistConfig = {
     key: "nitprofile",
     version: 1,
     storage,
-    whitelist: [],
+    whitelist: ["authSlice"],
 }
 
 /**
@@ -57,6 +57,7 @@ export const store = configureStore({
  * @type {Object}
  */
 export const persistor = persistStore(store)
+
 
 /**
  * Type representing the root state of the Redux store.

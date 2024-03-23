@@ -3,10 +3,9 @@ export interface IBaseApiResponse<T = undefined> {
     data: T
 }
 
-export interface IApiHookBaseResponse<T = undefined> {
-    handler: Function
-    data: IBaseApiResponse<T> | null
+export interface IApiHookBaseResponse<T = undefined, K = undefined> {
+    handler: (data: T) => Promise<void>
+    data: IBaseApiResponse<K> | null
     error: Error | null
     loading: boolean
 }
-

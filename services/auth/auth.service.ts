@@ -130,4 +130,4 @@ class AuthService {
     }
 }
 
-export const authService = new AuthService(process.env.APP_API_URL ?? "localhost:3000")
+export const authService = new AuthService(process.env.APP_API_URL ?? "http://localhost:4000/api/v1")
