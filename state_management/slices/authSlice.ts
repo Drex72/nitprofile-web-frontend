@@ -35,12 +35,12 @@ const dummyUser = {
     resetToken: null,
     profilePicSecureUrl: null,
     isVerified: true,
-    role: "USER" as IRole,
+    role: "ADMIN" as IRole,
 }
 
 const initialState: IInitialState = {
-    data: null,
-    isAuthenticated: false,
+    data: dummyUser,
+    isAuthenticated: true,
     persistExpDate: null,
 }
 

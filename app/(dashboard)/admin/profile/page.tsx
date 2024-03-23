@@ -1,48 +1,48 @@
 "use client"
-import { Button } from "@/components/ui/Button"
-import { DropzoneModal } from "@/components/ui/Modals/DropzoneModal"
-import { IDropZoneHandlerProps } from "@/hooks/useDropZone"
+
 import { useAppSelector } from "@/state_management"
-import { getAsset } from "@/utils"
+import { ProfileEmptyState } from "./emptyState"
 import Image from "next/image"
-import { useState } from "react"
+import { Button } from "@/components/ui/Button"
 
 const Profile = () => {
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
-    const [uploadProfileFrame, setUploadProfileFrame] = useState(false)
-
-    const [imageUrl, setImageUrl] = useState("")
-
-    const handleFileForm = (file: IDropZoneHandlerProps) => {
-        if (file.stream) {
-            setImageUrl(file.stream)
-        }
-    }
-
-    // const clos
+    if (!selectedProgram?.program.profileFrameSecureUrl) return <ProfileEmptyState />
+    
     return (
-        <section className="flex h-full flex-col items-center justify-center">
-            <DropzoneModal
-                header={"Upload Profile Frame"}
-                modalIsMounted={uploadProfileFrame}
-                handleClose={() => setUploadProfileFrame(false)}
-                handleInputChange={handleFileForm}
-                accept={{
-                    "image/*": [".jpeg", ".png"],
-                }}
-            >
-                <Image src={imageUrl} alt="Uploaded Frame" width={400} height={400} />
-            </DropzoneModal>
+        <section className=" h-full">
+            <div className="mb-2 flex w-full items-end justify-end">
+                <Button variant="contained" label="Customize" />
+            </div>
 
-            <Image src={getAsset("rocket.svg", "images")} alt="Rocket svg" width={280} height={280} />
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                <div className="basis-[50%]">
+                    <h2 className="mb-2 text-center text-lg font-semibold text-[#101010] md:text-xl">Frame</h2>
+                    <Image
+                        src="https://res.cloudinary.com/dinrq1kf4/image/upload/c_fill,g_center,h_1000,w_1000/c_fit,h_500,l_Nithub:NITPROFILE_ASSETS:IMAGE%2022-8769646304,r_10000,w_500,x_20,y_20/co_red,l_text:Cookie_10_bold:Teledua,x_40,y_40/v1/Nithub/nitprofile_profile_frames/FRAME%20119-5069537755"
+                        alt="Profile Frame"
+                        width={100}
+                        height={100}
+                        className="w-full"
+                        unoptimized
+                        priority
+                    />
+                </div>
 
-            <p className="my-6 max-w-[32rem] text-center">
-                There is no Profile Frame for this Program. Click the button below to Upload a Profile Frame for this
-                program.
-            </p>
-
-            <Button label="Upload Profile Frame" variant="contained" onClick={() => setUploadProfileFrame(true)} />
+                <div className="basis-[50%]">
+                    <h2 className="mb-2 text-center text-lg font-semibold text-primary md:text-xl">Preview</h2>
+                    <Image
+                        src="https://res.cloudinary.com/dinrq1kf4/image/upload/c_fill,g_center,h_1000,w_1000/c_fit,h_500,l_Nithub:NITPROFILE_ASSETS:IMAGE%2022-8769646304,r_10000,w_500,x_20,y_20/co_red,l_text:Cookie_10_bold:Teledua,x_40,y_40/v1/Nithub/nitprofile_profile_frames/FRAME%20119-5069537755"
+                        alt="Profile Frame"
+                        width={100}
+                        height={100}
+                        className="w-full"
+                        unoptimized
+                        priority
+                    />
+                </div>
+            </div>
         </section>
     )
 }
