@@ -1,7 +1,3 @@
 components Left
 Date Picker
 Chart
-
-
-Drawing Board  (Has Boundaries)
-Draggable Nodes (Expandable)
