@@ -72,11 +72,12 @@ export const PopOver = ({
             ref={wrapperRef}
             onMouseEnter={handleMouseOver}
             onMouseLeave={handleMouseLeave}
-            className="relative flex h-fit w-fit justify-center "
+            className="relative flex h-fit w-fit justify-center"
         >
             <div className="cursor-pointer" onClick={handleClick}>
                 {children}
             </div>
+
             <div
                 style={{
                     width: show ? width : 0,

@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { PopOver } from "../Popover"
 
 interface ITableCell {
     children: string | React.ReactNode
@@ -15,12 +16,15 @@ interface TableMoreMenuProps {
 export const TableMoreMenu = ({ actions }: TableMoreMenuProps) => {
     return (
         <>
-            <button>
+            {/* <button>
                 <Image src="/icons/charm_menu-kebab.svg" width={16} height={16} alt="more" />
-            </button>
-            {/* <PopOver content="lax" trigger="click">
-                {actions}
-            </PopOver> */}
+            </button> */}
+
+            <PopOver location="bottom" content={actions}>
+                <button>
+                    <Image src="/icons/charm_menu-kebab.svg" width={16} height={16} alt="more" />
+                </button>
+            </PopOver>
         </>
     )
 }
@@ -32,5 +36,5 @@ interface MenuItemProps {
 }
 
 export const MenuItem = ({ children }: MenuItemProps) => {
-    return <button className="flex items-center">{children}</button>
+    return <button className="flex items-center border border-red-500 shadow-md">{children}</button>
 }
