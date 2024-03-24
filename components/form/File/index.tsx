@@ -2,11 +2,10 @@
 
 import Image from "next/image"
 import { useDropzone } from "react-dropzone"
-import { convertFileToReadableStream } from "./utils/convertImageToStream.service"
 import { FieldValues, Path, UseFormRegister } from "react-hook-form"
-import React, { InputHTMLAttributes, useCallback, useEffect, useState } from "react"
-import { getAsset } from "@/utils"
+import React, { InputHTMLAttributes } from "react"
 import { IDropZoneHandlerProps, useFormDropzone } from "@/hooks/useDropZone"
+import { CloudIcon } from "@/public/icons"
 
 type IFileInput<T extends FieldValues> = {
     name: Path<T>
@@ -50,7 +49,7 @@ export const FileInput = <T extends FieldValues>(props: IFileInput<T>) => {
                     <div className=" flex w-full items-center  justify-center rounded-[4px] border border-solid border-transparent bg-white py-3 duration-200 ease-in focus-within:border-primary">
                         <div className="flex items-center"></div>
 
-                        <Image src={getAsset("cloud.svg", "icons")} alt="Upload" width={20} height={20} />
+                        <CloudIcon />
 
                         <p className="ml-3 text-sm font-normal text-[#939393] ">
                             {/* TODO: Work on the animation for this */}
