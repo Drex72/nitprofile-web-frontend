@@ -1,9 +1,7 @@
-import React from 'react'
+import { Users } from "@/sections"
 
-const Users = () => {
-  return (
-    <div>Users</div>
-  )
+const page = () => {
+    return <Users />
 }
 
-export default Users
+export default page
