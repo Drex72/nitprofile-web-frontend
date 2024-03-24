@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import { ProgramsModal } from "../Modals/ProgramsModal"
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { useAppSelector } from "@/state_management"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { CreateProgramModal } from "../Modals/CreateProgramModal"
 
 /**
@@ -17,6 +17,8 @@ export const Navbar = () => {
         showPrograms: false,
         createProgram: false,
     })
+
+    const router = useRouter()
 
     // Gets the current pathname using the usePathname hook
     const pathname = usePathname()
@@ -32,6 +34,16 @@ export const Navbar = () => {
             setProgramsModal({ ...programsModal, createProgram: true })
         }
     }, [allPrograms])
+
+    const handleClickProfile = () => {
+        if (data?.role === "USER") {
+            router.push("/student/settings")
+        }
+
+        if (data?.role === "ADMIN" || data?.role === "SUPER ADMIN") {
+            router.push("/admin/settings")
+        }
+    }
 
     return (
         <nav className="ml-[15rem] flex items-center justify-between bg-white px-[20px] py-[15px] shadow-sm">
@@ -64,14 +76,18 @@ export const Navbar = () => {
             </div>
 
             {/* User Information */}
-            <div className="flex flex-1 items-center justify-end gap-2">
+            <button
+                onClick={() => handleClickProfile()}
+                className="flex flex-1 cursor-pointer items-center justify-end gap-2"
+            >
                 <div className="h-[40px] w-[40px] rounded-full bg-gray-500" />
-                <div>
+
+                <div className="text-start">
                     <p className="text-sm font-normal text-[#101010]">{data?.firstName ?? "Chidi"}</p>
 
                     <p className="text-xs font-normal capitalize text-[#676767]">{data?.role ?? "Admin"}</p>
                 </div>
-            </div>
+            </button>
         </nav>
     )
 }

@@ -1,5 +1,5 @@
 import { IRole } from "@/state_management"
-import { PiGraduationCapLight } from "react-icons/pi"
+import { IoSettings } from "react-icons/io5"
 import { GoHomeFill } from "react-icons/go"
 import { IoPeople } from "react-icons/io5"
 import { PiCertificateFill } from "react-icons/pi"
@@ -46,6 +46,12 @@ const adminRoutes: ISidebarData[] = [
         route: "/admin/certificate",
         activeRoutes: ["certificate"],
     },
+    {
+        name: "Settings",
+        icon: <IoSettings />,
+        route: "/admin/settings",
+        activeRoutes: ["settings"],
+    },
 ]
 
 /**
@@ -73,7 +79,7 @@ const userRoutes = [
     },
     {
         name: "Settings",
-        icon: <IoPeople />,
+        icon: <IoSettings />,
         route: "/student/settings",
         activeRoutes: ["settings"],
     },
@@ -92,7 +98,12 @@ export const getSidebarData = (role: IRole | undefined): ISidebarData[] => {
         case "SUPER ADMIN":
             return [
                 ...adminRoutes,
-                { name: "Admins", icon: <GrUserAdmin />, route: "/admin/manage-admins", activeRoutes: ["manage-admins"] },
+                {
+                    name: "Admins",
+                    icon: <GrUserAdmin />,
+                    route: "/admin/manage-admins",
+                    activeRoutes: ["manage-admins"],
+                },
             ]
 
         case "USER":
