@@ -1,62 +1,18 @@
-// // "use client"
-
-// // import { RequireAuthentication } from "@/components/middlewares"
-
-// // const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-// //     return (
-// //         <RequireAuthentication require="no-auth">
-// //             <div className="min-h-screen">{children}</div>
-// //         </RequireAuthentication>
-// //     )
-// // }
-
-// // export default AuthLayout
-
-// "use client"
-
-// import { RequireAuthentication } from "@/components/middlewares"
-// import { Navbar } from "@/components/ui"
-// import { Sidebar } from "@/components/ui/Sidebar"
-// import { getAllowedRoles } from "@/utils"
-// import { usePathname } from "next/navigation"
-
-// const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-//     return (
-//         <RequireAuthentication allowedRoles={getAllowedRoles(pathname)}>
-//             <div className="min-h-screen bg-[#ededee]">
-//                 <Navbar />
-
-//                 <div className="flex">
-//                     <Sidebar />
-
-//                     <main
-//                         id="main-content"
-//                         style={{
-//                             minHeight: "calc(100vh - 70px)",
-//                         }}
-//                         className="relative !z-0 w-full overflow-y-scroll  px-8 py-[40px] md:ml-[15rem] "
-//                     >
-//                         {children}
-//                     </main>
-//                 </div>
-//             </div>
-//         </RequireAuthentication>
-//     )
-// }
-
-// export default DashboardLayout
-
 "use client"
 
 import { RequireAuthentication } from "@/components/middlewares"
-import { Navbar } from "@/components/ui"
-import { Sidebar } from "@/components/ui/Sidebar"
-import { getAllowedRoles } from "@/utils"
+import { NitdaLogo } from "@/public/icons"
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <RequireAuthentication require="no-auth">
-            <main className="h-screen">{children}</main>
+            <main className="relative flex h-screen items-center justify-center bg-[#ededee] ">
+                <NitdaLogo width={150} height={50} className="absolute left-5 top-5" />
+
+                <div className=" mx-auto w-[80%] rounded-lg bg-white px-5 pb-16 pt-10 shadow-lg md:w-full md:max-w-[420px] ">
+                    {children}
+                </div>
+            </main>
         </RequireAuthentication>
     )
 }

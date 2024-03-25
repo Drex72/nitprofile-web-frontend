@@ -8,12 +8,10 @@ export interface TableHeadProps {
 
 const TableHead = ({ items }: { items: TableHeadProps[] }) => {
     return (
-        <thead
-            className="sticky inset-0 bottom-auto mb-[13.2px] h-[76.984px] bg-[#D4D2D2]"
-            style={{ borderTopRightRadius: "14px" }}
-        >
-            <tr className="" style={{ borderRadius: "14px" }}>
+        <thead className=" bg-[#D4D2D2] !py-5" style={{ borderTopRightRadius: "14px" }}>
+            <tr className="rounded-[14px] py-10">
                 <th></th>
+
                 {items.map((item, index) => (
                     <th
                         key={index}

@@ -118,8 +118,6 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
         }
     }, [isAuthenticated, data, require])
 
-    const states = useAppSelector((state) => state)
-
     return (
         <>
             {/* Render a page loader while waiting for authentication and authorization checks */}

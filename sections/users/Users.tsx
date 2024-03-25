@@ -15,6 +15,8 @@ const Users = () => {
     const handleEditUser = () => {}
     return (
         <main>
+
+            <div></div>
             <UsersTable data={data} handleDeleteUser={handleDeleteUser} handleEditUser={handleEditUser} />
         </main>
     )

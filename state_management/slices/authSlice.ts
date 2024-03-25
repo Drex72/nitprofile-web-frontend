@@ -40,7 +40,7 @@ const dummyUser = {
 
 const initialState: IInitialState = {
     data: dummyUser,
-    isAuthenticated: true,
+    isAuthenticated: false,
     persistExpDate: null,
 }
 
