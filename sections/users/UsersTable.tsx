@@ -1,8 +1,8 @@
 "use client"
 
-import { Pagination, TableContainer, TableHead, TableHeadProps } from "@/components/ui"
+import { Pagination, Table, TableBody, TableContainer, TableHead, TableHeadProps } from "@/components/ui"
 import useTable from "@/hooks/useTable"
-import UserTableRow, { IUsersData } from "./UserTableRow"
+import UsersTableRow, { IUsersData } from "./UsersTableRow"
 
 const tableHeadData: TableHeadProps[] = [
     { id: "firstName", label: "First name", align: "left" },
@@ -12,25 +12,34 @@ const tableHeadData: TableHeadProps[] = [
     { id: "", label: "" },
 ]
 
-const UsersTable = ({ data }: { data: IUsersData[] }) => {
-    const rowsPerPage = 7
+interface UsersTableProps {
+    data: IUsersData[]
+    handleDeleteUser: (id: string) => void
+    handleEditUser: (id: string) => void
+}
 
+const UsersTable = ({ data, handleDeleteUser, handleEditUser }: UsersTableProps) => {
+    const rowsPerPage = 7
     const { currentPage, currentPageData, handleChangePage, isLastPage, isFirstPage, goToNext, goToPrev } = useTable(
         data,
         rowsPerPage,
     )
+
     return (
         <TableContainer>
-            <div className="h-[536px] overflow-y-auto">
-                <table className="relative w-full min-w-[1203.152px]">
-                    <TableHead items={tableHeadData} />
-                    <tbody style={{ marginTop: "40px" }}>
-                        {currentPageData.map((row, index) => (
-                            <UserTableRow key={index} item={row} />
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <Table>
+                <TableHead items={tableHeadData} />
+                <TableBody>
+                    {currentPageData.map((row, index) => (
+                        <UsersTableRow
+                            key={index}
+                            item={row}
+                            handleDeleteUser={handleDeleteUser}
+                            handleEditUser={handleEditUser}
+                        />
+                    ))}
+                </TableBody>
+            </Table>
             <Pagination
                 rowsPerPage={rowsPerPage}
                 totalRows={data.length}

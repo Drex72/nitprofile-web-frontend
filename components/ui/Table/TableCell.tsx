@@ -6,7 +6,7 @@ interface ITableCell {
 }
 
 const TableCell = ({ children }: ITableCell) => {
-    return <td className={`text-left text-[16px] font-normal uppercase leading-normal`}>{children}</td>
+    return <td className={`text-left text-[16px] font-normal leading-normal`}>{children}</td>
 }
 
 interface TableMoreMenuProps {
@@ -16,10 +16,6 @@ interface TableMoreMenuProps {
 export const TableMoreMenu = ({ actions }: TableMoreMenuProps) => {
     return (
         <>
-            {/* <button>
-                <Image src="/icons/charm_menu-kebab.svg" width={16} height={16} alt="more" />
-            </button> */}
-
             <PopOver location="bottom" content={actions}>
                 <button>
                     <Image src="/icons/charm_menu-kebab.svg" width={16} height={16} alt="more" />
@@ -33,8 +29,13 @@ export default TableCell
 
 interface MenuItemProps {
     children: React.ReactNode | string
+    handleClick: () => void
 }
 
-export const MenuItem = ({ children }: MenuItemProps) => {
-    return <button className="flex items-center border border-red-500 shadow-md">{children}</button>
+export const MenuItem = ({ children, handleClick }: MenuItemProps) => {
+    return (
+        <button className="flex items-center border border-red-500 shadow-md" onClick={handleClick}>
+            {children}
+        </button>
+    )
 }

@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react"
 
-const useTable = (data: any[], rowsPerPage: number) => {
+interface TableResult<T> {
+    currentPage: number
+    currentPageData: T[]
+    handleChangePage: (pageNumber: number) => void
+    isLastPage: boolean
+    isFirstPage: boolean
+    goToNext: () => void
+    goToPrev: () => void
+}
+
+const useTable = <T>(data: T[], rowsPerPage: number): TableResult<T> => {
     const [currentPage, setCurrentPage] = useState<number>(1)
 
-    const [currentPageData, setCurrentPageData] = useState<any[]>([])
+    const [currentPageData, setCurrentPageData] = useState<T[]>([])
 
     const totalRows = data.length
 

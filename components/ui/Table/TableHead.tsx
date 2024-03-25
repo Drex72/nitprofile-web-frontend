@@ -17,7 +17,7 @@ const TableHead = ({ items }: { items: TableHeadProps[] }) => {
                 {items.map((item, index) => (
                     <th
                         key={index}
-                        className={`text-${item.align || "left"} text-[18px] font-[600] leading-normal text-[#04091E]`}
+                        className={`text-${item.align || "left"} text-[16px] font-semibold leading-normal text-[#04091E]`}
                     >
                         {item.label}
                     </th>
