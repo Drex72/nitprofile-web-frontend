@@ -1,5 +1,6 @@
-import React, { InputHTMLAttributes } from "react"
+import React, { InputHTMLAttributes, useMemo, useState } from "react"
 import { FieldValues, Path, UseFormRegister } from "react-hook-form"
+import { FiEye, FiEyeOff } from "react-icons/fi"
 
 type TInputProps<T extends FieldValues> = {
     name: Path<T>
@@ -11,6 +12,18 @@ type TInputProps<T extends FieldValues> = {
 
 export const Input = <T extends FieldValues>(props: TInputProps<T>) => {
     const { name, label, error, prefixIcon, register, ...others } = props
+
+    // State to manage password visibility
+    const [secure, setSecure] = useState(true)
+
+    // Memoized password icon component to toggle password visibility
+    const passwordIcon = useMemo(() => {
+        return (
+            <div className="my-auto cursor-pointer pe-4" onClick={() => setSecure(!secure)}>
+                {secure ? <FiEye /> : <FiEyeOff />}
+            </div>
+        )
+    }, [secure, setSecure])
 
     return (
         <label htmlFor={name} className="flex w-full flex-col">
@@ -34,7 +47,10 @@ export const Input = <T extends FieldValues>(props: TInputProps<T>) => {
                     className={` text-[#101010]flex-1 w-full p-3 text-sm font-normal outline-none placeholder:text-sm placeholder:text-[#676767] disabled:cursor-not-allowed disabled:bg-[#F9F9F9] `}
                     {...register(name)}
                     {...others}
+                    type={others.type === "password" ? (secure ? "password" : "text") : others.type}
                 />
+
+                {others.type === "password" && passwordIcon}
 
                 {prefixIcon ? prefixIcon : null}
             </div>

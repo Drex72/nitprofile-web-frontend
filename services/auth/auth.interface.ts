@@ -13,9 +13,10 @@ export interface IResetPasswordRequest {
 }
 
 export interface IAcceptAdminInvitationRequest {
-    resetToken: string
-    firstName: string
     lastName: string
+    firstName: string
+    email: string
+    password: string
 }
 
 export interface IVerifyAccountRequest {

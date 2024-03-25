@@ -1,8 +1,5 @@
 "use client"
 
-import React, { useMemo, useState } from "react"
-import { FiEye, FiEyeOff } from "react-icons/fi"
-
 import { Input } from "@/components/form"
 import { Button } from "@/components/ui/Button"
 import { useLoginApi } from "@/services/auth/auth-hooks"
@@ -23,18 +20,6 @@ type schemaType = z.infer<typeof schema>
 
 const Login = () => {
     const { handler, loading } = useLoginApi()
-
-    // State to manage password visibility
-    const [secure, setSecure] = useState(true)
-
-    // Memoized password icon component to toggle password visibility
-    const passwordIcon = useMemo(() => {
-        return (
-            <div className="my-auto pe-4 cursor-pointer" onClick={() => setSecure(!secure)}>
-                {secure ? <FiEye /> : <FiEyeOff />}
-            </div>
-        )
-    }, [secure, setSecure])
 
     const router = useRouter()
 
@@ -86,9 +71,8 @@ const Login = () => {
                     required
                     name="password"
                     label="Password"
-                    type={secure ? "password" : "text"}
+                    type="password"
                     register={register}
-                    prefixIcon={passwordIcon}
                     disabled={loading}
                     placeholder="Enter your Password"
                     error={errors?.password ? errors.password.message : undefined}
