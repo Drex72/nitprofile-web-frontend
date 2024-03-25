@@ -3,11 +3,15 @@
 import { RequireAuthentication } from "@/components/middlewares"
 import { Navbar } from "@/components/ui"
 import { Sidebar } from "@/components/ui/Sidebar"
+import { useScreenSize } from "@/hooks/useScreenSize"
 import { getAllowedRoles } from "@/utils"
 import { usePathname } from "next/navigation"
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname()
+
+    useScreenSize();
+
 
     return (
         <RequireAuthentication allowedRoles={getAllowedRoles(pathname)}>

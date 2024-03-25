@@ -2,15 +2,18 @@
 import { SidebarItems } from "./SidebarItem"
 import { usePathname } from "next/navigation"
 import { getSidebarData } from "./data"
-import { authSlice, useAppDispatch, useAppSelector } from "@/state_management"
+import { appSlice, authSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { RiLogoutBoxRFill } from "react-icons/ri"
 import { NitdaLogo } from "@/public/icons"
+import { MdOutlineClose } from "react-icons/md"
 
 export const Sidebar = () => {
     // Work on the keyboard accessibility
 
     // Determines whether the sidebar is opened or closed
-    const sidebarOpened = true
+    const { sidebarOpened } = useAppSelector((state) => state.appSlice)
+
+    const { setSidebar } = appSlice.actions
 
     // Gets the current pathname using the usePathname hook
     const pathname = usePathname()
@@ -49,9 +52,15 @@ export const Sidebar = () => {
             aria-label="Sidebar"
         >
             <div
-                className={`relative flex max-h-screen min-h-0 flex-1  flex-col bg-white px-4 py-5 ${sidebarOpened ? "block" : "hidden"}`}
+                className={`relative flex h-full min-h-0  flex-1 flex-col  bg-white px-4 py-5 ${sidebarOpened ? "block" : "hidden"}`}
             >
-                <NitdaLogo width={150} height={50} className="mb-12" />
+                <div className="mb-12 flex items-center justify-between">
+                    <NitdaLogo width={150} height={50} />
+                    <MdOutlineClose
+                        onClick={() => dispatch(setSidebar(false))}
+                        className="text-3xl text-[#101010] md:hidden"
+                    />
+                </div>
 
                 <div className="flex h-full flex-col justify-between gap-4 ">
                     <div className="flex flex-col gap-5">
