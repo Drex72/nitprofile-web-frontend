@@ -1,7 +1,8 @@
-import { useAppSelector } from "@/state_management"
+import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { Button } from "../Button"
 import { IBaseModalProps, ModalLayout } from "./ModalLayout"
 import { TfiClose } from "react-icons/tfi"
+import { IProgram } from "@/services/programs/program.interface"
 
 interface IProgramsModalProps extends IBaseModalProps {
     createProgram: Function
@@ -14,6 +15,15 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
     const { data } = useAppSelector((state) => state.authSlice)
 
     const { allPrograms } = useAppSelector((state) => state.programSlice)
+
+    const dispatch = useAppDispatch()
+
+    const { setSelectedProgram } = programSlice.actions
+
+    const selectProgram = (program: IProgram) => {
+        dispatch(setSelectedProgram(program))
+        handleClose()
+    }
 
     return (
         <ModalLayout isMounted={modalIsMounted} onClose={handleClose}>
@@ -30,6 +40,7 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
                 <div className="mb-8 flex h-full max-h-[400] flex-col gap-4 overflow-y-scroll">
                     {allPrograms.map((program, index) => (
                         <button
+                            onClick={() => selectProgram(program)}
                             key={index}
                             className="group relative mx-auto inline-flex w-[98%] items-center justify-start overflow-hidden rounded bg-white py-3 pl-4 pr-12 text-sm font-normal capitalize text-[#101010] shadow-program_card transition-all  duration-300 ease-in-out hover:pl-10 hover:pr-6 md:text-base"
                         >

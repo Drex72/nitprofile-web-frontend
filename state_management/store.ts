@@ -12,7 +12,7 @@ const persistConfig = {
     key: "nitprofile",
     version: 1,
     storage,
-    whitelist: [],
+    whitelist: ["authSlice"],
 }
 
 /**
@@ -57,7 +57,6 @@ export const store = configureStore({
  * @type {Object}
  */
 export const persistor = persistStore(store)
-
 
 /**
  * Type representing the root state of the Redux store.
@@ -105,5 +104,4 @@ export const useSliceActions = <T extends ActionCreatorsMapObject<any>>(slice: T
     return bindActionCreators(slice, dispatch)
 }
 
-
-export const useEditorActions= () => useSliceActions(frameEditorSlice.actions);
+export const useEditorActions = () => useSliceActions(frameEditorSlice.actions)

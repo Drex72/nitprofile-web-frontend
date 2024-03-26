@@ -111,7 +111,7 @@ const VerifyAccount = () => {
                     error={errors?.confirmPassword ? errors.confirmPassword.message : undefined}
                 />
 
-                <Button variant="contained" label="Reset Password" loading={loading} type="submit" />
+                <Button variant="contained" label="Verify Account" loading={loading} type="submit" />
             </form>
         </>
     )

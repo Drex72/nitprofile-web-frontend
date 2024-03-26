@@ -82,7 +82,7 @@ export const Navbar = () => {
                 onClick={() => setProgramsModal({ ...programsModal, showPrograms: true })}
                 className="group flex max-w-[250px] flex-1 cursor-pointer items-center justify-between gap-4 rounded-md border border-[#676767] px-4 py-2 text-[14px] font-medium  text-[#101010]"
             >
-                <p>{selectedProgram?.program.name ?? "Nitprofile"}</p>
+                <p>{selectedProgram?.program.name ?? allPrograms[0]?.name ?? "Nitprofile"}</p>
 
                 <MdKeyboardArrowDown className="text-2xl transition-all duration-300 ease-in-out group-hover:rotate-180" />
             </div>

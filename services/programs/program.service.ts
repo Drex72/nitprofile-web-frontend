@@ -6,6 +6,7 @@ import {
     IAssignAdminToProgramPayload,
     ICreateProgramPayload,
     IProgram,
+    IProgramMetrics,
     IProgramNode,
     IProgramUser,
     IRegisterSingleUserForProgram,
@@ -167,6 +168,10 @@ class ProgramService {
     public async createProgramNode(programId: string, data: { nodes: IProgramNode[] }) {
         return await axiosInstance.post<IBaseApiResponse>(`${this.programUrl}/node?programId=${programId}`, data)
     }
+
+    public async getProgramMetrics(programId: string) {
+        return await axiosInstance.get<IBaseApiResponse<IProgramMetrics>>(`${this.programUrl}/metrics?programId=${programId}`)
+    }
 }
 
-export const authService = new ProgramService(process.env.APP_API_URL ?? "http://localhost:4000/api/v1")
+export const programService = new ProgramService(process.env.APP_API_URL ?? "http://localhost:4000/api/v1")

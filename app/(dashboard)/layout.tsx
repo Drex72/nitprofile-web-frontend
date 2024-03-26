@@ -4,17 +4,43 @@ import { RequireAuthentication } from "@/components/middlewares"
 import { Navbar } from "@/components/ui"
 import { Sidebar } from "@/components/ui/Sidebar"
 import { useScreenSize } from "@/hooks/useScreenSize"
+import { useGetProgramsApi } from "@/services/programs/program-hooks"
+import { programSlice, useAppSelector } from "@/state_management"
 import { getAllowedRoles } from "@/utils"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname()
 
-    useScreenSize();
+    const [programsFetching, setProgramsFetching] = useState(false)
 
+    const { handler } = useGetProgramsApi()
+
+    const dispatch = useDispatch()
+
+    const { allPrograms } = useAppSelector((state) => state.programSlice)
+
+    const { initialize } = programSlice.actions
+
+    useScreenSize()
+
+    const getAllPrograms = async () => {
+        setProgramsFetching(true)
+        const programs = await handler(undefined)
+
+        dispatch(initialize(programs.data))
+
+        setProgramsFetching(false)
+    }
+
+    useEffect(() => {
+        !allPrograms.length && getAllPrograms()
+    }, [allPrograms])
 
     return (
-        <RequireAuthentication allowedRoles={getAllowedRoles(pathname)}>
+        <RequireAuthentication loading={programsFetching} allowedRoles={getAllowedRoles(pathname)}>
             <div className="min-h-screen bg-[#ededee]">
                 <Navbar />
 

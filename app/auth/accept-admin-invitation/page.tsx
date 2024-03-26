@@ -139,7 +139,7 @@ const AcceptAdminInvitation = () => {
                     error={errors?.confirmPassword ? errors.confirmPassword.message : undefined}
                 />
 
-                <Button variant="contained" label="Reset Password" loading={loading} type="submit" />
+                <Button variant="contained" label="Create" loading={loading} type="submit" />
             </form>
         </>
     )

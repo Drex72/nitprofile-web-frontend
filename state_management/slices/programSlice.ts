@@ -32,7 +32,7 @@ interface IInitialState {
 }
 
 const initialStateValue: IInitialState = {
-    allPrograms: dummyprograms,
+    allPrograms: [],
     selectedProgram: null,
 }
 

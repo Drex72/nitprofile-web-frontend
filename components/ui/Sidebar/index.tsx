@@ -64,12 +64,15 @@ export const Sidebar = () => {
 
                 <div className="flex h-full flex-col justify-between gap-4 ">
                     <div className="flex flex-col gap-5">
-                        {sidebarData.map((item, index) => {
-                            const { activeRoutes, icon, name, route } = item
-                            const isActive = isItemActive(activeRoutes, 2)
-
-                            return <SidebarItems key={index} active={isActive} icon={icon} name={name} route={route} />
-                        })}
+                        {sidebarData.map((item, index) => (
+                            <SidebarItems
+                                key={item.name}
+                                active={isItemActive(item.activeRoutes, 2)}
+                                icon={item.icon}
+                                name={item.name}
+                                route={item.route}
+                            />
+                        ))}
                     </div>
 
                     <SidebarItems icon={<RiLogoutBoxRFill />} name="Logout" onClick={handleLogout} />

@@ -58,7 +58,6 @@ export interface IAssignAdminToProgramPayload {
     payloadid: string
 }
 
-
 export interface IProgramNode {
     id: string
     placeholder: boolean
@@ -79,4 +78,10 @@ export interface IProgramNode {
     color: string | null
     entity: string | null
     entity_key: string | null
+}
+
+export interface IProgramMetrics {
+    noOfProfilesGenerated: number
+    noOfVerifiedUsers: number
+    noOfCertificatesGenerated: number
 }

@@ -39,7 +39,7 @@ const dummyUser = {
 }
 
 const initialState: IInitialState = {
-    data: dummyUser,
+    data: null,
     isAuthenticated: false,
     persistExpDate: null,
 }

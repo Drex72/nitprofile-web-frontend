@@ -10,6 +10,7 @@ interface RequireAuthProps {
     children: React.ReactNode
     require?: "auth" | "no-auth"
     allowedRoles?: IRole[]
+    loading?: boolean
 }
 
 interface IValidatorHandler {
@@ -33,6 +34,7 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
     children,
     require = "auth",
     allowedRoles = [],
+    loading = false,
 }) => {
     // Next.js router instance for navigation
     const router = useRouter()
@@ -48,7 +50,7 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
     const { setRouteValidation } = appSlice.actions
 
     // State to manage loading status
-    const [loading, setLoading] = useState(routeValidated ? false : true)
+    const [loadingState, setLoadingState] = useState(routeValidated ? false : true)
 
     /**
      * Handler function for route validation.
@@ -64,7 +66,7 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
         if (routeName) router.push(routeName)
 
         // Set loading to false after navigation
-        setLoading(false)
+        setLoadingState(false)
 
         // Dispatch action to set route validation to true
         dispatch(setRouteValidation(true))
@@ -78,11 +80,11 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
     useEffect(() => {
         // Check if a validation was just previously done
         if (routeValidated) {
-            return setLoading(false)
+            return setLoadingState(false)
         }
 
         // Set loading to true for suspenseful animation
-        setLoading(true)
+        setLoadingState(true)
 
         if (require === "auth") {
             if (!isAuthenticated || !data) {
@@ -101,7 +103,7 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
                 }
 
                 // If authenticated, set loading to false
-                return setLoading(false)
+                return setLoadingState(false)
             }
         }
 
@@ -113,7 +115,7 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
                 })
             } else {
                 // If not authenticated, set loading to false
-                return setLoading(false)
+                return setLoadingState(false)
             }
         }
     }, [isAuthenticated, data, require])
@@ -121,12 +123,12 @@ export const RequireAuthentication: React.FC<RequireAuthProps> = ({
     return (
         <>
             {/* Render a page loader while waiting for authentication and authorization checks */}
-            <ConditionalComponent isMounted={loading}>
+            <ConditionalComponent isMounted={loading || loadingState}>
                 <PageLoader />
             </ConditionalComponent>
 
             {/* Render the children if no redirection is needed */}
-            <ConditionalComponent isMounted={!loading}>{children}</ConditionalComponent>
+            <ConditionalComponent isMounted={!loading && !loadingState}>{children}</ConditionalComponent>
         </>
     )
 }
