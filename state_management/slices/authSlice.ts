@@ -58,7 +58,7 @@ const authReduxSlice = createSlice({
             state.data = action.payload
 
             const expDate = moment().add(1, "minute").toDate()
-            state.persistExpDate = expDate
+            // state.persistExpDate = expDate
         },
     },
 })

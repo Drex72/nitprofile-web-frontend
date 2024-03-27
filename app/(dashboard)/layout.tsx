@@ -28,9 +28,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     const getAllPrograms = async () => {
         setProgramsFetching(true)
+
         const programs = await handler(undefined)
 
-        dispatch(initialize(programs.data))
+        programs && dispatch(initialize(programs?.data))
 
         setProgramsFetching(false)
     }
