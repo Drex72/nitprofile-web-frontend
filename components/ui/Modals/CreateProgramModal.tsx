@@ -8,7 +8,7 @@ import { useAppSelector } from "@/state_management"
 export const CreateProgramModal = (props: IBaseModalProps) => {
     const { modalIsMounted, handleClose } = props
 
-    const { closeModal, form, onSubmit } = useCreateProgram(handleClose)
+    const { closeModal, form, onSubmit, loading } = useCreateProgram(handleClose)
 
     const { allPrograms } = useAppSelector((state) => state.programSlice)
 
@@ -44,15 +44,6 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
 
                     <Input
                         required
-                        name="year"
-                        label="Year of Program"
-                        register={register}
-                        placeholder="Year of Program"
-                        error={errors?.year ? errors.year.message : undefined}
-                    />
-
-                    <Input
-                        required
                         name="startDate"
                         type="date"
                         label="Start Date"
@@ -71,7 +62,7 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
 
                     <div className="flex items-end justify-end">
                         <Button label="Cancel" variant="text" />
-                        <Button label="Create" variant="contained" />
+                        <Button label="Create" variant="contained" loading={loading} type="submit" />
                     </div>
                 </form>
             </div>

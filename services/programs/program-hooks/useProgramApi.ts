@@ -1,24 +1,24 @@
 import { useApi } from "@/hooks/useApi"
 import { IApiHookBaseResponse, IBaseApiResponse } from "@/services/types"
-import { IProgram, IProgramMetrics } from "../program.interface"
+import { ICreateProgramPayload, IProgram, IProgramMetrics } from "../program.interface"
 import { programService } from "../program.service"
 
-export const useCreateProgramApi: () => IApiHookBaseResponse<string, IProgramMetrics> = () => {
-    const getProgramMetricsRequest = useApi<IBaseApiResponse<IProgramMetrics>, string>((programId: string) => {
-        return programService.getProgramMetrics(programId)
+export const useCreateProgramApi: () => IApiHookBaseResponse<ICreateProgramPayload, IProgram> = () => {
+    const createProgramRequest = useApi<IBaseApiResponse<IProgram>, ICreateProgramPayload>((payload: ICreateProgramPayload) => {
+        return programService.createProgram(payload)
     })
 
-    const handleGetProgramMetrics = async (programId: string) => {
-        getProgramMetricsRequest.reset()
+    const handleCreateProgram = async (payload: ICreateProgramPayload) => {
+        createProgramRequest.reset()
 
-        return (await getProgramMetricsRequest.request(programId)) as IBaseApiResponse<IProgramMetrics>
+        return (await createProgramRequest.request(payload)) as IBaseApiResponse<IProgram>
     }
 
     return {
-        handler: handleGetProgramMetrics,
-        data: getProgramMetricsRequest.data,
-        error: getProgramMetricsRequest.error,
-        loading: getProgramMetricsRequest.loading,
+        handler: handleCreateProgram,
+        data: createProgramRequest.data,
+        error: createProgramRequest.error,
+        loading: createProgramRequest.loading,
     }
 }
 

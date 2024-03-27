@@ -22,7 +22,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     const { allPrograms } = useAppSelector((state) => state.programSlice)
 
-    const { initialize } = programSlice.actions
+    const { initialize, setSelectedProgram } = programSlice.actions
 
     useScreenSize()
 
@@ -32,6 +32,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         const programs = await handler(undefined)
 
         programs && dispatch(initialize(programs?.data))
+
+        programs && programs?.data.length && dispatch(setSelectedProgram(programs?.data[0]))
 
         setProgramsFetching(false)
     }

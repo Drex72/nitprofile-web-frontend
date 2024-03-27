@@ -86,6 +86,30 @@ export const programReduxSlice = createSlice({
             state.allPrograms = [...state.allPrograms, action.payload]
         },
 
+        addProgramProfileFrame: (
+            state,
+            action: {
+                payload: {
+                    programId: string
+                    profileFrameSecureUrl: string
+                    profileFramePublicId: string
+                    profileFrameHeight: string
+                    profileFrameWidth: string
+                }
+            },
+        ) => {
+            state.allPrograms = state.allPrograms.map((program) => {
+                if (program.id === action.payload.programId) {
+                    program.profileFrameSecureUrl = action.payload.profileFrameSecureUrl
+                    program.profileFramePublicId = action.payload.profileFramePublicId
+                    program.profileFrameHeight = action.payload.profileFrameHeight
+                    program.profileFrameWidth = action.payload.profileFrameWidth
+                }
+
+                return program
+            })
+        },
+
         clearPrograms: (state) => {
             state.allPrograms = []
             state.selectedProgram = null

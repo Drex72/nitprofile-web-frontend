@@ -4,14 +4,35 @@ import { useAppSelector } from "@/state_management"
 import { ProfileEmptyState } from "./emptyState"
 import Image from "next/image"
 import { Button } from "@/components/ui/Button"
+import { useEffect, useMemo, useState } from "react"
+import { useProfilePreview } from "@/services/programs/program-hooks"
+import { ConditionalComponent } from "@/components/animation"
 
 const Profile = () => {
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
-    if (!selectedProgram?.program.profileFrameSecureUrl) return <ProfileEmptyState />
-    
+    const { handler, loading } = useProfilePreview()
+
+    const [previewedProfile, setPreviewedProfile] = useState("")
+
+    const programFrame = useMemo(() => {
+        return selectedProgram?.program.profileFrameSecureUrl
+    }, [selectedProgram])
+
+    useEffect(() => {
+        previewProfile()
+
+        async function previewProfile() {
+            const response = selectedProgram && (await handler(selectedProgram?.program.id))
+
+            setPreviewedProfile(response?.data ?? "")
+        }
+    }, [selectedProgram])
+
+    if (!programFrame) return <ProfileEmptyState />
+
     return (
-        <section className=" h-full">
+        <section className=" mx-auto h-full max-w-[1500px]">
             <div className="mb-2 flex w-full items-end justify-end">
                 <Button variant="contained" label="Customize" />
             </div>
@@ -20,11 +41,11 @@ const Profile = () => {
                 <div className="basis-[50%]">
                     <h2 className="mb-2 text-center text-lg font-semibold text-[#101010] md:text-xl">Frame</h2>
                     <Image
-                        src="https://res.cloudinary.com/dinrq1kf4/image/upload/c_fill,g_center,h_1000,w_1000/c_fit,h_500,l_Nithub:NITPROFILE_ASSETS:IMAGE%2022-8769646304,r_10000,w_500,x_20,y_20/co_red,l_text:Cookie_10_bold:Teledua,x_40,y_40/v1/Nithub/nitprofile_profile_frames/FRAME%20119-5069537755"
+                        src={programFrame}
                         alt="Profile Frame"
                         width={100}
                         height={100}
-                        className="w-full"
+                        className="w-full rounded-md"
                         unoptimized
                         priority
                     />
@@ -32,15 +53,21 @@ const Profile = () => {
 
                 <div className="basis-[50%]">
                     <h2 className="mb-2 text-center text-lg font-semibold text-primary md:text-xl">Preview</h2>
-                    <Image
-                        src="https://res.cloudinary.com/dinrq1kf4/image/upload/c_fill,g_center,h_1000,w_1000/c_fit,h_500,l_Nithub:NITPROFILE_ASSETS:IMAGE%2022-8769646304,r_10000,w_500,x_20,y_20/co_red,l_text:Cookie_10_bold:Teledua,x_40,y_40/v1/Nithub/nitprofile_profile_frames/FRAME%20119-5069537755"
-                        alt="Profile Frame"
-                        width={100}
-                        height={100}
-                        className="w-full"
-                        unoptimized
-                        priority
-                    />
+                    <ConditionalComponent isMounted={loading}>
+                        <div className="h-[400px] w-full animate-pulse rounded-md bg-slate-400"></div>
+                    </ConditionalComponent>
+
+                    <ConditionalComponent isMounted={!loading}>
+                        <Image
+                            src={previewedProfile}
+                            alt="Profile Frame"
+                            width={100}
+                            height={100}
+                            className="w-full rounded-md"
+                            unoptimized
+                            priority
+                        />
+                    </ConditionalComponent>
                 </div>
             </div>
         </section>

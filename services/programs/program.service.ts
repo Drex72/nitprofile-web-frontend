@@ -165,6 +165,11 @@ class ProgramService {
         return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile?programId=${programId}`)
     }
 
+    public async previewProfile(programId: string) {
+        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile/preview?programId=${programId}`)
+    }
+
+
     public async createProgramNode(programId: string, data: { nodes: IProgramNode[] }) {
         return await axiosInstance.post<IBaseApiResponse>(`${this.programUrl}/node?programId=${programId}`, data)
     }
