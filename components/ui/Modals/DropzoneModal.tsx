@@ -3,19 +3,21 @@ import { IBaseModalProps, ModalLayout } from "../Modals/ModalLayout"
 import { IDropZoneHandlerProps, useFormDropzone } from "@/hooks/useDropZone"
 import { DropzoneOptions, useDropzone } from "react-dropzone"
 import { FaCloudUploadAlt } from "react-icons/fa"
+import { useEffect } from "react"
 
 interface IDropzoneModalProps extends IBaseModalProps {
     header: String
     handleInputChange?: (file: IDropZoneHandlerProps) => void
+    fileDeleted?: boolean
     children?: React.ReactNode
 }
 
 type IDropzoneProps = IDropzoneModalProps & DropzoneOptions
 
 export const DropzoneModal = (props: IDropzoneProps) => {
-    const { modalIsMounted, handleClose, header, handleInputChange, children, ...other } = props
+    const { modalIsMounted, handleClose, header, handleInputChange, fileDeleted, children, ...other } = props
 
-    const { onDrop, fileUploaded, resetForm,deleteFile } = useFormDropzone({
+    const { onDrop, fileUploaded, resetForm, deleteFile } = useFormDropzone({
         handleChange: handleInputChange,
     })
 
@@ -31,6 +33,11 @@ export const DropzoneModal = (props: IDropzoneProps) => {
             handleClose()
         }
     }
+
+    // I couldnt' find a way to handle delete so this is a patchy way...fix later
+    useEffect(() => {
+        fileDeleted && resetForm()
+    }, [fileDeleted])
 
     return (
         <ModalLayout isMounted={modalIsMounted} onClose={handleClose}>

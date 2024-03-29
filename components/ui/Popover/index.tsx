@@ -88,7 +88,8 @@ export const PopOver = ({
                     show ? " w-fit overflow-scroll opacity-100 " : "h-0 w-0 overflow-hidden opacity-0 "
                 }`}
             >
-                {typeof content === "string" ? (
+                <div className="mb-[10px] rounded shadow-lg">{content}</div>
+                {/* {typeof content === "string" ? (
                     <div className="mb-[10px] rounded shadow-md">{content}</div>
                 ) : (
                     // Conditionally pass additional props to ReactNode content
@@ -96,7 +97,7 @@ export const PopOver = ({
                         show,
                         setShow,
                     })
-                )}
+                )} */}
                 {/* <div className="rounded shadow-md mb-[10px]">{content}</div> */}
             </div>
         </div>

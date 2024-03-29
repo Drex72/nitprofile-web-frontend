@@ -1,2 +1,5 @@
 export * from './CloudIcon'
 export * from './NitdaLogo'
+export * from './KebabIcon'
+export * from './DeleteIcon'
+export * from './EditIcon'

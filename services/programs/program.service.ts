@@ -169,13 +169,22 @@ class ProgramService {
         return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile/preview?programId=${programId}`)
     }
 
-
     public async createProgramNode(programId: string, data: { nodes: IProgramNode[] }) {
         return await axiosInstance.post<IBaseApiResponse>(`${this.programUrl}/node?programId=${programId}`, data)
     }
 
+    public async getProgramNodes(programId: string, category: "profile" | "certificate") {
+        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/node`, {
+            params: {
+                programId,
+                category,
+            },
+        })
+    }
     public async getProgramMetrics(programId: string) {
-        return await axiosInstance.get<IBaseApiResponse<IProgramMetrics>>(`${this.programUrl}/metrics?programId=${programId}`)
+        return await axiosInstance.get<IBaseApiResponse<IProgramMetrics>>(
+            `${this.programUrl}/metrics?programId=${programId}`,
+        )
     }
 }
 

@@ -59,7 +59,6 @@ export interface IAssignAdminToProgramPayload {
 }
 
 export interface IProgramNode {
-    id: string
     placeholder: boolean
     type: "image" | "text"
     x: number

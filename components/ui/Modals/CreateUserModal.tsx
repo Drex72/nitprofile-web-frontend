@@ -2,30 +2,21 @@ import { Input } from "@/components/form"
 import { Button } from "../Button"
 import { IBaseModalProps, ModalLayout } from "./ModalLayout"
 import { TfiClose } from "react-icons/tfi"
-import { z } from "zod"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useCreateSingleProgramUser } from "@/hooks/useCreateSingleUser"
 
-const schema = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string().email(),
-})
 
 export const CreateUserModal = (props: IBaseModalProps) => {
     const { modalIsMounted, handleClose } = props
 
-    type schemaType = z.infer<typeof schema>
+    const { form, onSubmit, loading } = useCreateSingleProgramUser(handleClose)
 
     const {
         register,
         formState: { errors },
         handleSubmit,
-    } = useForm<schemaType>({
-        resolver: zodResolver(schema),
-    })
+    } = form
 
-    const onSubmit: SubmitHandler<schemaType> = async (data) => {}
+    // })
 
     return (
         <ModalLayout isMounted={modalIsMounted} onClose={handleClose}>
@@ -68,8 +59,8 @@ export const CreateUserModal = (props: IBaseModalProps) => {
                     />
 
                     <div className="flex items-end justify-end">
-                        <Button label="Cancel" variant="text" />
-                        <Button label="Create" variant="contained" />
+                        <Button label="Cancel" variant="text" onClick={() => handleClose && handleClose()} />
+                        <Button label="Create" variant="contained" type="submit" loading={loading} />
                     </div>
                 </form>
             </div>

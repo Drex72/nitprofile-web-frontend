@@ -1,16 +1,17 @@
-interface TableCheckBoxProps {
-    isChecked: boolean
-    handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
+import { InputHTMLAttributes } from "react"
 
-const TableCheckBox = ({ isChecked, handleCheckboxChange }: TableCheckBoxProps) => {
+type TableCheckBoxProps = {
+    handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+} & InputHTMLAttributes<HTMLInputElement>
+
+const TableCheckBox = ({ handleCheckboxChange, ...others }: TableCheckBoxProps) => {
     return (
         <label className="ml-5 flex items-center space-x-2">
             <input
                 type="checkbox"
-                checked={isChecked}
                 onChange={handleCheckboxChange}
-                className="h-6 w-6 appearance-none rounded-md border-[2px] border-black checked:border-transparent checked:bg-green-500 focus:outline-none"
+                {...others}
+                className="h-[18px] w-[18px] cursor-pointer appearance-none rounded-sm border-[2px] border-[#49454F] transition-all duration-300 ease-in-out checked:border-transparent checked:bg-green-500 focus:outline-none"
             />
         </label>
     )

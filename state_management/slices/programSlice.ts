@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { IProgram, IProgramNode } from "@/services/programs/program.interface"
+import { IProgram, IProgramNode, IProgramUser } from "@/services/programs/program.interface"
 import { createSlice } from "@reduxjs/toolkit"
 
 const dummyprograms = [
@@ -25,6 +25,9 @@ const dummyprograms = [
 
 interface IInitialState {
     allPrograms: IProgram[]
+
+    programUsers: IProgramUser[]
+
     selectedProgram: {
         program: IProgram
         programNodes: IProgramNode[]
@@ -34,6 +37,7 @@ interface IInitialState {
 const initialStateValue: IInitialState = {
     allPrograms: [],
     selectedProgram: null,
+    programUsers: [],
 }
 
 export const programReduxSlice = createSlice({
@@ -75,6 +79,35 @@ export const programReduxSlice = createSlice({
                 ...state.selectedProgram,
                 programNodes: action.payload,
             }
+        },
+
+        setProgramUsers: (
+            state,
+            action: {
+                payload: IProgramUser[]
+            },
+        ) => {
+            if (!state.selectedProgram) return
+
+            state.programUsers = action.payload
+        },
+
+        addProgramUser: (
+            state,
+            action: {
+                payload: IProgramUser
+            },
+        ) => {
+            state.programUsers = [...state.programUsers, action.payload]
+        },
+
+        addProgramUsers: (
+            state,
+            action: {
+                payload: IProgramUser[]
+            },
+        ) => {
+            state.programUsers = [...state.programUsers, ...action.payload]
         },
 
         addProgram: (

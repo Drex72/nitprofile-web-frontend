@@ -1,6 +1,11 @@
-const Table = ({ children }: { children: React.ReactNode }) => {
+const Table = ({ children, height }: { children: React.ReactNode; height?: number }) => {
     return (
-        <div className="h-[480px] overflow-y-auto">
+        <div
+            style={{
+                minHeight: `${height ?? 400}px`,
+            }}
+            className="overflow-y-auto"
+        >
             <table className="relative w-full ">{children}</table>
         </div>
     )

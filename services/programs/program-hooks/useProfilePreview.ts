@@ -1,6 +1,5 @@
 import { useApi } from "@/hooks/useApi"
 import { IApiHookBaseResponse, IBaseApiResponse } from "@/services/types"
-import { IProgramMetrics } from "../program.interface"
 import { programService } from "../program.service"
 
 export const useProfilePreview: () => IApiHookBaseResponse<string, undefined> = () => {

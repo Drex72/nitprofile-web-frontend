@@ -1,23 +1,13 @@
-type IAlign = "left" | "right" | "center" | "end"
-
-export interface TableHeadProps {
-    id: string
-    label: string
-    align?: IAlign
-}
-
-const TableHead = ({ items }: { items: TableHeadProps[] }) => {
+const TableHead = ({ items }: { items: string[] }) => {
     return (
         <thead className=" bg-[#D4D2D2] !py-5" style={{ borderTopRightRadius: "14px" }}>
-            <tr className="rounded-[14px] py-10">
-                <th></th>
-
+            <tr className="h-[50px] rounded-[14px] ">
                 {items.map((item, index) => (
                     <th
                         key={index}
-                        className={`text-${item.align || "left"} text-[16px] font-semibold leading-normal text-[#04091E]`}
+                        className={`text-md text-left font-semibold capitalize leading-normal text-[#04091E] first-of-type:pl-4`}
                     >
-                        {item.label}
+                        {item}
                     </th>
                 ))}
             </tr>

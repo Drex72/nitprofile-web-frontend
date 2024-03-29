@@ -1,12 +1,18 @@
 import Image from "next/image"
 import { PopOver } from "../Popover"
+import { KebabIcon } from "@/public/icons"
 
 interface ITableCell {
     children: string | React.ReactNode
+    alignment?: "text-left" | "text-center" | "text-right"
 }
 
-const TableCell = ({ children }: ITableCell) => {
-    return <td className={`text-left text-[16px] font-normal leading-normal`}>{children}</td>
+const TableCell = ({ children, alignment = "text-left" }: ITableCell) => {
+    return (
+        <td className={`${alignment} text-left text-[16px] font-normal leading-normal first-of-type:pl-4 `}>
+            {children}
+        </td>
+    )
 }
 
 interface TableMoreMenuProps {
@@ -17,9 +23,10 @@ export const TableMoreMenu = ({ actions }: TableMoreMenuProps) => {
     return (
         <>
             <PopOver location="bottom" content={actions}>
-                <button>
-                    <Image src="/icons/charm_menu-kebab.svg" width={16} height={16} alt="more" />
-                </button>
+                <KebabIcon
+                    className="h-[16px] w-[16px] transition-all duration-300 ease-in-out hover:text-primary"
+                    color="red"
+                />
             </PopOver>
         </>
     )
@@ -30,12 +37,4 @@ export default TableCell
 interface MenuItemProps {
     children: React.ReactNode | string
     handleClick: () => void
-}
-
-export const MenuItem = ({ children, handleClick }: MenuItemProps) => {
-    return (
-        <button className="flex items-center border border-red-500 shadow-md" onClick={handleClick}>
-            {children}
-        </button>
-    )
 }

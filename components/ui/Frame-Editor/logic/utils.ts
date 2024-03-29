@@ -1,4 +1,6 @@
+import { IProgramNode } from "@/services/programs/program.interface"
 import { Node } from "."
+import { fabric } from "fabric"
 
 interface IOptions {
     objects: fabric.Object[]
@@ -63,8 +65,6 @@ const convert_fabric_objects_to_nodes = (options: IOptions): Node[] => {
         }
     })
 
-    console.log(result)
-
     return result
 }
 
@@ -88,6 +88,101 @@ const get_gravity_and_offsets = (x: number, y: number, canvasWidth: number, canv
         x: offsetX,
     }
 }
-const convert_node_to_fabric_object = () => {}
+
+const reverse_gravity_and_offsets = (
+    gravity: string,
+    offsetX: number,
+    offsetY: number,
+    canvasWidth: number,
+    canvasHeight: number,
+) => {
+    // Extract quadrant information from gravity
+    const gravityParts = gravity?.split("_")
+    const yQuadrant = gravityParts[0]
+    const xQuadrant = gravityParts[1]
+
+    // Determine x and y coordinates based on quadrant and offsets
+    let x, y
+    if (xQuadrant === "east") {
+        x = offsetX
+    } else {
+        x = -offsetX
+    }
+
+    if (yQuadrant === "south") {
+        y = offsetY
+    } else {
+        y = -offsetY
+    }
+
+    // Adjust x and y coordinates if canvas size is provided
+    if (canvasWidth !== undefined && canvasHeight !== undefined) {
+        x += canvasWidth / 2
+        y += canvasHeight / 2
+    }
+
+    return { x, y }
+}
+
+interface IConvertNodeToObjectOptions {
+    node: IProgramNode
+    canvasHeight: number
+    canvasWidth: number
+}
+
+const convert_node_to_fabric_object = (options: IConvertNodeToObjectOptions): fabric.Object | undefined => {
+    const { canvasHeight, canvasWidth, node } = options
+
+    const { x, y } = reverse_gravity_and_offsets(node.gravity, node.x, node.y, canvasWidth, canvasHeight)
+
+    if (node.type === "image") {
+        if (node.overlay) {
+            return new fabric.Image(node.overlay, {})
+        }
+
+        return new fabric.Circle({
+            left: x,
+            top: y,
+            fill: "#aaa",
+            radius: node.width,
+            opacity: 1,
+            stroke: "#000",
+            strokeWidth: 1,
+        })
+    }
+
+    // if (node.type === "text") {
+
+    //     const text = () => {
+    //         if(node.placeholder) {
+    //             return ""
+    //         }
+
+    //         return node.text!
+    //     }
+    //     const textNode = new fabric.IText(text(), {
+    //         fontFamily: node.font_family ?? "Cambria",
+    //         left: x,
+    //         top: y,
+    //         fontSize: parseInt(node.font_size ?? "13"),
+    //         fontWeight: node.font_weight ?? "bold",
+    //         fill: node.color ?? "#000",
+    //         opacity: 1,
+    //         editable: !node.placeholder,
+    //     })
+
+    //     if (node.placeholder) {
+    //         textNode.toObject = () => {
+    //             return {
+    //                 placeholder: true,
+    //                 entity: node.entity,
+    //                 entityKey: node?.entity_key ?? undefined,
+    //             }
+    //         }
+    //     }
+
+    //     return textNode
+    // }
+}
 
 export { convert_fabric_objects_to_nodes, convert_node_to_fabric_object }

@@ -119,6 +119,18 @@ export const useSceneLogic = () => {
         initializeScene()
     })
 
+    // Get snapshot before update
+    const snapshot = useRef({ width: 0, height: 0 })
+
+    useEffect(() => {
+        if (!imageRef.current) return
+
+        const rect = imageRef.current.getBoundingClientRect()
+
+        snapshot.current.width = rect.width
+        snapshot.current.height = rect.height
+    })
+
     // Setting the Screen Size State whenever the screen is resized
     /**
      * Adds a resize event listener to handle canvas resizing when the window size changes.
@@ -150,7 +162,7 @@ export const useSceneLogic = () => {
 
         // Remove resize event listener when the component unmounts
         return () => window.removeEventListener("resize", handleResize)
-    }, [imageRef.current]) // Dependency array includes imageRef.current to trigger useEffect when it changes
+    }, [imageRef.current, snapshot.current.height, snapshot.current.width]) // Dependency array includes imageRef.current to trigger useEffect when it changes
 
     const saves = () => {
         const objects = state.scene.canvas?.getObjects()

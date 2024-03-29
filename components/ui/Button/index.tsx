@@ -49,8 +49,8 @@ export const Button: React.FC<IButtonProps> = (props) => {
 // Object containing styles for different button variants
 const buttonConfig = {
     outlined:
-        "bg-white text-primary-dark hover:bg-primary-dark hover:text-white disabled:border-gray-200 disabled:text-gray-500",
+        "bg-white text-black border border-primary hover:bg-primary-dark hover:text-primary disabled:border-gray-200 disabled:text-gray-500",
     text: "border-none bg-transparent text-primary-dark disabled:text-opacity-50",
     contained:
-        "bg-primary text-black hover:text-primary-dark hover:bg-white hover:shadow-md disabled:bg-opacity-20 disabled:text-opacity-50 disabled:border-none",
+        "bg-primary text-black hover:text-primary hover:bg-white hover:shadow-md disabled:bg-opacity-20 disabled:text-opacity-50 disabled:border-none",
 }
