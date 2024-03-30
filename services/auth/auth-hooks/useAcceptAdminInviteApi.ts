@@ -16,7 +16,6 @@ export const useAcceptAdminInviteApi: () => IApiHookBaseResponse<IAcceptAdminInv
     )
 
     const handleAcceptAdminInvite = async (data: IAcceptAdminInvitationPayload) => {
-        const {} = data
         acceptAdminInviteRequest.reset()
 
         return (await acceptAdminInviteRequest.request(data)) as IBaseApiResponse<IUser>

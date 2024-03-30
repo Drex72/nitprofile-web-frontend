@@ -40,7 +40,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         !allPrograms.length && getAllPrograms()
-    }, [allPrograms])
+    }, [])
 
     return (
         <RequireAuthentication loading={programsFetching} allowedRoles={getAllowedRoles(pathname)}>

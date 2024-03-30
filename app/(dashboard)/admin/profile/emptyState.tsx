@@ -9,9 +9,10 @@ import { getAsset } from "@/utils"
 import Image from "next/image"
 import { useRef, useState } from "react"
 
-interface IImageProperties {
+export interface IImageProperties {
     streamUrl: string
     fileObj: File | null
+    deleted: boolean
 }
 
 export const ProfileEmptyState = () => {
@@ -28,6 +29,7 @@ export const ProfileEmptyState = () => {
     const [imageProperties, setImageproperties] = useState<IImageProperties>({
         streamUrl: "",
         fileObj: null,
+        deleted: false,
     })
 
     const ref = useRef<HTMLImageElement>(null)
@@ -36,6 +38,7 @@ export const ProfileEmptyState = () => {
         setImageproperties({
             streamUrl: file.stream ?? "",
             fileObj: file.file ?? null,
+            deleted: false,
         })
     }
 
@@ -77,9 +80,18 @@ export const ProfileEmptyState = () => {
         setImageproperties({
             streamUrl: "",
             fileObj: null,
+            deleted: false,
         })
 
         setUploadProfileFrame(false)
+    }
+
+    const deleteFile = () => {
+        setImageproperties({
+            streamUrl: "",
+            fileObj: null,
+            deleted: true,
+        })
     }
 
     return (
@@ -89,13 +101,19 @@ export const ProfileEmptyState = () => {
                 modalIsMounted={uploadProfileFrame}
                 handleClose={() => setUploadProfileFrame(false)}
                 handleInputChange={handleFileForm}
+                fileDeleted={imageProperties.deleted}
                 accept={{
                     "image/*": [".jpeg", ".png"],
                 }}
             >
-                <Image ref={ref} src={imageProperties.streamUrl} alt="Uploaded Frame" width={400} height={400} />
+                <div className="mb-4 block px-3">
+                    <Image ref={ref} src={imageProperties.streamUrl} alt="Uploaded Frame" width={400} height={400} />
+                </div>
 
-                <Button variant="contained" label="Submit" loading={loading} onClick={() => onSubmit()} />
+                <div className=" items- flex justify-between">
+                    <Button variant="outlined" label="Delete" disabled={loading} onClick={() => deleteFile()} />
+                    <Button variant="contained" label="Submit" loading={loading} onClick={() => onSubmit()} />
+                </div>
             </DropzoneModal>
 
             <Image src={getAsset("rocket.svg", "images")} alt="Rocket svg" width={280} height={280} />

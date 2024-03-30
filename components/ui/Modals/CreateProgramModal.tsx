@@ -1,9 +1,11 @@
 import { Input } from "@/components/form"
+import { useCreateProgram } from "@/hooks/useCreateProgram"
+import { makeToast } from "@/libs/react-toast"
+import { authSlice, useAppDispatch, useAppSelector } from "@/state_management"
+import { useEffect } from "react"
+import { TfiClose } from "react-icons/tfi"
 import { Button } from "../Button"
 import { IBaseModalProps, ModalLayout } from "./ModalLayout"
-import { TfiClose } from "react-icons/tfi"
-import { useCreateProgram } from "@/hooks/useCreateProgram"
-import { useAppSelector } from "@/state_management"
 
 export const CreateProgramModal = (props: IBaseModalProps) => {
     const { modalIsMounted, handleClose } = props
@@ -12,11 +14,32 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
 
     const { allPrograms } = useAppSelector((state) => state.programSlice)
 
+    const { data } = useAppSelector((state) => state.authSlice)
+
+    const dispatch = useAppDispatch()
+
+    const { logout } = authSlice.actions
+
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = form
+
+    const handleLogout = () => {
+        dispatch(logout())
+    }
+
+    useEffect(() => {
+        if (data?.role !== "SUPER ADMIN") {
+            makeToast({
+                id: "create-program-error",
+                message: "You don't have the Permission to Create Program, Please Contact Super Admin.",
+                type: "error",
+                duration: 10000,
+            })
+        }
+    }, [data])
 
     // If there is no program, don't allow the admin to close the portal until they have created a program
 
@@ -60,9 +83,21 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
                         error={errors?.endDate ? errors.endDate.message : undefined}
                     />
 
-                    <div className="flex items-end justify-end">
-                        <Button label="Cancel" variant="text" />
-                        <Button label="Create" variant="contained" loading={loading} type="submit" />
+                    <div className="flex items-end justify-end gap-2">
+                        {!data ||
+                            (data?.role !== "SUPER ADMIN" && (
+                                <Button label="Logout" onClick={handleLogout} variant="outlined" />
+                            ))}
+
+                        {data && data?.role === "SUPER ADMIN" && <Button label="Cancel" onClick={closeModal} variant="text" />}
+
+                        <Button
+                            label="Create"
+                            variant="contained"
+                            disabled={!data || data?.role !== "SUPER ADMIN"}
+                            loading={loading}
+                            type="submit"
+                        />
                     </div>
                 </form>
             </div>

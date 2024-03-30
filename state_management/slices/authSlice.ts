@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
+import { IUpdateProfilePictureResponse, IUpdateProfileRequest } from "@/services/profile/profile.interface"
 import { createSlice } from "@reduxjs/toolkit"
-import moment from "moment"
 
 export type IRole = "ADMIN" | "SUPER ADMIN" | "USER"
 
@@ -57,8 +57,20 @@ const authReduxSlice = createSlice({
             state.isAuthenticated = true
             state.data = action.payload
 
-            const expDate = moment().add(1, "minute").toDate()
+            // const expDate = moment().add(1, "minute").toDate()
             // state.persistExpDate = expDate
+        },
+
+        updateProfile: (state, action: { payload: IUpdateProfileRequest }) => {
+            state.data = Object.assign({}, state.data, action.payload)
+        },
+
+        updateProfilePicture: (state, action: { payload: IUpdateProfilePictureResponse }) => {
+            const { publicId, secureUrl } = action.payload
+            if (state.data) {
+                state.data.profilePicPublicId = publicId ?? ""
+                state.data.profilePicSecureUrl = secureUrl ?? ""
+            }
         },
     },
 })

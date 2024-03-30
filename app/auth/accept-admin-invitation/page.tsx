@@ -1,20 +1,19 @@
 "use client"
 
-import React, { useEffect } from "react"
 import { Input } from "@/components/form"
 import { Button } from "@/components/ui/Button"
-import { useAcceptAdminInviteApi } from "@/services/auth/auth-hooks"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { useRouter, useSearchParams } from "next/navigation"
 import { makeToast } from "@/libs/react-toast"
+import { useAcceptAdminInviteApi } from "@/services/auth/auth-hooks"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 const schema = z
     .object({
         firstName: z.string(),
         lastName: z.string(),
-        email: z.string().email(),
         password: z.string(),
         confirmPassword: z.string(),
     })
@@ -70,7 +69,7 @@ const AcceptAdminInvitation = () => {
 
         makeToast({
             id: "accept-admin-invite-success",
-            message: response?.message,
+            message: "Admin Invited Successfully. Please Log in",
             type: "success",
         })
 
@@ -108,15 +107,6 @@ const AcceptAdminInvitation = () => {
                     register={register}
                     placeholder="Last Name"
                     error={errors?.lastName ? errors.lastName.message : undefined}
-                />
-
-                <Input
-                    required
-                    name="email"
-                    label="Email"
-                    register={register}
-                    placeholder="Email"
-                    error={errors?.email ? errors.email.message : undefined}
                 />
 
                 <Input

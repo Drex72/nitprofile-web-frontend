@@ -25,7 +25,6 @@ export const TableMoreMenu = ({ actions }: TableMoreMenuProps) => {
             <PopOver location="bottom" content={actions}>
                 <KebabIcon
                     className="h-[16px] w-[16px] transition-all duration-300 ease-in-out hover:text-primary"
-                    color="red"
                 />
             </PopOver>
         </>

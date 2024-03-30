@@ -15,7 +15,6 @@ export interface IResetPasswordRequest {
 export interface IAcceptAdminInvitationRequest {
     lastName: string
     firstName: string
-    email: string
     password: string
 }
 

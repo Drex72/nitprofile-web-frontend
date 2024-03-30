@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useCallback, useEffect, useState } from "react"
-import { ProgramsModal } from "../Modals/ProgramsModal"
-import { MdKeyboardArrowDown } from "react-icons/md"
 import { appSlice, useAppDispatch, useAppSelector } from "@/state_management"
+import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
-import { CreateProgramModal } from "../Modals/CreateProgramModal"
+import { useEffect, useState } from "react"
+import { MdKeyboardArrowDown } from "react-icons/md"
 import { RxHamburgerMenu } from "react-icons/rx"
+import { CreateProgramModal } from "../Modals/CreateProgramModal"
+import { ProgramsModal } from "../Modals/ProgramsModal"
 
 /**
  * Navbar component for displaying navigation options and user information.
@@ -92,7 +93,19 @@ export const Navbar = () => {
                 onClick={() => handleClickProfile()}
                 className="hidden flex-1 cursor-pointer items-center justify-end gap-2 md:flex"
             >
-                <div className="h-[40px] w-[40px] rounded-full bg-gray-500" />
+                {data?.profilePicSecureUrl && (
+                    <div className="h-[40px] w-[40px]">
+                        <Image
+                            src={data.profilePicSecureUrl ?? ""}
+                            alt="Profile Picture"
+                            width={40}
+                            height={40}
+                            className="h-full w-full rounded-full"
+                        />
+                    </div>
+                )}
+
+                {!data?.profilePicSecureUrl && <div className="h-[40px] w-[40px] rounded-full bg-gray-500" />}
 
                 <div className="text-start">
                     <p className="text-sm font-normal text-[#101010]">{data?.firstName ?? "Chidi"}</p>
