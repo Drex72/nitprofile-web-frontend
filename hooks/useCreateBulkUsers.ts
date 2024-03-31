@@ -1,7 +1,7 @@
-import { useCreateProgramUsers } from "@/services/programs/program-hooks"
-import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { makeToast } from "@/libs/react-toast"
-import { useRef, useState } from "react"
+import { useCreateProgramUsersApi } from "@/services/programs/program-hooks/program-users"
+import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
+import { useState } from "react"
 import { IDropZoneHandlerProps } from "./useDropZone"
 
 interface ICSVProperties {
@@ -11,7 +11,7 @@ interface ICSVProperties {
 }
 
 export const useCreateBulkUsers = (handleClose?: Function) => {
-    const { handler, loading } = useCreateProgramUsers()
+    const { handler, loading } = useCreateProgramUsersApi()
 
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 

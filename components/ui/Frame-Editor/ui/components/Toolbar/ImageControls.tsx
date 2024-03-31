@@ -100,7 +100,7 @@ export const ImageControls = () => {
         <div>
             <p>Redius: {imageProperties.radius * imageProperties.scale} </p>
             <p>Left: {imageProperties.left} </p>
-            <input type="number" onChange={(e) => handleChange(parseInt(e.target.value))} />
+            {/* <input type="number" onChange={(e) => handleChange(parseInt(e.target.value))} /> */}
             {/* <input type="number" onChange={(e) => handleChangeRadius(parseInt(e.target.value))} /> */}
             Image Options
             {/* Radius, Left, Top,  Opacity, Fill, Stroke, Stroke Width */}

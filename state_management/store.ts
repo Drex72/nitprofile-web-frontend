@@ -1,7 +1,7 @@
 import { ActionCreatorsMapObject, bindActionCreators, combineReducers, configureStore } from "@reduxjs/toolkit"
 import storage from "redux-persist/lib/storage"
 import { persistReducer, persistStore } from "redux-persist"
-import { appSlice, authSlice, frameEditorSlice, programSlice } from "./slices"
+import { appSlice, authSlice, programSlice } from "./slices"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 
 /**
@@ -22,7 +22,6 @@ const persistConfig = {
 const rootReducer = combineReducers({
     appSlice: appSlice.reducer,
     authSlice: authSlice.reducer,
-    editorSlice: frameEditorSlice.reducer,
     programSlice: programSlice.reducer,
 })
 
@@ -104,4 +103,3 @@ export const useSliceActions = <T extends ActionCreatorsMapObject<any>>(slice: T
     return bindActionCreators(slice, dispatch)
 }
 
-export const useEditorActions = () => useSliceActions(frameEditorSlice.actions)

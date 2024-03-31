@@ -43,7 +43,7 @@ const Profile = () => {
             >
                 <div className="mx-auto mb-4 block max-h-[500px] w-full overflow-y-scroll border px-3">
                     <Image
-                        src={avatarSettings.streamUrl}
+                        src={avatarSettings.streamUrl??""}
                         alt="Uploaded Avatar"
                         width={400}
                         height={400}

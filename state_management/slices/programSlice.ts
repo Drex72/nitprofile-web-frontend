@@ -143,6 +143,12 @@ export const programReduxSlice = createSlice({
             })
         },
 
+        enableProfileGeneration: (state) => {
+            if (!state.selectedProgram) return
+
+            state.selectedProgram.program.profileGenerationAvailable = true
+        },
+
         clearPrograms: (state) => {
             state.allPrograms = []
             state.selectedProgram = null

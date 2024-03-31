@@ -103,15 +103,6 @@ const Profile = () => {
                         disabled
                     />
 
-                    <Input
-                        name="password"
-                        type="password"
-                        label="Password"
-                        register={register}
-                        placeholder="Enter your Password"
-                        error={errors?.password ? errors.password.message : undefined}
-                        readOnly={profileMode === "view" ? true : false}
-                    />
                 </div>
 
                 {profileMode === "edit" && (

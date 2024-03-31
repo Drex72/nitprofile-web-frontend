@@ -1,6 +1,6 @@
 import { IProgramNode } from "@/services/programs/program.interface"
-import { Node } from "."
 import { fabric } from "fabric"
+import { Node } from "."
 
 interface IOptions {
     objects: fabric.Object[]
@@ -25,6 +25,8 @@ const convert_fabric_objects_to_nodes = (options: IOptions): Node[] => {
 
             const { gravity, x, y } = get_gravity_and_offsets(scaledLeft, scaledTop, canvasWidth, canvasHeight)
 
+            console.log(x,y)
+
             result.push({
                 type: "image",
                 x,
@@ -48,7 +50,7 @@ const convert_fabric_objects_to_nodes = (options: IOptions): Node[] => {
 
             const metadata = newObj.toObject()
 
-            result.push({
+            const test = {
                 type: "text",
                 x,
                 y,
@@ -61,7 +63,15 @@ const convert_fabric_objects_to_nodes = (options: IOptions): Node[] => {
                 placeholder: metadata?.placeholder ?? false,
                 entity: metadata?.entity ?? undefined,
                 entity_key: metadata?.entityKey ?? undefined,
-            })
+            }
+
+            if (!test.placeholder) {
+                delete test.entity_key
+                delete test.entity
+                delete test.placeholder
+            }
+
+            result.push(test as any)
         }
     })
 
@@ -84,8 +94,8 @@ const get_gravity_and_offsets = (x: number, y: number, canvasWidth: number, canv
 
     return {
         gravity: gravity,
-        y: offsetY,
-        x: offsetX,
+        y: Math.round(offsetY),
+        x: Math.round(offsetX),
     }
 }
 

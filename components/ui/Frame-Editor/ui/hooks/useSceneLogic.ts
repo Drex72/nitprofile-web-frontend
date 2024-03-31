@@ -1,39 +1,30 @@
+import { makeToast } from "@/libs/react-toast"
+import { useCreateProgramNodesApi } from "@/services/programs/program-hooks/program-nodes"
+import { useAppSelector } from "@/state_management"
+import { ICreateNodeOptions, Scene, convert_fabric_objects_to_nodes } from "@frame-editor/logic"
 import { useCallback, useEffect, useRef } from "react"
 import { useSceneContext } from "./useSceneContext"
-import { makeToast } from "@/libs/react-toast"
-import { useEditorActions } from "@/state_management"
-import { ICreateNodeOptions, Scene, convert_fabric_objects_to_nodes } from "@frame-editor/logic"
 
 export const useSceneLogic = () => {
-    // Ref Object used to manage the state of the scene object
     const sceneRef = useRef<Scene | null>(null)
 
     const { dispatch, state } = useSceneContext()
 
-    const { saveEditorCustomizations } = useEditorActions()
+    const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
     const imageRef = useRef<HTMLImageElement>(null)
 
-    // const [type, setType] = useState<"landscape" | "portrait">("portrait")
-
-    /**
-     * Initializes the scene by creating a new canvas and configuring its options.
-     * This function sets up the canvas for rendering and interaction.
-     */
     const initializeScene = useCallback(() => {
-        // Create a new scene with the specified canvas ID and options
         const scene = new Scene({
-            canvas_id: "frame_editor", // ID of the HTML canvas element
+            canvas_id: "frame_editor",
             options: {
                 selection: false,
                 renderOnAddRemove: true, // Render canvas when objects are added or removed
             },
         })
 
-        // Get the canvas element from the scene
         const canvas = scene.get_canvas()
 
-        // If canvas creation fails, display an error toast and return
         if (!canvas) {
             return makeToast({
                 id: "error_creating_canvas",
@@ -42,7 +33,6 @@ export const useSceneLogic = () => {
             })
         }
 
-        // Dispatch an action to initialize the canvas in the Frame Editor Context
         dispatch({
             type: "initialize_canvas",
             payload: {
@@ -50,7 +40,6 @@ export const useSceneLogic = () => {
             },
         })
 
-        // Set the scene reference to the initialized scene
         sceneRef.current = scene
     }, [])
 
@@ -164,7 +153,11 @@ export const useSceneLogic = () => {
         return () => window.removeEventListener("resize", handleResize)
     }, [imageRef.current, snapshot.current.height, snapshot.current.width]) // Dependency array includes imageRef.current to trigger useEffect when it changes
 
-    const saves = () => {
+    const { handler, loading } = useCreateProgramNodesApi()
+
+    const saveCustomization = async () => {
+        if (!selectedProgram) return
+
         const objects = state.scene.canvas?.getObjects()
 
         if (!objects || !state.scene.canvas || !imageRef.current) return
@@ -175,12 +168,22 @@ export const useSceneLogic = () => {
 
         const scaleFactor = clientWidth / canvasWidth
 
-        convert_fabric_objects_to_nodes({
+        const nodes = convert_fabric_objects_to_nodes({
             canvasHeight: state.scene.canvas.getHeight(),
             canvasWidth: state.scene.canvas.getWidth(),
             objects,
             scaleFactor,
         })
+
+        const node_type = localStorage.getItem("node_type") as "profile" | "certificate"
+console.log(nodes)
+        const response = await handler({
+            category: node_type,
+            nodes:[nodes[0]],
+            programId: selectedProgram.program.id,
+        })
+        
+        console.log(response)
         // Get all objects on the page
         // Get the properties needed from them
         // Send it to the api
@@ -190,7 +193,7 @@ export const useSceneLogic = () => {
 
     return {
         handleCreateNode,
-        saves,
+        saveCustomization,
         canvas: state.scene.canvas,
         imageRef,
     }

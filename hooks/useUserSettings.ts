@@ -122,6 +122,8 @@ export const useUserSettings = () => {
 
         const response = await updateProfilePictureApi(formData)
 
+        console.log(response)
+
         if (!response || !response.data) return
 
         makeToast({

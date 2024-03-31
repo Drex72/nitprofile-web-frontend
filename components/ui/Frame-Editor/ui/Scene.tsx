@@ -1,14 +1,14 @@
-import { useSceneLogic } from "./hooks"
+import { NitdaLogo } from "@/public/icons"
+import { useAppSelector } from "@/state_management"
 import { Toolbar } from "@frame-editor/ui/components/Toolbar"
 import Image from "next/image"
-import { useAppSelector } from "@/state_management"
-import { NitdaLogo } from "@/public/icons"
-import { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
 import { convert_node_to_fabric_object } from "../logic"
+import { useSceneLogic } from "./hooks"
 
 export const FrameEditor = () => {
-    const { canvas, handleCreateNode, imageRef, saves } = useSceneLogic()
+    const { canvas, handleCreateNode, imageRef, saveCustomization } = useSceneLogic()
 
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
@@ -17,13 +17,20 @@ export const FrameEditor = () => {
     const router = useRouter()
 
     const programFrame = useMemo(() => {
-        if (!selectedProgram) {
+        const node_type = localStorage.getItem("node_type") as "profile" | "certificate"
+
+        if (!selectedProgram || !node_type) {
+            router.back()
+        }
+
+        if (node_type !== "certificate" && node_type !== "profile") {
             router.back()
         }
 
         return {
             frame: selectedProgram?.program.profileFrameSecureUrl ?? "",
             nodes: selectedProgram?.programNodes ?? [],
+            node_type:node_type ?? "profile",
         }
     }, [selectedProgram])
 
@@ -75,6 +82,7 @@ export const FrameEditor = () => {
                     </div>
                 </div>
             </div>
+            <button onClick={() => saveCustomization()}>Save</button>
 
             {canvas && (
                 <div className="w-full max-w-[95%] basis-[20%] overflow-scroll rounded-md  bg-[#ededee] p-2">

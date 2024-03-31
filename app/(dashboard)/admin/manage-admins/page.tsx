@@ -5,7 +5,7 @@ import { TableSkeletonLoader } from "@/components/ui/Loaders"
 import { CreateAdminModal } from "@/components/ui/Modals/CreateAdminModal"
 import { Search } from "@/components/ui/Search"
 import { useCreateBulkUsers } from "@/hooks/useCreateBulkUsers"
-import { useGetProgramUsers } from "@/services/programs/program-hooks"
+import { useGetProgramUsersApi } from "@/services/programs/program-hooks/program-users"
 import { IProgramUser } from "@/services/programs/program.interface"
 import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { useEffect, useState } from "react"
@@ -14,7 +14,7 @@ import { AiOutlinePlus } from "react-icons/ai"
 const Admins = () => {
     const dispatch = useAppDispatch()
 
-    const { handler, loading } = useGetProgramUsers()
+    const { handler, loading } = useGetProgramUsersApi()
 
     const [allUsers, setAllUsers] = useState<IProgramUser[]>([])
 

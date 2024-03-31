@@ -5,16 +5,19 @@ import {
     Pagination,
     Table,
     TableBody,
-    TableContainer,
-    TableHead,
     TableCell,
     TableCheckBox,
+    TableContainer,
+    TableHead,
     TableMoreMenu,
     TableRow,
 } from "@/components/ui"
 import useTable from "@/hooks/useTable"
+import { makeToast } from "@/libs/react-toast"
 import { DeleteIcon, EditIcon } from "@/public/icons"
+import { useResendProgramUserVerificationMailApi } from "@/services/programs/program-hooks/program-users"
 import { IProgramUser } from "@/services/programs/program.interface"
+import { useAppSelector } from "@/state_management"
 interface IUserProps {
     users: IProgramUser[]
 }
@@ -42,7 +45,26 @@ export const UsersTable = (props: IUserProps) => {
 
     const handleDeleteUser = (id: string) => {}
 
-    const handleResendVerificationMail = (id: string) => {}
+    const { handler: resendVerificationMail, loading: resendingMail } = useResendProgramUserVerificationMailApi()
+
+    const { selectedProgram } = useAppSelector((state) => state.programSlice)
+
+    const handleResendVerificationMail = async (email: string) => {
+        if (!selectedProgram) return
+
+        const response = await resendVerificationMail({
+            email,
+            programId: selectedProgram.program.id,
+        })
+
+        if (!response) return
+
+        makeToast({
+            id: "sent-verification-mail",
+            message: "Mail Sent Successfully",
+            type: "success",
+        })
+    }
 
     const bulkDeleteUsers = () => {}
 
@@ -69,8 +91,8 @@ export const UsersTable = (props: IUserProps) => {
                                         <div className="mx-auto flex w-[150px] flex-col gap-5 rounded-lg border-[0.5px] border-[#E3E6E8] bg-white shadow-sm">
                                             {!row.isVerified && (
                                                 <button
-                                                    className="flex text-primary items-center gap-2 px-5 py-2 text-sm transition-all duration-300 ease-in-out hover:bg-[#E3E6E8]"
-                                                    onClick={() => handleResendVerificationMail(row.id)}
+                                                    className="flex items-center gap-2 px-5 py-2 text-sm text-primary transition-all duration-300 ease-in-out hover:bg-[#E3E6E8]"
+                                                    onClick={() => handleResendVerificationMail(row.email)}
                                                 >
                                                     <EditIcon width={17} height={17} />
 

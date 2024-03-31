@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/Button"
 import { DropzoneModal } from "@/components/ui/Modals/DropzoneModal"
 import { IDropZoneHandlerProps } from "@/hooks/useDropZone"
 import { makeToast } from "@/libs/react-toast"
-import { useAddProfileFrame } from "@/services/programs/program-hooks"
+import { useUploadProgramProfileFrame } from "@/services/programs/program-hooks/program-profile"
 import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { getAsset } from "@/utils"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 
 export interface IImageProperties {
@@ -18,7 +19,9 @@ export interface IImageProperties {
 export const ProfileEmptyState = () => {
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
-    const { handler, loading } = useAddProfileFrame()
+    const { handler, loading } = useUploadProgramProfileFrame()
+
+    const router = useRouter()
 
     const dispatch = useAppDispatch()
 
@@ -83,7 +86,11 @@ export const ProfileEmptyState = () => {
             deleted: false,
         })
 
+        deleteFile()
+
         setUploadProfileFrame(false)
+
+        router.push("/admin/profile")
     }
 
     const deleteFile = () => {
@@ -106,11 +113,18 @@ export const ProfileEmptyState = () => {
                     "image/*": [".jpeg", ".png"],
                 }}
             >
-                <div className="mb-4 block px-3">
-                    <Image ref={ref} src={imageProperties.streamUrl} alt="Uploaded Frame" width={400} height={400} />
+                <div className="mx-auto mb-4 block max-h-[500px] w-full overflow-y-scroll border px-3">
+                    <Image
+                        ref={ref}
+                        src={imageProperties.streamUrl}
+                        alt="Uploaded Frame"
+                        width={400}
+                        height={400}
+                        className="mx-auto"
+                    />
                 </div>
 
-                <div className=" items- flex justify-between">
+                <div className="items- flex justify-between">
                     <Button variant="outlined" label="Delete" disabled={loading} onClick={() => deleteFile()} />
                     <Button variant="contained" label="Submit" loading={loading} onClick={() => onSubmit()} />
                 </div>

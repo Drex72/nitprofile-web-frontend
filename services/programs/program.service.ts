@@ -1,13 +1,13 @@
-import { axiosInstance, axios } from "@/libs/axios"
-import { IBaseApiResponse } from "../types"
+import { Node } from "@/components/ui/Frame-Editor/logic"
+import { axios, axiosInstance } from "@/libs/axios"
 import { IUser } from "@/state_management"
+import { IBaseApiResponse } from "../types"
 import {
     IAdminAssignedToProgram,
     IAssignAdminToProgramPayload,
     ICreateProgramPayload,
     IProgram,
     IProgramMetrics,
-    IProgramNode,
     IProgramUser,
     IRegisterSingleUserForProgram,
 } from "./program.interface"
@@ -149,11 +149,8 @@ class ProgramService {
      * @param {FormData} data - Form data containing the necessary information.
      * @returns {Promise<IBaseApiResponse<IProgram>>} - A promise that resolves when profile generation is enabled.
      */
-    public async enableProfileGeneration(programId: string, data: FormData) {
-        return await axiosInstance.put<IBaseApiResponse<IProgram>>(
-            `${this.programUrl}/profile?programId=${programId}`,
-            data,
-        )
+    public async enableProfileGeneration(programId: string) {
+        return await axiosInstance.put<IBaseApiResponse<IProgram>>(`${this.programUrl}/profile?programId=${programId}`)
     }
 
     /**
@@ -169,7 +166,7 @@ class ProgramService {
         return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile/preview?programId=${programId}`)
     }
 
-    public async createProgramNode(programId: string, data: { nodes: IProgramNode[] }) {
+    public async createProgramNode(programId: string, data: { nodes: Node[]; category: "profile" | "certificate" }) {
         return await axiosInstance.post<IBaseApiResponse>(`${this.programUrl}/node?programId=${programId}`, data)
     }
 

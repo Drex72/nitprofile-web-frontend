@@ -1,24 +1,24 @@
 "use client"
 import { useEffect, useState } from "react"
 
-import { Search } from "@/components/ui/Search"
 import { ConditionalComponent } from "@/components/animation"
-import { TableSkeletonLoader } from "@/components/ui/Loaders"
-import { MemoizedUsersTable } from "@/components/ui/Table/Tables"
-import { useGetProgramUsers } from "@/services/programs/program-hooks"
-import { IProgramUser } from "@/services/programs/program.interface"
-import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { Button } from "@/components/ui/Button"
+import { CSVViewer } from "@/components/ui/CSVViewer"
+import { TableSkeletonLoader } from "@/components/ui/Loaders"
 import { CreateUserModal } from "@/components/ui/Modals/CreateUserModal"
 import { DropzoneModal } from "@/components/ui/Modals/DropzoneModal"
-import { AiOutlinePlus } from "react-icons/ai"
+import { Search } from "@/components/ui/Search"
+import { MemoizedUsersTable } from "@/components/ui/Table/Tables"
 import { useCreateBulkUsers } from "@/hooks/useCreateBulkUsers"
-import { CSVViewer } from "@/components/ui/CSVViewer"
+import { useGetProgramUsersApi } from "@/services/programs/program-hooks/program-users"
+import { IProgramUser } from "@/services/programs/program.interface"
+import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
+import { AiOutlinePlus } from "react-icons/ai"
 
 const Users = () => {
     const dispatch = useAppDispatch()
 
-    const { handler, loading } = useGetProgramUsers()
+    const { handler, loading } = useGetProgramUsersApi()
 
     const [allUsers, setAllUsers] = useState<IProgramUser[]>([])
 
@@ -77,7 +77,12 @@ const Users = () => {
                 </div>
 
                 <div className=" items- flex justify-between">
-                    <Button variant="outlined" label="Delete" disabled={bulkUsersCreating}  onClick={() => deleteCSV()} />
+                    <Button
+                        variant="outlined"
+                        label="Delete"
+                        disabled={bulkUsersCreating}
+                        onClick={() => deleteCSV()}
+                    />
                     <Button variant="contained" label="Submit" loading={bulkUsersCreating} onClick={() => onSubmit()} />
                 </div>
             </DropzoneModal>

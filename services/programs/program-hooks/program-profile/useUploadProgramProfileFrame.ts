@@ -1,14 +1,14 @@
 import { useApi } from "@/hooks/useApi"
+import { IProgram } from "@/services/programs/program.interface"
+import { programService } from "@/services/programs/program.service"
 import { IApiHookBaseResponse, IBaseApiResponse } from "@/services/types"
-import { IProgram } from "../program.interface"
-import { programService } from "../program.service"
 
 interface IAddProfileFramePayload {
     data: FormData
     programId: string
 }
 
-export const useAddProfileFrame: () => IApiHookBaseResponse<IAddProfileFramePayload, IProgram> = () => {
+export const useUploadProgramProfileFrame: () => IApiHookBaseResponse<IAddProfileFramePayload, IProgram> = () => {
     const addProfileFrameRequest = useApi<IBaseApiResponse<IProgram>, IAddProfileFramePayload>(
         (payload: IAddProfileFramePayload) => {
             return programService.uploadProfileFrame(payload.programId, payload.data)

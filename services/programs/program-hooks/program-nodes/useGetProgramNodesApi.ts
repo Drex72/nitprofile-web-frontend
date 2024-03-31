@@ -1,14 +1,14 @@
 import { useApi } from "@/hooks/useApi"
 import { IApiHookBaseResponse, IBaseApiResponse } from "@/services/types"
-import { IProgram, IProgramNode } from "../program.interface"
-import { programService } from "../program.service"
+import { IProgramNode } from "../../program.interface"
+import { programService } from "../../program.service"
 
 interface IGetProgramNodes {
     category: "profile" | "certificate"
     programId: string
 }
 
-export const useGetProgramNodes: () => IApiHookBaseResponse<IGetProgramNodes, IProgramNode[]> = () => {
+export const useGetProgramNodesApi: () => IApiHookBaseResponse<IGetProgramNodes, IProgramNode[]> = () => {
     const getProgramNodesRequest = useApi<IBaseApiResponse<IProgramNode[]>, IGetProgramNodes>(
         (payload: IGetProgramNodes) => {
             return programService.getProgramNodes(payload.programId, payload.category)
