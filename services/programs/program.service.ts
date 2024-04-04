@@ -66,6 +66,10 @@ class ProgramService {
         return await axiosInstance.put(`${this.programUrl}?programId=${programId}`, data)
     }
 
+    public async deleteProgram(programId: string) {
+        return await axiosInstance.delete(`${this.programUrl}?programId=${programId}`)
+    }
+
     /**
      * Retrieves users registered for a program.
      * @param {string} programId - The ID of the program to retrieve users for.

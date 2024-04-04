@@ -1,7 +1,7 @@
-import { ICanvasOptions } from "fabric/fabric-impl"
 import { fabric } from "fabric"
+import { ICanvasOptions } from "fabric/fabric-impl"
+import { DEFAULT_CANVAS_VALUES, DEFAULT_IMAGE_NODE_VALUES, DEFAULT_TEXT_NODE_VALUES } from "./utils"
 import { ICreateNodeOptions, PlaceholderKeys } from "./Interface"
-import { DEFAULT_CANVAS_VALUES, DEFAULT_IMAGE_NODE_VALUES, DEFAULT_TEXT_NODE_VALUES } from "../utils/defaultSizes"
 
 type ICreateSceneOptions = {
     canvas_id: string
@@ -70,8 +70,7 @@ export class Scene {
 
         if (options.nodeType === "placeholder") {
             const textNode = this.createTextObject({
-                entity: options.entity,
-                entityKey: options.entityKey,
+                ...options,
             })
 
             this.canvas.add(textNode)
@@ -99,7 +98,7 @@ export class Scene {
     private createTextObject(placeholder?: PlaceholderKeys): fabric.Text {
         const isPlaceholder = placeholder && placeholder.entity
 
-        const createdFabricNode = new fabric.IText(DEFAULT_TEXT_NODE_VALUES.text, {
+        const createdFabricNode = new fabric.IText(placeholder?.placeholderText ?? DEFAULT_TEXT_NODE_VALUES.text, {
             fontFamily: DEFAULT_TEXT_NODE_VALUES.font_family,
             left: DEFAULT_TEXT_NODE_VALUES.x,
             top: DEFAULT_TEXT_NODE_VALUES.y,
@@ -116,17 +115,9 @@ export class Scene {
                 return {
                     placeholder: true,
                     entity: placeholder.entity,
-                    entityKey: placeholder.entityKey ?? undefined,
+                    entityKey: placeholder.entity !== "date" ? placeholder.entityKey : undefined,
                 }
             }
-
-            // createdFabricNode.toObject = function (this: fabric.IText, propertiesToInclude) {
-            //     return fabric.util.object.extend(fabric.IText.prototype.toObject.call(this, propertiesToInclude), {
-            //         placeholder: true,
-            //         entity: placeholder.entity,
-            //         entityKey: placeholder.entityKey ?? undefined,
-            //     })
-            // }
         }
 
         return createdFabricNode

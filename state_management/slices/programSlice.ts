@@ -141,6 +141,26 @@ export const programReduxSlice = createSlice({
 
                 return program
             })
+
+            if (!state.selectedProgram) return
+
+            state.selectedProgram.program.profileFrameSecureUrl = action.payload.profileFrameSecureUrl
+            state.selectedProgram.program.profileFramePublicId = action.payload.profileFramePublicId
+            state.selectedProgram.program.profileFrameHeight = action.payload.profileFrameHeight
+            state.selectedProgram.program.profileFrameWidth = action.payload.profileFrameWidth
+        },
+
+        deleteSelectedProgram: (state) => {
+            if (!state.selectedProgram) return
+
+            const filteredPrograms = state.allPrograms.filter((item) => item.id !== state.selectedProgram?.program.id)
+
+            state.allPrograms = filteredPrograms
+
+            state.selectedProgram = {
+                program: filteredPrograms[0],
+                programNodes: [],
+            }
         },
 
         enableProfileGeneration: (state) => {

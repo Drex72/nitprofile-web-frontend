@@ -91,12 +91,13 @@ export const UsersTable = (props: IUserProps) => {
                                         <div className="mx-auto flex w-[150px] flex-col gap-5 rounded-lg border-[0.5px] border-[#E3E6E8] bg-white shadow-sm">
                                             {!row.isVerified && (
                                                 <button
+                                                    disabled={resendingMail}
                                                     className="flex items-center gap-2 px-5 py-2 text-sm text-primary transition-all duration-300 ease-in-out hover:bg-[#E3E6E8]"
                                                     onClick={() => handleResendVerificationMail(row.email)}
                                                 >
                                                     <EditIcon width={17} height={17} />
 
-                                                    <span>Resend Mail</span>
+                                                    <span>{resendingMail ? "Resending..." : "Resend Mail"}</span>
                                                 </button>
                                             )}
 

@@ -1,8 +1,8 @@
+import { IProgram } from "@/services/programs/program.interface"
 import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
+import { TfiClose } from "react-icons/tfi"
 import { Button } from "../Button"
 import { IBaseModalProps, ModalLayout } from "./ModalLayout"
-import { TfiClose } from "react-icons/tfi"
-import { IProgram } from "@/services/programs/program.interface"
 
 interface IProgramsModalProps extends IBaseModalProps {
     createProgram: Function
@@ -27,7 +27,7 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
 
     return (
         <ModalLayout isMounted={modalIsMounted} onClose={handleClose}>
-            <div className="px-2 md:px-0">
+            <div className=" px-2 md:px-0">
                 <div className="mb-4 flex items-center justify-between border-b-2 border-[#676767_0.5] pb-2 text-[#000000_0.5]">
                     <h2 className="text-lg font-semibold md:text-xl">Select a program</h2>
 
@@ -37,12 +37,12 @@ export const ProgramsModal = (props: IProgramsModalProps) => {
                     />
                 </div>
 
-                <div className="mb-8 flex h-full max-h-[400] flex-col gap-4 overflow-y-scroll">
+                <div className="mb-8 flex max-h-[400px] flex-col gap-4 overflow-y-scroll">
                     {allPrograms.map((program, index) => (
                         <button
                             onClick={() => selectProgram(program)}
                             key={index}
-                            className="group relative mx-auto inline-flex w-[98%] items-center justify-start overflow-hidden rounded bg-white py-3 pl-4 pr-12 text-sm font-normal capitalize text-[#101010] shadow-program_card transition-all  duration-300 ease-in-out hover:pl-10 hover:pr-6 md:text-base"
+                            className="group relative mx-auto inline-flex max-h-[50px] w-[98%] items-center justify-start overflow-hidden rounded bg-white py-6 pl-4 pr-12 text-sm font-normal capitalize text-[#101010] shadow-program_card transition-all  duration-300 ease-in-out hover:pl-10 hover:pr-6 md:text-base"
                         >
                             <span className="absolute left-0 top-0 h-[1px] w-full bg-primary transition-all duration-150 ease-in-out group-hover:h-full"></span>
                             <span className="absolute right-0 pr-4 duration-200 ease-out group-hover:translate-x-12"></span>

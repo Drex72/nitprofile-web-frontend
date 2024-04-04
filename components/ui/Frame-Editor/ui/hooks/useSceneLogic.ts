@@ -1,25 +1,54 @@
 import { makeToast } from "@/libs/react-toast"
 import { useCreateProgramNodesApi } from "@/services/programs/program-hooks/program-nodes"
 import { useAppSelector } from "@/state_management"
-import { ICreateNodeOptions, Scene, convert_fabric_objects_to_nodes } from "@frame-editor/logic"
-import { useCallback, useEffect, useRef } from "react"
+import {
+    ICreateNodeOptions,
+    Scene,
+    convert_fabric_objects_to_nodes,
+    convert_node_to_fabric_object,
+} from "@frame-editor/logic"
+import { useRouter } from "next/navigation"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useSnapshotDimensions } from "."
 import { useSceneContext } from "./useSceneContext"
 
 export const useSceneLogic = () => {
+    const router = useRouter()
+
     const sceneRef = useRef<Scene | null>(null)
+
+    const frameImageRef = useRef<HTMLImageElement>(null)
 
     const { dispatch, state } = useSceneContext()
 
+    const [frameImageLoading, setFrameImageLoading] = useState(true)
+
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
-    const imageRef = useRef<HTMLImageElement>(null)
+    const programFrame = useMemo(() => {
+        const node_type = localStorage.getItem("node_type") as "profile" | "certificate"
+
+        if (!selectedProgram || !node_type) {
+            router.back()
+        }
+
+        if (node_type !== "certificate" && node_type !== "profile") {
+            router.back()
+        }
+
+        return {
+            frame: selectedProgram?.program.profileFrameSecureUrl ?? "",
+            nodes: selectedProgram?.programNodes ?? [],
+            node_type: node_type ?? "profile",
+        }
+    }, [selectedProgram])
 
     const initializeScene = useCallback(() => {
         const scene = new Scene({
             canvas_id: "frame_editor",
             options: {
                 selection: false,
-                renderOnAddRemove: true, // Render canvas when objects are added or removed
+                renderOnAddRemove: false, // Render canvas when objects are added or removed
             },
         })
 
@@ -43,14 +72,32 @@ export const useSceneLogic = () => {
         sceneRef.current = scene
     }, [])
 
-    /**
-     * Rescales the canvas and its objects based on the current dimensions of the canvas container.
-     * This function adjusts the size and position of all objects in the canvas to fit the container.
-     * It also updates the canvas dimensions to match the container's dimensions.
-     */
+    const initializeObjects = useCallback(() => {
+        const nodes = programFrame.nodes
+
+        if (!state.scene.canvas || !selectedProgram) return
+
+        const clientWidth = parseInt(selectedProgram.program.profileFrameWidth ?? "1000")
+
+        const canvasWidth = state.scene.canvas.getWidth()
+
+        const scaleFactor = Math.round(clientWidth / canvasWidth)
+
+        for (let node of nodes) {
+            const obj = convert_node_to_fabric_object({
+                node,
+                scaleFactor,
+            })
+
+            obj && state.scene.canvas?.add(obj)
+        }
+
+        state.scene.canvas?.renderAll()
+    }, [programFrame.nodes, selectedProgram, state.scene.canvas])
+
     const rescaleCanvas = (containerWidth: number, containerHeight: number) => {
         // Check if the image reference or canvas is not available
-        if (!imageRef.current || !state.scene.canvas) return
+        if (!frameImageRef.current || !state.scene.canvas) return
 
         // Get the current width of the canvas
         const canvasWidth = state.scene.canvas.getWidth()
@@ -90,15 +137,7 @@ export const useSceneLogic = () => {
         state.scene.canvas.renderAll()
     }
 
-    /**
-     * Handles the creation of a new Fabric Object within the scene.
-     * This function delegates the creation process to the scene reference.
-     * If the scene reference is not available, this function does nothing.
-     *
-     * @param options - Options for creating the node, including type, position, and other properties.
-     */
     const handleCreateNode = (options: ICreateNodeOptions): void => {
-        // Delegate the creation process to the scene reference if available
         sceneRef.current?.create_node(options)
     }
 
@@ -106,38 +145,20 @@ export const useSceneLogic = () => {
         if (sceneRef.current) return
 
         initializeScene()
+
+        initializeObjects()
     })
 
-    // Get snapshot before update
-    const snapshot = useRef({ width: 0, height: 0 })
+    const snapshot = useSnapshotDimensions(frameImageRef)
 
     useEffect(() => {
-        if (!imageRef.current) return
-
-        const rect = imageRef.current.getBoundingClientRect()
-
-        snapshot.current.width = rect.width
-        snapshot.current.height = rect.height
-    })
-
-    // Setting the Screen Size State whenever the screen is resized
-    /**
-     * Adds a resize event listener to handle canvas resizing when the window size changes.
-     * This useEffect hook ensures that the canvas is properly resized to fit its container.
-     * It also removes the event listener when the component is unmounted.
-     */
-    useEffect(() => {
-        /**
-         * Handles the resize event by recalculating the canvas dimensions based on the container's size.
-         * If the image reference is not available, this function does nothing.
-         */
         const handleResize = (): void => {
             // Check if the image reference is not available
-            if (!imageRef.current) return
+            if (!frameImageRef.current) return
 
             // Get the width and height of the container
-            const containerWidth = imageRef.current.offsetWidth
-            const containerHeight = imageRef.current.offsetHeight
+            const containerWidth = frameImageRef.current.offsetWidth
+            const containerHeight = frameImageRef.current.offsetHeight
 
             // Rescale the canvas to fit the container
             rescaleCanvas(containerWidth, containerHeight)
@@ -151,50 +172,59 @@ export const useSceneLogic = () => {
 
         // Remove resize event listener when the component unmounts
         return () => window.removeEventListener("resize", handleResize)
-    }, [imageRef.current, snapshot.current.height, snapshot.current.width]) // Dependency array includes imageRef.current to trigger useEffect when it changes
+    }, [frameImageRef.current, snapshot]) // Dependency array includes imageRef.current to trigger useEffect when it changes
 
-    const { handler, loading } = useCreateProgramNodesApi()
+    const onImageLoad = () => {
+        setFrameImageLoading(false)
+    }
+
+    const { handler, loading: saving } = useCreateProgramNodesApi()
 
     const saveCustomization = async () => {
         if (!selectedProgram) return
 
         const objects = state.scene.canvas?.getObjects()
 
-        if (!objects || !state.scene.canvas || !imageRef.current) return
+        if (!objects || !state.scene.canvas || !frameImageRef.current) return
 
         const canvasWidth = state.scene.canvas.getWidth()
 
-        const clientWidth = imageRef.current?.offsetWidth
+        const clientWidth = parseInt(
+            selectedProgram.program.profileFrameWidth ?? frameImageRef?.current?.naturalWidth.toString(),
+        )
 
-        const scaleFactor = clientWidth / canvasWidth
+        const scaleFactor = Math.round(clientWidth / canvasWidth)
 
         const nodes = convert_fabric_objects_to_nodes({
-            canvasHeight: state.scene.canvas.getHeight(),
-            canvasWidth: state.scene.canvas.getWidth(),
             objects,
             scaleFactor,
         })
 
         const node_type = localStorage.getItem("node_type") as "profile" | "certificate"
-console.log(nodes)
+
         const response = await handler({
             category: node_type,
-            nodes:[nodes[0]],
+            nodes: nodes,
             programId: selectedProgram.program.id,
         })
-        
-        console.log(response)
-        // Get all objects on the page
-        // Get the properties needed from them
-        // Send it to the api
-        // Clear the scene, canvas, etc
-        // Take them back to home page
+
+        if (!response) return
+
+        state.scene.canvas.clear()
+
+        router.back()
+
+        localStorage.removeItem("node_type")
     }
 
     return {
         handleCreateNode,
         saveCustomization,
         canvas: state.scene.canvas,
-        imageRef,
+        frameImageRef,
+        programFrame,
+        onImageLoad,
+        frameImageLoading,
+        saving,
     }
 }

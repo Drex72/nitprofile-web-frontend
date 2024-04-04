@@ -1,10 +1,11 @@
-import { IEvent } from "fabric/fabric-impl"
-import React, { useEffect } from "react"
+import { ConditionalComponent } from "@/components/animation"
+import { ICreateNodeOptions, getTextForPlaceholder } from "@frame-editor/logic"
 import { useSceneContext } from "@frame-editor/ui/hooks"
-import { ICreateNodeOptions } from "@frame-editor/logic"
+import { IEvent } from "fabric/fabric-impl"
+import { useEffect } from "react"
+import { MdDelete } from "react-icons/md"
 import { ImageControls } from "./ImageControls"
 import { ToolbarButton } from "./ToolbarButton"
-import { ConditionalComponent } from "@/components/animation"
 
 interface IToolbarProps {
     /**
@@ -73,29 +74,30 @@ export const Toolbar = (props: IToolbarProps) => {
         },
 
         {
-            name: "Custom Image",
-            handler: () => create_node({ nodeType: "image" }),
-        },
-
-        {
             name: "Text",
             handler: () => create_node({ nodeType: "text" }),
         },
 
         {
-            name: `{{"PROGRAM_NAME"}}`,
-            handler: () => create_node({ nodeType: "placeholder", entity: "program", entityKey: "name" }),
-        },
-
-        {
             name: `{{"USER_NAME"}}`,
-            handler: () => create_node({ nodeType: "placeholder", entity: "user", entityKey: "name" }),
+            handler: () =>
+                create_node({
+                    nodeType: "placeholder",
+                    entity: "user",
+                    entityKey: "firstName",
+                    placeholderText: getTextForPlaceholder({ entity: "user", entityKey: "firstName" }),
+                }),
         },
 
-        {
-            name: `{{"DATE"}}`,
-            handler: () => create_node({ nodeType: "placeholder", entity: "date", entityKey: "" }),
-        },
+        // {
+        //     name: `{{"DATE"}}`,
+        //     handler: () =>
+        //         create_node({
+        //             nodeType: "placeholder",
+        //             entity: "date",
+        //             placeholderText: getTextForPlaceholder({ entity: "date" }),
+        //         }),
+        // },
     ]
 
     useEffect(() => {
@@ -117,6 +119,8 @@ export const Toolbar = (props: IToolbarProps) => {
 
         canvas.remove(selectedItem)
 
+        canvas.renderAll()
+
         dispatch({
             type: "deselect_object",
         })
@@ -126,14 +130,21 @@ export const Toolbar = (props: IToolbarProps) => {
 
     return (
         <div>
-            {/* {selectedItem && selectedItem.type === "circle" && <ImageControls />} */}
+            {selectedItem && selectedItem.type === "circle" && <ImageControls />}
 
-            {/* {selectedItem && <button onClick={handleDelete}>Delete</button>} */}
+            {selectedItem && (
+                <button
+                    onClick={handleDelete}
+                    className=" rounded-full border bg-red-500 px-3 py-3 text-white transition-all duration-300 ease-in-out hover:border-red-500 hover:bg-white hover:text-red-500 "
+                >
+                    <MdDelete className="text-xl " />
+                </button>
+            )}
 
             {/* {selectedItem && selectedItem.type === "i-text" && <TextControls />} */}
 
             <ConditionalComponent isMounted={!selectedItem}>
-                <div className="grid-cols-toolbar_buttons_grid grid gap-4">
+                <div className="grid grid-cols-toolbar_buttons_grid gap-4">
                     {baseControls.map((control, index) => (
                         <ToolbarButton key={index} label={control.name} onClick={() => control.handler()} />
                     ))}

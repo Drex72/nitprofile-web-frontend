@@ -3,7 +3,7 @@ import { useSceneContext } from "@frame-editor/ui/hooks"
 import { DEFAULT_IMAGE_NODE_VALUES } from "@frame-editor/logic"
 import { ChangeEvent, useState } from "react"
 
-export const ImageControls = () => {
+export const TextControls = () => {
     const { state } = useSceneContext()
 
     const { canvas, selectedItem } = state.scene
@@ -40,38 +40,6 @@ export const ImageControls = () => {
         })
     }
 
-    canvas.on("object:moving", (options) => {
-        const e = options
-
-        if (!e || !e.target || !e.target.top || !e.target.left) return
-
-        setImageProperties({
-            ...imageProperties,
-            left: e.target.left,
-            top: e.target.top,
-        })
-    })
-
-    canvas.on("object:scaling", (options) => {
-        const e = options
-
-        if (!e || !e.target || !e.target.top || !e.target.left) return
-
-        setImageProperties({
-            ...imageProperties,
-            left: e.target.left,
-            top: e.target.top,
-        })
-    })
-
-    canvas.on("object:scaling", (options) => {
-        const e = options
-
-        if (!e || !e.target || !e.target.scaleX) return
-
-        setImageProperties({ ...imageProperties, scale: e.target.scaleX })
-    })
-
     const handleChangeRadius = (value: number) => {
         if (!value) return
 
@@ -85,7 +53,7 @@ export const ImageControls = () => {
 
         activeObject.set("scaleY", 1)
 
-        const newValues = { ...imageProperties, radius: value, scale:1 }
+        const newValues = { ...imageProperties, radius: value, scale: 1 }
 
         setImageProperties(newValues)
 
@@ -108,7 +76,19 @@ export const ImageControls = () => {
 
     const options = [
         {
-            name: "Radius",
+            name: "Font Family",
+            value: Math.round(imageProperties.radius * imageProperties.scale),
+            handleChange: (e: ChangeEvent<HTMLInputElement>) => handleChangeRadius(parseInt(e.target.value)),
+            placeholder: "100",
+        },
+        {
+            name: "Font Size",
+            value: Math.round(imageProperties.radius * imageProperties.scale),
+            handleChange: (e: ChangeEvent<HTMLInputElement>) => handleChangeRadius(parseInt(e.target.value)),
+            placeholder: "100",
+        },
+        {
+            name: "Font Weight",
             value: Math.round(imageProperties.radius * imageProperties.scale),
             handleChange: (e: ChangeEvent<HTMLInputElement>) => handleChangeRadius(parseInt(e.target.value)),
             placeholder: "100",
@@ -152,7 +132,7 @@ export const ImageControls = () => {
     ]
 
     return (
-        <div className="grid-cols-image_toolbar_buttons_grid grid gap-4 py-2">
+        <div className="grid grid-cols-image_toolbar_buttons_grid gap-4 py-2">
             {options.map((option, index) => (
                 <label key={index} htmlFor="Radius" className="flex w-full flex-col">
                     <span className="mb-1 text-sm font-medium  text-[#101010] disabled:text-[#B7B7B7]">

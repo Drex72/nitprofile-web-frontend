@@ -7,7 +7,6 @@ import { useUploadProgramProfileFrame } from "@/services/programs/program-hooks/
 import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { getAsset } from "@/utils"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 
 export interface IImageProperties {
@@ -20,8 +19,6 @@ export const ProfileEmptyState = () => {
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
     const { handler, loading } = useUploadProgramProfileFrame()
-
-    const router = useRouter()
 
     const dispatch = useAppDispatch()
 
@@ -89,8 +86,6 @@ export const ProfileEmptyState = () => {
         deleteFile()
 
         setUploadProfileFrame(false)
-
-        router.push("/admin/profile")
     }
 
     const deleteFile = () => {

@@ -31,6 +31,8 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
     }
 
     useEffect(() => {
+        if (!data) return
+
         if (data?.role !== "SUPER ADMIN") {
             makeToast({
                 id: "create-program-error",
@@ -89,7 +91,9 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
                                 <Button label="Logout" onClick={handleLogout} variant="outlined" />
                             ))}
 
-                        {data && data?.role === "SUPER ADMIN" && <Button label="Cancel" onClick={closeModal} variant="text" />}
+                        {data && data?.role === "SUPER ADMIN" && (
+                            <Button label="Cancel" onClick={closeModal} variant="text" />
+                        )}
 
                         <Button
                             label="Create"

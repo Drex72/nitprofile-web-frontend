@@ -80,3 +80,23 @@ export const useUpdateProgramApi: () => IApiHookBaseResponse<string, IProgramMet
         loading: getProgramMetricsRequest.loading,
     }
 }
+
+
+export const useDeleteProgramApi: () => IApiHookBaseResponse<string> = () => {
+    const deleteProgramRequest = useApi<IBaseApiResponse, string>((programId: string) => {
+        return programService.deleteProgram(programId)
+    })
+
+    const handleDeleteProgram = async (programId: string) => {
+        deleteProgramRequest.reset()
+
+        return (await deleteProgramRequest.request(programId)) as IBaseApiResponse
+    }
+
+    return {
+        handler: handleDeleteProgram,
+        data: deleteProgramRequest.data,
+        error: deleteProgramRequest.error,
+        loading: deleteProgramRequest.loading,
+    }
+}
