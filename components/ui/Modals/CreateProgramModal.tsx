@@ -31,9 +31,10 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
     }
 
     useEffect(() => {
-        if (!data) return
+        if (!data || data.role === 'USER') return
+        
 
-        if (data?.role !== "SUPER ADMIN") {
+        if (data?.role !== "SUPER ADMIN" && !allPrograms.length) {
             makeToast({
                 id: "create-program-error",
                 message: "You don't have the Permission to Create Program, Please Contact Super Admin.",
@@ -41,7 +42,7 @@ export const CreateProgramModal = (props: IBaseModalProps) => {
                 duration: 10000,
             })
         }
-    }, [data])
+    }, [data, allPrograms])
 
     // If there is no program, don't allow the admin to close the portal until they have created a program
 

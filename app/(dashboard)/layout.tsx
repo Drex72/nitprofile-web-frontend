@@ -5,6 +5,7 @@ import { Navbar } from "@/components/ui"
 import { Sidebar } from "@/components/ui/Sidebar"
 import { useScreenSize } from "@/hooks/useScreenSize"
 import { useGetProgramsApi } from "@/services/programs/program-hooks"
+import { useGetProgramUserApi } from "@/services/programs/program-hooks/program-users/useGetProgramUserApi"
 import { programSlice, useAppSelector } from "@/state_management"
 import { getAllowedRoles } from "@/utils"
 import { usePathname } from "next/navigation"
@@ -18,11 +19,15 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     const { handler } = useGetProgramsApi()
 
+    const { handler: getProgramUser } = useGetProgramUserApi()
+
     const dispatch = useDispatch()
 
-    const { allPrograms } = useAppSelector((state) => state.programSlice)
+    const { allPrograms, selectedProgram } = useAppSelector((state) => state.programSlice)
 
-    const { initialize, setSelectedProgram } = programSlice.actions
+    const { data } = useAppSelector((state) => state.authSlice)
+
+    const { initialize, setSelectedProgram, setUserPrograms, setUserProgram } = programSlice.actions
 
     useScreenSize()
 
@@ -35,12 +40,27 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         programs && programs?.data.length && dispatch(setSelectedProgram(programs?.data[0]))
 
+        if (data && data.role === "USER") {
+            const userPrograms = await getProgramUser(undefined)
+
+            if (userPrograms?.data) {
+                dispatch(setUserPrograms(userPrograms?.data))
+
+                dispatch(setUserProgram())
+            }
+        }
+
         setProgramsFetching(false)
     }
 
     useEffect(() => {
         !allPrograms.length && getAllPrograms()
     }, [])
+
+    useEffect(() => {
+        dispatch(setUserProgram())
+        
+    }, [selectedProgram?.program])
 
     return (
         <RequireAuthentication loading={programsFetching} allowedRoles={getAllowedRoles(pathname)}>

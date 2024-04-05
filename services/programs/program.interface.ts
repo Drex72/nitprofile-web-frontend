@@ -24,17 +24,19 @@ export interface ICreateProgramPayload {
     endDate: string
 }
 
+export interface IUserProgram {
+    id: string
+    userId: string
+    programId: string
+    completedTraining: boolean
+    profileImageUrl: string | null
+    profileGenerationDate: Date | null
+    certificateImageUrl: string | null
+    certificateGenerationDate: Date | null
+}
+
 export interface IProgramUser extends IUser {
-    user_programs: {
-        id: string
-        userId: string
-        programId: string
-        completedTraining: boolean
-        profileImageUrl: string | null
-        profileGenerationDate: Date | null
-        certificateImageUrl: string | null
-        certificateGenerationDate: Date | null
-    }[]
+    user_programs: IUserProgram[]
 }
 
 export interface IRegisterSingleUserForProgram {

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { IProgram, IProgramNode, IProgramUser } from "@/services/programs/program.interface"
+import { IProgram, IProgramNode, IProgramUser, IUserProgram } from "@/services/programs/program.interface"
 import { createSlice } from "@reduxjs/toolkit"
 
 const dummyprograms = [
@@ -28,9 +28,12 @@ interface IInitialState {
 
     programUsers: IProgramUser[]
 
+    userPrograms: IUserProgram[]
+
     selectedProgram: {
         program: IProgram
         programNodes: IProgramNode[]
+        userProgram: IUserProgram | null
     } | null
 }
 
@@ -38,6 +41,7 @@ const initialStateValue: IInitialState = {
     allPrograms: [],
     selectedProgram: null,
     programUsers: [],
+    userPrograms: [],
 }
 
 export const programReduxSlice = createSlice({
@@ -53,6 +57,30 @@ export const programReduxSlice = createSlice({
             state.allPrograms = action.payload
         },
 
+        setUserPrograms: (
+            state,
+            action: {
+                payload: IUserProgram[]
+            },
+        ) => {
+            state.userPrograms = action.payload
+        },
+
+        setUserProgram: (state) => {
+            if (!state.selectedProgram) return
+
+            const userProgram = state.userPrograms.find(
+                (userProgram) => userProgram.programId === state.selectedProgram?.program.id,
+            )
+
+            if (!userProgram) return
+
+            state.selectedProgram = {
+                ...state.selectedProgram,
+                userProgram,
+            }
+        },
+
         setSelectedProgram: (
             state,
             action: {
@@ -61,9 +89,12 @@ export const programReduxSlice = createSlice({
         ) => {
             localStorage.setItem("selected_program_id", action.payload.id)
 
+            const userProgram = state.userPrograms.find((program) => program.programId === action.payload.id) ?? null
+
             state.selectedProgram = {
                 program: action.payload,
                 programNodes: [],
+                userProgram,
             }
         },
 
@@ -150,6 +181,51 @@ export const programReduxSlice = createSlice({
             state.selectedProgram.program.profileFrameWidth = action.payload.profileFrameWidth
         },
 
+
+        addProgramCertificateFrame: (
+            state,
+            action: {
+                payload: {
+                    programId: string
+                    certificateFrameSecureUrl: string
+                    certificateFramePublicId: string
+                    certificateFrameHeight: string
+                    certificateFrameWidth: string
+                }
+            },
+        ) => {
+            state.allPrograms = state.allPrograms.map((program) => {
+                if (program.id === action.payload.programId) {
+                    program.certificateFrameSecureUrl = action.payload.certificateFrameSecureUrl
+                    program.certificateFramePublicId = action.payload.certificateFramePublicId
+                    program.certificateFrameHeight = action.payload.certificateFrameHeight
+                    program.certificateFrameWidth = action.payload.certificateFrameWidth
+                }
+
+                return program
+            })
+
+            if (!state.selectedProgram) return
+
+            state.selectedProgram.program.profileFrameSecureUrl = action.payload.certificateFrameSecureUrl
+            state.selectedProgram.program.profileFramePublicId = action.payload.certificateFramePublicId
+            state.selectedProgram.program.profileFrameHeight = action.payload.certificateFrameHeight
+            state.selectedProgram.program.profileFrameWidth = action.payload.certificateFrameWidth
+        },
+
+        updateGeneratedProfile: (
+            state,
+            action: {
+                payload: {
+                    profileUrl: string
+                }
+            },
+        ) => {
+            if (!state.selectedProgram || !state.selectedProgram.userProgram) return
+
+            state.selectedProgram.userProgram.profileImageUrl = action.payload.profileUrl
+        },
+
         deleteSelectedProgram: (state) => {
             if (!state.selectedProgram) return
 
@@ -160,6 +236,7 @@ export const programReduxSlice = createSlice({
             state.selectedProgram = {
                 program: filteredPrograms[0],
                 programNodes: [],
+                userProgram: null,
             }
         },
 

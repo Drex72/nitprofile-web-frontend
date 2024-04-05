@@ -10,6 +10,7 @@ import {
     IProgramMetrics,
     IProgramUser,
     IRegisterSingleUserForProgram,
+    IUserProgram,
 } from "./program.interface"
 
 /**
@@ -81,6 +82,10 @@ class ProgramService {
         )
     }
 
+    public async getProgramRegisteredUser() {
+        return await axiosInstance.get<IBaseApiResponse<IUserProgram>>(`${this.programUrl}/user`)
+    }
+
     /**
      * Registers a single user for a program.
      * @param {string} programId - The ID of the program to register the user for.
@@ -143,6 +148,13 @@ class ProgramService {
     public async uploadProfileFrame(programId: string, data: FormData) {
         return await axiosInstance.post<IBaseApiResponse<IProgram>>(
             `${this.programUrl}/profile?programId=${programId}`,
+            data,
+        )
+    }
+
+    public async uploadCertificateFrame(programId: string, data: FormData) {
+        return await axiosInstance.post<IBaseApiResponse<IProgram>>(
+            `${this.programUrl}/certificate?programId=${programId}`,
             data,
         )
     }
