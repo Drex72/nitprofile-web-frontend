@@ -169,6 +169,10 @@ class ProgramService {
         return await axiosInstance.put<IBaseApiResponse<IProgram>>(`${this.programUrl}/profile?programId=${programId}`)
     }
 
+    public async enableCertificateGeneration(programId: string) {
+        return await axiosInstance.put<IBaseApiResponse<IProgram>>(`${this.programUrl}/certificate?programId=${programId}`)
+    }
+
     /**
      * Generates a profile for a program.
      * @param {string} programId - The ID of the program to generate the profile for.
@@ -178,8 +182,16 @@ class ProgramService {
         return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile?programId=${programId}`)
     }
 
+    public async generateCertificate(programId: string) {
+        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/certificate?programId=${programId}`)
+    }
+
     public async previewProfile(programId: string) {
         return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile/preview?programId=${programId}`)
+    }
+
+    public async previewCertificate(programId: string) {
+        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/certificate/preview?programId=${programId}`)
     }
 
     public async createProgramNode(programId: string, data: { nodes: Node[]; category: "profile" | "certificate" }) {

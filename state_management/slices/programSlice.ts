@@ -207,10 +207,10 @@ export const programReduxSlice = createSlice({
 
             if (!state.selectedProgram) return
 
-            state.selectedProgram.program.profileFrameSecureUrl = action.payload.certificateFrameSecureUrl
-            state.selectedProgram.program.profileFramePublicId = action.payload.certificateFramePublicId
-            state.selectedProgram.program.profileFrameHeight = action.payload.certificateFrameHeight
-            state.selectedProgram.program.profileFrameWidth = action.payload.certificateFrameWidth
+            state.selectedProgram.program.certificateFrameSecureUrl = action.payload.certificateFrameSecureUrl
+            state.selectedProgram.program.certificateFramePublicId = action.payload.certificateFramePublicId
+            state.selectedProgram.program.certificateFrameHeight = action.payload.certificateFrameHeight
+            state.selectedProgram.program.certificateFrameWidth = action.payload.certificateFrameWidth
         },
 
         updateGeneratedProfile: (
@@ -224,6 +224,19 @@ export const programReduxSlice = createSlice({
             if (!state.selectedProgram || !state.selectedProgram.userProgram) return
 
             state.selectedProgram.userProgram.profileImageUrl = action.payload.profileUrl
+        },
+
+        updateGeneratedCertificate: (
+            state,
+            action: {
+                payload: {
+                    certificateImageUrl: string
+                }
+            },
+        ) => {
+            if (!state.selectedProgram || !state.selectedProgram.userProgram) return
+
+            state.selectedProgram.userProgram.certificateImageUrl = action.payload.certificateImageUrl
         },
 
         deleteSelectedProgram: (state) => {
@@ -244,6 +257,12 @@ export const programReduxSlice = createSlice({
             if (!state.selectedProgram) return
 
             state.selectedProgram.program.profileGenerationAvailable = true
+        },
+
+        enableCertificateGeneration: (state) => {
+            if (!state.selectedProgram) return
+
+            state.selectedProgram.program.certificateGenerationAvailable = true
         },
 
         clearPrograms: (state) => {

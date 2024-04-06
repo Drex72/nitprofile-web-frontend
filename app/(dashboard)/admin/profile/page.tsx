@@ -101,6 +101,7 @@ const Profile = () => {
                             label="Customize"
                             loading={programNodesFetching}
                             onClick={() => handleCustomizeFrame()}
+                            disabled={selectedProgram?.program.profileGenerationAvailable}
                         />
                     </div>
 

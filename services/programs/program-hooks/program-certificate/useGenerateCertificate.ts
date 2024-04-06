@@ -2,21 +2,21 @@ import { useApi } from "@/hooks/useApi"
 import { programService } from "@/services/programs/program.service"
 import { IApiHookBaseResponse, IBaseApiResponse } from "@/services/types"
 
-export const useGenerateProfileCard: () => IApiHookBaseResponse<string, undefined> = () => {
-    const getProfilePreviewRequest = useApi<IBaseApiResponse, string>((programId: string) => {
-        return programService.generateProfile(programId)
+export const useGenerateCertificateApi: () => IApiHookBaseResponse<string, undefined> = () => {
+    const getGenerateCertificateRequest = useApi<IBaseApiResponse, string>((programId: string) => {
+        return programService.generateCertificate(programId)
     })
 
-    const handleGetProgramMetrics = async (programId: string) => {
-        getProfilePreviewRequest.reset()
+    const handleGenerateCertificate = async (programId: string) => {
+        getGenerateCertificateRequest.reset()
 
-        return (await getProfilePreviewRequest.request(programId)) as IBaseApiResponse
+        return (await getGenerateCertificateRequest.request(programId)) as IBaseApiResponse
     }
 
     return {
-        handler: handleGetProgramMetrics,
-        data: getProfilePreviewRequest.data,
-        error: getProfilePreviewRequest.error,
-        loading: getProfilePreviewRequest.loading,
+        handler: handleGenerateCertificate,
+        data: getGenerateCertificateRequest.data,
+        error: getGenerateCertificateRequest.error,
+        loading: getGenerateCertificateRequest.loading,
     }
 }

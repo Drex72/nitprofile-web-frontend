@@ -36,8 +36,17 @@ export const useSceneLogic = () => {
             router.back()
         }
 
+        const frame = () => {
+            switch (node_type) {
+                case "profile":
+                    return selectedProgram?.program.profileFrameSecureUrl ?? ""
+                case "certificate":
+                    return selectedProgram?.program.certificateFrameSecureUrl ?? ""
+            }
+        }
+
         return {
-            frame: selectedProgram?.program.profileFrameSecureUrl ?? "",
+            frame: frame(),
             nodes: selectedProgram?.programNodes ?? [],
             node_type: node_type ?? "profile",
         }
@@ -77,7 +86,18 @@ export const useSceneLogic = () => {
 
         if (!state.scene.canvas || !selectedProgram) return
 
-        const clientWidth = parseInt(selectedProgram.program.profileFrameWidth ?? "1000")
+        const node_type = localStorage.getItem("node_type") as "profile" | "certificate"
+
+        const frameWidth = () => {
+            switch (node_type) {
+                case "profile":
+                    return selectedProgram?.program.profileFrameWidth ?? ""
+                case "certificate":
+                    return selectedProgram?.program.certificateFrameWidth ?? ""
+            }
+        }
+
+        const clientWidth = parseInt(frameWidth() ?? "1000")
 
         const canvasWidth = state.scene.canvas.getWidth()
 
@@ -189,9 +209,18 @@ export const useSceneLogic = () => {
 
         const canvasWidth = state.scene.canvas.getWidth()
 
-        const clientWidth = parseInt(
-            selectedProgram.program.profileFrameWidth ?? frameImageRef?.current?.naturalWidth.toString(),
-        )
+        const node_type = localStorage.getItem("node_type") as "profile" | "certificate"
+
+        const frameWidth = () => {
+            switch (node_type) {
+                case "profile":
+                    return selectedProgram?.program.profileFrameWidth ?? ""
+                case "certificate":
+                    return selectedProgram?.program.certificateFrameWidth ?? ""
+            }
+        }
+
+        const clientWidth = parseInt(frameWidth() ?? frameImageRef?.current?.naturalWidth.toString())
 
         const scaleFactor = Math.round(clientWidth / canvasWidth)
 
@@ -199,8 +228,6 @@ export const useSceneLogic = () => {
             objects,
             scaleFactor,
         })
-
-        const node_type = localStorage.getItem("node_type") as "profile" | "certificate"
 
         const response = await handler({
             category: node_type,

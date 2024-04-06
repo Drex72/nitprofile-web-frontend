@@ -38,7 +38,17 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         programs && dispatch(initialize(programs?.data))
 
-        programs && programs?.data.length && dispatch(setSelectedProgram(programs?.data[0]))
+        if (programs && programs?.data.length) {
+            const selectedProgramId = localStorage.getItem("selected_program_id")
+
+            if (selectedProgramId) {
+                const selectedProgram = programs.data.find((item) => (item.id === selectedProgramId))
+
+                selectedProgram && dispatch(setSelectedProgram(selectedProgram))
+            } else {
+                programs && programs?.data.length && dispatch(setSelectedProgram(programs?.data[0]))
+            }
+        }
 
         if (data && data.role === "USER") {
             const userPrograms = await getProgramUser(undefined)
@@ -59,7 +69,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         dispatch(setUserProgram())
-        
     }, [selectedProgram?.program])
 
     return (

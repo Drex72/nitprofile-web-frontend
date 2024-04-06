@@ -3,21 +3,21 @@ import { IProgram } from "@/services/programs/program.interface"
 import { programService } from "@/services/programs/program.service"
 import { IApiHookBaseResponse, IBaseApiResponse } from "@/services/types"
 
-export const useEnableProfileCardGenerationApi: () => IApiHookBaseResponse<string, IProgram> = () => {
-    const enableProfileGenerationRequest = useApi<IBaseApiResponse<IProgram>, string>((programId: string) => {
-        return programService.enableProfileGeneration(programId)
+export const useEnableCertificateGenerationApi: () => IApiHookBaseResponse<string, IProgram> = () => {
+    const enableCertificateGenerationRequest = useApi<IBaseApiResponse<IProgram>, string>((programId: string) => {
+        return programService.enableCertificateGeneration(programId)
     })
 
-    const handleEnableProfileGeneration = async (programId: string) => {
-        enableProfileGenerationRequest.reset()
+    const handleEnableCertificateGeneration = async (programId: string) => {
+        enableCertificateGenerationRequest.reset()
 
-        return (await enableProfileGenerationRequest.request(programId)) as IBaseApiResponse<IProgram>
+        return (await enableCertificateGenerationRequest.request(programId)) as IBaseApiResponse<IProgram>
     }
 
     return {
-        handler: handleEnableProfileGeneration,
-        data: enableProfileGenerationRequest.data,
-        error: enableProfileGenerationRequest.error,
-        loading: enableProfileGenerationRequest.loading,
+        handler: handleEnableCertificateGeneration,
+        data: enableCertificateGenerationRequest.data,
+        error: enableCertificateGenerationRequest.error,
+        loading: enableCertificateGenerationRequest.loading,
     }
 }
