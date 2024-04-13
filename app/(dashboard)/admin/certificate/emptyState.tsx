@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button"
 import { DropzoneModal } from "@/components/ui/Modals/DropzoneModal"
 import { IDropZoneHandlerProps } from "@/hooks/useDropZone"
 import { makeToast } from "@/libs/react-toast"
-import { useUploadProgramProfileFrame } from "@/services/programs/program-hooks/program-profile"
+import { useUploadProgramCertificateFrame } from "@/services/programs/program-hooks/program-certificate/useUploadProgramCertificateFrame"
 import { programSlice, useAppDispatch, useAppSelector } from "@/state_management"
 import { getAsset } from "@/utils"
 import Image from "next/image"
@@ -15,16 +15,16 @@ export interface IImageProperties {
     deleted: boolean
 }
 
-export const ProfileEmptyState = () => {
+export const CertificateEmptyState = () => {
     const { selectedProgram } = useAppSelector((state) => state.programSlice)
 
-    const { handler, loading } = useUploadProgramProfileFrame()
+    const { handler, loading } = useUploadProgramCertificateFrame()
 
     const dispatch = useAppDispatch()
 
-    const { addProgramProfileFrame } = programSlice.actions
+    const { addProgramCertificateFrame } = programSlice.actions
 
-    const [uploadProfileFrame, setUploadProfileFrame] = useState(false)
+    const [uploadCertificateFrame, setUploadCertificateFrame] = useState(false)
 
     const [imageProperties, setImageproperties] = useState<IImageProperties>({
         streamUrl: "",
@@ -45,14 +45,14 @@ export const ProfileEmptyState = () => {
     const onSubmit = async () => {
         if (!selectedProgram || !imageProperties.fileObj || !imageProperties.streamUrl) return
 
-        const profileFrameHeight = ref.current?.naturalHeight ?? 1000
-        const profileFrameWidth = ref.current?.naturalWidth ?? 1000
+        const certificateFrameHeight = ref.current?.naturalHeight ?? 1000
+        const certificateFrameWidth = ref.current?.naturalWidth ?? 1000
 
         const formData = new FormData()
 
         formData.append("frame", imageProperties.fileObj)
-        formData.append("profileFrameHeight", profileFrameHeight.toString())
-        formData.append("profileFrameWidth", profileFrameWidth.toString())
+        formData.append("certificateFrameHeight", certificateFrameHeight.toString())
+        formData.append("certificateFrameWidth", certificateFrameWidth.toString())
 
         const response = await handler({
             data: formData,
@@ -63,17 +63,17 @@ export const ProfileEmptyState = () => {
 
         makeToast({
             id: "program-success",
-            message: "Profile Frame Uploaded Successfully",
+            message: "Certificate Frame Uploaded Successfully",
             type: "success",
         })
 
         dispatch(
-            addProgramProfileFrame({
+            addProgramCertificateFrame({
                 programId: selectedProgram?.program.id,
-                profileFrameSecureUrl: response.data.profileFrameSecureUrl!,
-                profileFramePublicId: response.data.profileFramePublicId!,
-                profileFrameHeight: response.data.profileFrameHeight!,
-                profileFrameWidth: response.data.profileFrameWidth!,
+                certificateFrameSecureUrl: response.data.certificateFrameSecureUrl!,
+                certificateFramePublicId: response.data.certificateFramePublicId!,
+                certificateFrameHeight: response.data.certificateFrameHeight!,
+                certificateFrameWidth: response.data.certificateFrameWidth!,
             }),
         )
 
@@ -85,7 +85,7 @@ export const ProfileEmptyState = () => {
 
         deleteFile()
 
-        setUploadProfileFrame(false)
+        setUploadCertificateFrame(false)
     }
 
     const deleteFile = () => {
@@ -99,9 +99,9 @@ export const ProfileEmptyState = () => {
     return (
         <section className="flex h-full flex-col items-center justify-center">
             <DropzoneModal
-                header={"Upload Profile Frame"}
-                modalIsMounted={uploadProfileFrame}
-                handleClose={() => setUploadProfileFrame(false)}
+                header={"Upload Certificate Frame"}
+                modalIsMounted={uploadCertificateFrame}
+                handleClose={() => setUploadCertificateFrame(false)}
                 handleInputChange={handleFileForm}
                 fileDeleted={imageProperties.deleted}
                 accept={{
@@ -128,11 +128,15 @@ export const ProfileEmptyState = () => {
             <Image src={getAsset("rocket.svg", "images")} alt="Rocket svg" width={280} height={280} />
 
             <p className="my-6 max-w-[32rem] text-center">
-                There is no Profile Frame for this Program. Click the button below to Upload a Profile Frame for this
-                program.
+                There is no Certificate Frame for this Program. Click the button below to Upload a Certificate Frame for
+                this program.
             </p>
 
-            <Button label="Upload Profile Frame" variant="contained" onClick={() => setUploadProfileFrame(true)} />
+            <Button
+                label="Upload Certificate Frame"
+                variant="contained"
+                onClick={() => setUploadCertificateFrame(true)}
+            />
         </section>
     )
 }

@@ -31,7 +31,7 @@ const Profile = () => {
 
     const programFrame = useMemo(() => {
         return selectedProgram?.program.profileFrameSecureUrl
-    }, [selectedProgram])
+    }, [selectedProgram?.program.profileFrameSecureUrl])
 
     const handleCustomizeFrame = async () => {
         if (!selectedProgram) return
@@ -77,74 +77,83 @@ const Profile = () => {
         setPreviewedProfile("")
     }, [selectedProgram])
 
-    if (!programFrame) return <ProfileEmptyState />
-
     return (
-        <section className=" mx-auto h-full max-w-[1500px]">
-            <div className="mb-4 flex w-full items-end justify-end gap-4">
-                <Button
-                    variant="outlined"
-                    label={selectedProgram?.program.profileGenerationAvailable ? "Profile Generation Enabled" : "Enable Profile Generation"}
-                    loading={enablingProfileGeneration}
-                    disabled={selectedProgram?.program.profileGenerationAvailable}
-                    onClick={() => enableProfileGeneration()}
-                />
+        <>
+            {!programFrame && <ProfileEmptyState />}
 
-                <Button
-                    variant="contained"
-                    label="Customize"
-                    loading={programNodesFetching}
-                    onClick={() => handleCustomizeFrame()}
-                />
-            </div>
+            {programFrame && (
+                <section className=" mx-auto h-full max-w-[1500px]">
+                    <div className="mb-4 flex w-full items-end justify-end gap-4">
+                        <Button
+                            variant="outlined"
+                            label={
+                                selectedProgram?.program.profileGenerationAvailable
+                                    ? "Profile Generation Enabled"
+                                    : "Enable Profile Generation"
+                            }
+                            loading={enablingProfileGeneration}
+                            disabled={selectedProgram?.program.profileGenerationAvailable}
+                            onClick={() => enableProfileGeneration()}
+                        />
 
-            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                <div className="w-full md:basis-[50%]">
-                    <h2 className="mb-2 text-center text-lg font-semibold text-[#101010] md:text-xl">Frame</h2>
-                    <Image
-                        src={programFrame}
-                        alt="Profile Frame"
-                        width={100}
-                        height={100}
-                        className="w-full rounded-md"
-                        unoptimized
-                        priority
-                    />
-                </div>
+                        <Button
+                            variant="contained"
+                            label="Customize"
+                            loading={programNodesFetching}
+                            onClick={() => handleCustomizeFrame()}
+                            disabled={selectedProgram?.program.profileGenerationAvailable}
+                        />
+                    </div>
 
-                <div className="w-full md:basis-[50%]">
-                    <h2 className="mb-2 text-center text-lg font-semibold text-primary md:text-xl">Preview</h2>
-
-                    <ConditionalComponent isMounted={!previewedProfile} delay={100}>
-                        <div className="flex flex-col items-center">
-                            <p className="my-6 max-w-[32rem] text-center">
-                                Click on the Button Below to Preview Profile
-                            </p>
-
-                            <Button
-                                label="Preview Profile"
-                                variant="contained"
-                                className="mx-auto"
-                                onClick={() => previewProfile()}
-                                loading={loading}
+                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                        <div className="w-full md:basis-[50%]">
+                            <h2 className="mb-2 text-center text-lg font-semibold text-[#101010] md:text-xl">Frame</h2>
+                            <Image
+                                src={programFrame}
+                                alt="Profile Frame"
+                                width={100}
+                                height={100}
+                                className="w-full rounded-md"
+                                unoptimized
+                                priority
                             />
                         </div>
-                    </ConditionalComponent>
 
-                    <ConditionalComponent isMounted={previewedProfile ? true : false} delay={100}>
-                        <Image
-                            src={previewedProfile}
-                            alt="Profile Frame"
-                            width={100}
-                            height={100}
-                            className="w-full rounded-md"
-                            unoptimized
-                            priority
-                        />
-                    </ConditionalComponent>
-                </div>
-            </div>
-        </section>
+                        <div className="w-full md:basis-[50%]">
+                            <h2 className="mb-2 text-center text-lg font-semibold text-primary md:text-xl">Preview</h2>
+
+                            <ConditionalComponent isMounted={!previewedProfile} delay={100}>
+                                <div className="flex flex-col items-center">
+                                    <p className="my-6 max-w-[32rem] text-center">
+                                        Click on the Button Below to Preview Profile
+                                    </p>
+
+                                    <Button
+                                        label="Preview Profile"
+                                        variant="contained"
+                                        className="mx-auto"
+                                        onClick={() => previewProfile()}
+                                        loading={loading}
+                                    />
+                                </div>
+                            </ConditionalComponent>
+
+                            <ConditionalComponent isMounted={previewedProfile ? true : false} delay={100}>
+                                <Image
+                                    src={previewedProfile}
+                                    alt="Profile Frame"
+                                    width={100}
+                                    height={100}
+                                    className="w-full rounded-md"
+                                    unoptimized
+                                    priority
+                                />
+                            </ConditionalComponent>
+                        </div>
+                    </div>
+                </section>
+            )}
+        </>
     )
 }
 export default Profile

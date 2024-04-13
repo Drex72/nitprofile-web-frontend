@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { IProgram, IProgramNode, IProgramUser } from "@/services/programs/program.interface"
+import { IProgram, IProgramNode, IProgramUser, IUserProgram } from "@/services/programs/program.interface"
 import { createSlice } from "@reduxjs/toolkit"
 
 const dummyprograms = [
@@ -28,9 +28,12 @@ interface IInitialState {
 
     programUsers: IProgramUser[]
 
+    userPrograms: IUserProgram[]
+
     selectedProgram: {
         program: IProgram
         programNodes: IProgramNode[]
+        userProgram: IUserProgram | null
     } | null
 }
 
@@ -38,6 +41,7 @@ const initialStateValue: IInitialState = {
     allPrograms: [],
     selectedProgram: null,
     programUsers: [],
+    userPrograms: [],
 }
 
 export const programReduxSlice = createSlice({
@@ -53,6 +57,30 @@ export const programReduxSlice = createSlice({
             state.allPrograms = action.payload
         },
 
+        setUserPrograms: (
+            state,
+            action: {
+                payload: IUserProgram[]
+            },
+        ) => {
+            state.userPrograms = action.payload
+        },
+
+        setUserProgram: (state) => {
+            if (!state.selectedProgram) return
+
+            const userProgram = state.userPrograms.find(
+                (userProgram) => userProgram.programId === state.selectedProgram?.program.id,
+            )
+
+            if (!userProgram) return
+
+            state.selectedProgram = {
+                ...state.selectedProgram,
+                userProgram,
+            }
+        },
+
         setSelectedProgram: (
             state,
             action: {
@@ -61,9 +89,12 @@ export const programReduxSlice = createSlice({
         ) => {
             localStorage.setItem("selected_program_id", action.payload.id)
 
+            const userProgram = state.userPrograms.find((program) => program.programId === action.payload.id) ?? null
+
             state.selectedProgram = {
                 program: action.payload,
                 programNodes: [],
+                userProgram,
             }
         },
 
@@ -141,12 +172,97 @@ export const programReduxSlice = createSlice({
 
                 return program
             })
+
+            if (!state.selectedProgram) return
+
+            state.selectedProgram.program.profileFrameSecureUrl = action.payload.profileFrameSecureUrl
+            state.selectedProgram.program.profileFramePublicId = action.payload.profileFramePublicId
+            state.selectedProgram.program.profileFrameHeight = action.payload.profileFrameHeight
+            state.selectedProgram.program.profileFrameWidth = action.payload.profileFrameWidth
+        },
+
+
+        addProgramCertificateFrame: (
+            state,
+            action: {
+                payload: {
+                    programId: string
+                    certificateFrameSecureUrl: string
+                    certificateFramePublicId: string
+                    certificateFrameHeight: string
+                    certificateFrameWidth: string
+                }
+            },
+        ) => {
+            state.allPrograms = state.allPrograms.map((program) => {
+                if (program.id === action.payload.programId) {
+                    program.certificateFrameSecureUrl = action.payload.certificateFrameSecureUrl
+                    program.certificateFramePublicId = action.payload.certificateFramePublicId
+                    program.certificateFrameHeight = action.payload.certificateFrameHeight
+                    program.certificateFrameWidth = action.payload.certificateFrameWidth
+                }
+
+                return program
+            })
+
+            if (!state.selectedProgram) return
+
+            state.selectedProgram.program.certificateFrameSecureUrl = action.payload.certificateFrameSecureUrl
+            state.selectedProgram.program.certificateFramePublicId = action.payload.certificateFramePublicId
+            state.selectedProgram.program.certificateFrameHeight = action.payload.certificateFrameHeight
+            state.selectedProgram.program.certificateFrameWidth = action.payload.certificateFrameWidth
+        },
+
+        updateGeneratedProfile: (
+            state,
+            action: {
+                payload: {
+                    profileUrl: string
+                }
+            },
+        ) => {
+            if (!state.selectedProgram || !state.selectedProgram.userProgram) return
+
+            state.selectedProgram.userProgram.profileImageUrl = action.payload.profileUrl
+        },
+
+        updateGeneratedCertificate: (
+            state,
+            action: {
+                payload: {
+                    certificateImageUrl: string
+                }
+            },
+        ) => {
+            if (!state.selectedProgram || !state.selectedProgram.userProgram) return
+
+            state.selectedProgram.userProgram.certificateImageUrl = action.payload.certificateImageUrl
+        },
+
+        deleteSelectedProgram: (state) => {
+            if (!state.selectedProgram) return
+
+            const filteredPrograms = state.allPrograms.filter((item) => item.id !== state.selectedProgram?.program.id)
+
+            state.allPrograms = filteredPrograms
+
+            state.selectedProgram = {
+                program: filteredPrograms[0],
+                programNodes: [],
+                userProgram: null,
+            }
         },
 
         enableProfileGeneration: (state) => {
             if (!state.selectedProgram) return
 
             state.selectedProgram.program.profileGenerationAvailable = true
+        },
+
+        enableCertificateGeneration: (state) => {
+            if (!state.selectedProgram) return
+
+            state.selectedProgram.program.certificateGenerationAvailable = true
         },
 
         clearPrograms: (state) => {

@@ -10,6 +10,7 @@ import {
     IProgramMetrics,
     IProgramUser,
     IRegisterSingleUserForProgram,
+    IUserProgram,
 } from "./program.interface"
 
 /**
@@ -66,6 +67,10 @@ class ProgramService {
         return await axiosInstance.put(`${this.programUrl}?programId=${programId}`, data)
     }
 
+    public async deleteProgram(programId: string) {
+        return await axiosInstance.delete(`${this.programUrl}?programId=${programId}`)
+    }
+
     /**
      * Retrieves users registered for a program.
      * @param {string} programId - The ID of the program to retrieve users for.
@@ -75,6 +80,10 @@ class ProgramService {
         return await axiosInstance.get<IBaseApiResponse<IProgramUser[]>>(
             `${this.programUrl}/users?programId=${programId}`,
         )
+    }
+
+    public async getProgramRegisteredUser() {
+        return await axiosInstance.get<IBaseApiResponse<IUserProgram>>(`${this.programUrl}/user`)
     }
 
     /**
@@ -143,6 +152,13 @@ class ProgramService {
         )
     }
 
+    public async uploadCertificateFrame(programId: string, data: FormData) {
+        return await axiosInstance.post<IBaseApiResponse<IProgram>>(
+            `${this.programUrl}/certificate?programId=${programId}`,
+            data,
+        )
+    }
+
     /**
      * Enables profile generation for a program.
      * @param {string} programId - The ID of the program to enable profile generation for.
@@ -151,6 +167,10 @@ class ProgramService {
      */
     public async enableProfileGeneration(programId: string) {
         return await axiosInstance.put<IBaseApiResponse<IProgram>>(`${this.programUrl}/profile?programId=${programId}`)
+    }
+
+    public async enableCertificateGeneration(programId: string) {
+        return await axiosInstance.put<IBaseApiResponse<IProgram>>(`${this.programUrl}/certificate?programId=${programId}`)
     }
 
     /**
@@ -162,8 +182,16 @@ class ProgramService {
         return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile?programId=${programId}`)
     }
 
+    public async generateCertificate(programId: string) {
+        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/certificate?programId=${programId}`)
+    }
+
     public async previewProfile(programId: string) {
         return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/profile/preview?programId=${programId}`)
+    }
+
+    public async previewCertificate(programId: string) {
+        return await axiosInstance.get<IBaseApiResponse>(`${this.programUrl}/certificate/preview?programId=${programId}`)
     }
 
     public async createProgramNode(programId: string, data: { nodes: Node[]; category: "profile" | "certificate" }) {

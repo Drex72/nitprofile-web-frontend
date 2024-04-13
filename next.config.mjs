@@ -2,8 +2,9 @@ import MillionLint from "@million/lint"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
+    output: "standalone",
     images: {
-        domains: ["res.cloudinary.com"],
+        remotePatterns: ["res.cloudinary.com"],
     },
 }
 // export default MillionLint.next({

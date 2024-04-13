@@ -1,6 +1,15 @@
-const placeholderTextNodeEntity = ["program", "date", "user"] as const
-
-type IPlaceholderTextNodeEntity = (typeof placeholderTextNodeEntity)[number]
+type IPlaceholderTextNodeEntity =
+    | {
+          entity: "user"
+          entityKey: string
+      }
+    | {
+          entity: "program"
+          entityKey: string
+      }
+    | {
+          entity: "date"
+      }
 
 interface INode {
     x: number
@@ -44,31 +53,30 @@ type ITextNode = INonPlaceholderTextNode | IPlaceholderTextNode
 
 type Node = IImageNode | ITextNode
 
-type PlaceholderKeys = {
-    entity: IPlaceholderTextNodeEntity
-    entityKey?: string
+type PlaceholderKeys = IPlaceholderTextNodeEntity & {
+    placeholderText: string
+}
+
+type ICreatePlaceHolderNode = PlaceholderKeys & {
+    nodeType: "placeholder"
 }
 
 type ICreateNodeOptions =
     | {
           nodeType: "image" | "text"
       }
-    | {
-          nodeType: "placeholder"
-          entity: IPlaceholderTextNodeEntity
-          entityKey: string
-      }
+    | ICreatePlaceHolderNode
 
 interface INodeFactory<T = undefined> {
     fabricNode: T
 }
 
 export type {
-    ITextNode,
-    IImageNode,
-    Node,
     ICreateNodeOptions,
-    IPlaceholderTextNodeEntity,
+    IImageNode,
     INodeFactory,
+    IPlaceholderTextNodeEntity,
+    ITextNode,
+    Node,
     PlaceholderKeys,
 }

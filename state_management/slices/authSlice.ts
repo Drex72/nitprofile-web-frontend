@@ -24,20 +24,6 @@ interface IInitialState {
     persistExpDate: Date | null
 }
 
-const dummyUser = {
-    id: "622c4d4e-3786-4c19-b790-29e4c8c67463",
-    firstName: "Odumuyiwa",
-    lastName: "Victor",
-    otherName: "",
-    email: "davidokunoye003@gmail.com",
-    emailVerified: true,
-    profilePicPublicId: null,
-    resetToken: null,
-    profilePicSecureUrl: null,
-    isVerified: true,
-    role: "SUPER ADMIN" as IRole,
-}
-
 const initialState: IInitialState = {
     data: null,
     isAuthenticated: false,

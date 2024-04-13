@@ -4,7 +4,7 @@ import { IApiHookBaseResponse, IBaseApiResponse } from "@/services/types"
 
 export const useGenerateProfileCard: () => IApiHookBaseResponse<string, undefined> = () => {
     const getProfilePreviewRequest = useApi<IBaseApiResponse, string>((programId: string) => {
-        return programService.previewProfile(programId)
+        return programService.generateProfile(programId)
     })
 
     const handleGetProgramMetrics = async (programId: string) => {

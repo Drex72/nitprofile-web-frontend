@@ -2,6 +2,7 @@
 import { Input } from "@/components/form"
 import { Button } from "@/components/ui/Button"
 import { DropzoneModal } from "@/components/ui/Modals/DropzoneModal"
+import { useDeleteProgram } from "@/hooks/useDeleteProgram"
 import { useUserSettings } from "@/hooks/useUserSettings"
 import { useAppSelector } from "@/state_management"
 import { getAsset } from "@/utils"
@@ -23,6 +24,8 @@ const Profile = () => {
 
     const { data } = useAppSelector((state) => state.authSlice)
 
+    const { loading: deleting, onSubmit: onDeleteProgram } = useDeleteProgram()
+
     const {
         register,
         formState: { errors },
@@ -43,7 +46,7 @@ const Profile = () => {
             >
                 <div className="mx-auto mb-4 block max-h-[500px] w-full overflow-y-scroll border px-3">
                     <Image
-                        src={avatarSettings.streamUrl??""}
+                        src={avatarSettings.streamUrl ?? ""}
                         alt="Uploaded Avatar"
                         width={400}
                         height={400}
@@ -170,13 +173,23 @@ const Profile = () => {
                 )}
 
                 {profileMode === "view" && (
-                    <Button
-                        variant="contained"
-                        label="Edit Profile"
-                        onClick={() => {
-                            setProfileMode("edit")
-                        }}
-                    />
+                    <div className="flex items-center gap-4 ">
+                        <Button
+                            variant="contained"
+                            label="Edit Profile"
+                            onClick={() => {
+                                setProfileMode("edit")
+                            }}
+                        />
+
+                        <Button
+                            variant="contained"
+                            label="Delete Program"
+                            className="bg-red-500 text-white hover:border-red-500 hover:text-red-500"
+                            onClick={onDeleteProgram}
+                            loading={deleting}
+                        />
+                    </div>
                 )}
             </form>
         </div>

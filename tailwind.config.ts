@@ -38,6 +38,8 @@ const config: Config = {
 
             gridTemplateColumns: {
                 toolbar_buttons_grid: "repeat(auto-fit, minmax(200px, 1fr));",
+                image_toolbar_buttons_grid: "repeat(auto-fit, minmax(100px, 1fr));",
+
             },
         },
     },
