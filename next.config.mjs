@@ -4,7 +4,7 @@ const nextConfig = {
     reactStrictMode: false,
     output: "standalone",
     images: {
-        remotePatterns: ["res.cloudinary.com"],
+        domains: ["res.cloudinary.com"],
     },
 }
 // export default MillionLint.next({
