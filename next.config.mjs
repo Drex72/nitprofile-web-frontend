@@ -6,6 +6,8 @@ const nextConfig = {
     images: {
         domains: ["res.cloudinary.com"],
     },
+    basePath: '/nitprofile-client'
+
 }
 // export default MillionLint.next({
 //   rsc: true
