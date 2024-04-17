@@ -1,5 +1,5 @@
-import MillionLint from "@million/lint"
-/** @type {import('next').NextConfig} */
+// import MillionLint from "@million/lint"
+// /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
     output: "standalone",
