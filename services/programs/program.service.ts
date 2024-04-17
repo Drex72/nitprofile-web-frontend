@@ -12,6 +12,7 @@ import {
     IRegisterSingleUserForProgram,
     IUserProgram,
 } from "./program.interface"
+import { API_URL } from "@/constants/api_url"
 
 /**
  * Service class for interacting with program-related API endpoints.
@@ -213,4 +214,4 @@ class ProgramService {
     }
 }
 
-export const programService = new ProgramService(process.env.APP_API_URL ?? "http://localhost:4000/api/v1")
+export const programService = new ProgramService(API_URL)

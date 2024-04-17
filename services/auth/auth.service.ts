@@ -8,6 +8,7 @@ import {
 } from "./auth.interface"
 import { IBaseApiResponse } from "../types"
 import { IUser } from "@/state_management"
+import { API_URL } from "@/constants/api_url"
 
 /**
  * Service class for handling authentication-related API requests.
@@ -130,4 +131,4 @@ class AuthService {
     }
 }
 
-export const authService = new AuthService(process.env.APP_API_URL ?? "http://localhost:4000/api/v1")
+export const authService = new AuthService(API_URL)

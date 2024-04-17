@@ -1,11 +1,10 @@
-import axios from "axios"
-import { authSlice, store } from "@/state_management"
+import { API_URL } from "@/constants/api_url"
 import { makeToast } from "@/libs//react-toast"
-
-export const baseURL = "http://localhost:4000/api/v1"
+import { authSlice, store } from "@/state_management"
+import axios from "axios"
 
 const axiosInstance = axios.create({
-    baseURL,
+    baseURL: API_URL,
     withCredentials: true,
 })
 
@@ -21,14 +20,14 @@ axiosInstance.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             retries -= 1
 
-            await fetch(`${baseURL}/auth/refresh-token`, {
+            await fetch(`${API_URL}/auth/refresh-token`, {
                 credentials: "include",
             })
 
             if (retries === 0) {
                 makeToast({
                     id: "refresh-token-error",
-                    message:  "Your Session has Expired, Please Log in",
+                    message: "Your Session has Expired, Please Log in",
                     type: "error",
                 })
 
