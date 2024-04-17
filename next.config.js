@@ -35,4 +35,5 @@ const nextConfig = {
 //   rsc: true
 // })(nextConfig);
 
-export default nextConfig
+// export default nextConfig
+module.exports = nextConfig
