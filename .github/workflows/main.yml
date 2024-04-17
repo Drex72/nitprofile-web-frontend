@@ -34,6 +34,14 @@ jobs:
         port: ${{ secrets.PORT }}
         command_timeout: 200m
         script: |
-          cd nitprofile-client/
-          git pull origin main
-          docker-compose restart
+          if [ -d "nitprofile-client" ]; then
+            echo "Directory exists. Pulling latest changes."
+            cd nitprofile-client
+            git pull origin main
+            docker compose restart
+          else
+            echo "Directory does not exist. Cloning repository."
+            git clone https://github.com/Drex72/nitprofile-web-frontend.git
+            cd nitprofile-client
+            docker-compose up -d
+          fi
