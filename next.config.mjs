@@ -6,7 +6,7 @@ const nextConfig = {
     images: {
         domains: ["res.cloudinary.com"],
     },
-    // basePath: '/nitprofile-client'
+    basePath: '/nitprofile-client'
 
 }
 // export default MillionLint.next({
