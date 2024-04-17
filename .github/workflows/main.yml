@@ -41,7 +41,7 @@ jobs:
             docker compose restart
           else
             echo "Directory does not exist. Cloning repository."
-            git clone https://github.com/Drex72/nitprofile-web-frontend.git
+            git clone https://github.com/Drex72/nitprofile-web-frontend.git nitprofile-client
             cd nitprofile-client
             docker-compose up -d
           fi
