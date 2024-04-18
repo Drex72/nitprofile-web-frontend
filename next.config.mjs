@@ -1,13 +1,16 @@
-import MillionLint from "@million/lint"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
     output: "standalone",
     images: {
-        domains: ["res.cloudinary.com"],
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "**.cloudinary.com",
+            },
+        ],
     },
-    basePath: '/nitprofile-client'
-
+    basePath: "/nitprofile-client",
 }
 // export default MillionLint.next({
 //   rsc: true
