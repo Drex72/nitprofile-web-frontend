@@ -15,7 +15,7 @@ axiosInstance.interceptors.response.use(
         return response
     },
     async (error) => {
-        const LOGIN_ROUTE = "/auth/login"
+        const LOGIN_ROUTE = "/nitprofile-client/auth/login"
 
         if (error.response && error.response.status === 401) {
             retries -= 1
