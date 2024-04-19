@@ -98,12 +98,12 @@ export const getSidebarData = (role: IRole | undefined): ISidebarData[] => {
         case "SUPER ADMIN":
             return [
                 ...adminRoutes,
-                {
-                    name: "Admins",
-                    icon: <GrUserAdmin />,
-                    route: "/admin/manage-admins",
-                    activeRoutes: ["manage-admins"],
-                },
+                // {
+                //     name: "Admins",
+                //     icon: <GrUserAdmin />,
+                //     route: "/admin/manage-admins",
+                //     activeRoutes: ["manage-admins"],
+                // },
             ]
 
         case "USER":
