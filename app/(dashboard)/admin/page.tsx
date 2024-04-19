@@ -1,15 +1,16 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import { ConditionalComponent } from "@/components/animation"
+import { AdminStatisticsChart } from "@/components/ui/Charts"
 import { KpiCard } from "@/components/ui/KpiCard"
+import { KpiSkeletonLoader } from "@/components/ui/KpiCard/SkeletonLoader"
 import {
-    ProfileAmountIllustration,
     CertificateAmountIllustration,
+    ProfileAmountIllustration,
     VerifiedUsersAmountIllustration,
 } from "@/public/illustrations"
-import { KpiSkeletonLoader } from "@/components/ui/KpiCard/SkeletonLoader"
 import { useProgramMetricsApi } from "@/services/programs/program-hooks"
 import { useAppSelector } from "@/state_management"
-import { ConditionalComponent } from "@/components/animation"
+import { useEffect } from "react"
 
 const AdminHome = () => {
     const { handler, loading, data: programMetrics } = useProgramMetricsApi()
@@ -57,6 +58,8 @@ const AdminHome = () => {
                     ))}
                 </div>
             </ConditionalComponent>
+
+            <AdminStatisticsChart />
         </div>
     )
 }
