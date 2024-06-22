@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/preset-react": "^7.24.7",
     "@hookform/resolvers": "^3.3.4",
     "@million/lint": "^0.0.73",
     "@reduxjs/toolkit": "^2.2.1",
     "animate.css": "^4.1.1",
     "axios": "^1.6.7",
+    "canvas": "^2.11.2",
     "fabric": "^5.3.0",
     "million": "^3.0.6",
     "moment": "^2.30.1",

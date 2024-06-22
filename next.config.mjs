@@ -2,6 +2,16 @@
 const nextConfig = {
     reactStrictMode: false,
     output: "standalone",
+    webpack: (config, { webpack }) => {
+        config.experiments = {
+            ...config.experiments,
+            topLevelAwait: true,
+        }
+        config.externals.push({
+            canvas: "commonjs canvas",
+        })
+        return config
+    },
     logging: {
         fetches: {
             fullUrl: true,
